@@ -1,0 +1,113 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Some Pithy Text</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li class="active"><a href="#">Home</a></li> 
+              <li><a href="#about">About</a></li> 
+              <li><a href="#contact">Contact</a></li> 
+            </ul> 
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+    <div class="container"> 
+      <div id="event-app">
+
+        <form id='search-events' class='well form-search'>
+          <input id='new-event' type='text' class='input-xlarge search-query' placeholder='What are you looking for' />
+          <button id='new-event-submit' type='submit' class='btn'><i class='icon-search'></i> Search</button>
+        </form>
+
+        <div id='event-graph'>
+        </div>
+
+        <div id='event-pager' class='pagination'>
+          <ul>
+          <li><a href='#'>Prev</a></li>
+          <li class='active'><a href='#'>1</a></li>
+          <li><a href='#'>2</a></li>
+          <li><a href='#'>3</a></li>
+          <li><a href='#'>4</a></li>
+          <li><a href='#'>5</a></li>
+          <li><a href='#'>Next</a></li>
+          </ul>
+        </div>
+
+        <div id="events">
+          <ul id='event-list'></ul>
+        </div>
+
+      </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- templates -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script type="text/template" id="event-template">
+      <div class='event'>
+        <div class='event-time'>
+          <span class='event-time-date'><%= time %></span>
+          <span class='event-time-time'><%= date %></span>
+        </div>
+        <div class='event-text'><%= text %></div>
+        <div class='event-tags'>
+        <% _.each(tags, function(tag) { %>
+           <span class='label'><%= tag %></span>
+        <% }); %>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="paging-template">
+      <ul>
+        <li><a href='#'>Prev</a></li>
+        <% _.each(pages, function(page) { %>
+          <li class=<% page.active ? 'active' : '' %>
+            <a href='#'><%= page.id %></a>
+          </li>
+        <% }); %>
+        <li><a href='#'>Next</a></li>
+      </ul>
+    </script>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/highstock.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/lib/backbone-localstorage.js"></script> 
+    <script src="./assets/js/mock-data.js"></script> 
+    <script src="./assets/js/main.js"></script> 
+
+  </body> 
+</html>

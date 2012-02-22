@@ -1,0 +1,37 @@
+body {
+  padding-top: 60px;
+}
+.navbar .container {
+  padding-left: 3em;
+}
+
+#main-logo {
+  position:fixed;
+  top: 5px;
+  left: 5px;
+  width: 60px;
+  z-index:10000;
+}
+
+#events {
+  overflow:auto;
+}
+
+#event-graph {
+  height:200px;
+}
+
+
+#event-list {
+  list-style:none;
+  margin-left: 0;
+}
+
+#event-list .focused {
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.event-time {
+  color: #ccc;
+}
