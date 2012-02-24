@@ -283,6 +283,7 @@ var GenericChartView = Backbone.View.extend({
 
   defaults: {
     size: 100,
+    first: true,
   },
 
   /**
@@ -302,6 +303,12 @@ var GenericChartView = Backbone.View.extend({
    * @param current The new x axis value to link with
    */
   appendData: function(reading, current) {
+    if (this.first) {
+      _.each(this.chart.series, function(chart) {
+        chart.addPoint([current - 1, null], false, false);
+      }); // hack
+      this.first = false;
+    }
     _.each(_.zip(reading, this.chart.series), function(pair) {
       pair[1].addPoint([current, pair[0]], false, false);
     });
@@ -330,6 +337,32 @@ var GenericChartView = Backbone.View.extend({
     this.chart.redraw();
   }
 
+});
+
+var HealthNodeView = Backbone.View.extend({
+  tagName: 'em',
+  template: _.template($('#health-node-template').html()),
+  initailize: function(args) {
+    this.model.bind('change', this.render, this);
+    this.model.bind('destroy', this.remove, this);
+  },
+
+  remove: function() {
+    $(this.el).remove();
+  },
+
+  events: {
+    'click .btn': 'toggleNodeview'
+  },
+
+  toggleNodeview: function() {
+    var node = $(this.el).text();
+  },
+
+  render: function() {
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
+  }
 });
 
 // ------------------------------------------------------------
@@ -465,6 +498,9 @@ var OsMemoryChartView = GenericChartView.extend({
 // ------------------------------------------------------------
 // information table views
 // ------------------------------------------------------------
+// - update dynamic information
+// - add information retrieved from update
+// ------------------------------------------------------------
 var SystemNodeTableView = Backbone.View.extend({
   el: $('#node-system-info'),
   template: _.template($('#system-info-template').html()),
@@ -485,32 +521,6 @@ var JvmNodeTableView = Backbone.View.extend({
     return this;
   }
 
-});
-
-var HealthNodeView = Backbone.View.extend({
-  tagName: 'em',
-  template: _.template($('#health-node-template').html()),
-  initailize: function(args) {
-    this.model.bind('change', this.render, this);
-    this.model.bind('destroy', this.remove, this);
-  },
-
-  remove: function() {
-    $(this.el).remove();
-  },
-
-  events: {
-    'click .btn': 'toggleNodeview'
-  },
-
-  toggleNodeview: function() {
-    var node = $(this.el).text();
-  },
-
-  render: function() {
-    $(this.el).html(this.template(this.model.toJSON()));
-    return this;
-  }
 });
 
 
@@ -602,10 +612,11 @@ var ElasticHealthAppView = Backbone.View.extend({
   },
 
   newReading: function(data, xhr) {
-    _.each(this.charts, function(chart) {
-      chart.update(data);
+    var node = data.nodes[_.first(_.keys(data.nodes))];
+    _.each(window.app.charts, function(chart) {
+      chart.update(node);
     });
-    this.pollingCallback();
+    //this.pollingCallback();
   },
 
   toggleUpdating: function() {
