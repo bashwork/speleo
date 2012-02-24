@@ -44,7 +44,6 @@ var EventCollection = Backbone.Collection.extend({
 // views
 // ------------------------------------------------------------
 var EventView = Backbone.View.extend({
-  tagName: 'li',
   template: _.template($('#event-template').html()),
 
   events: {
@@ -60,7 +59,6 @@ var EventView = Backbone.View.extend({
 
   render: function() {
    $(this.el).html(this.template(this.model.toJSON()));
-   $(this.el).addClass('well');
    return this;
   },
 

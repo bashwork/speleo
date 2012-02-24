@@ -75,19 +75,21 @@
   <!-- templates -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <script type="text/template" id="event-template">
-      <a class="close event-close">&times;</a>
-      <div class='event'>
-        <div class='event-time'>
-          <span class='event-time-date'><%= time %></span>
-          <span class='event-time-time'><%= date %></span>
+      <li class='well'>
+        <a class="close event-close">&times;</a>
+        <div class='event'>
+          <div class='event-time'>
+            <span class='event-time-date'><%= time %></span>
+            <span class='event-time-time'><%= date %></span>
+          </div>
+          <div class='event-text'><%= text %></div>
+          <div class='event-tags'>
+          <% _.each(tags, function(tag) { %>
+             <span class='label'><%= tag %></span>
+          <% }); %>
+          </div>
         </div>
-        <div class='event-text'><%= text %></div>
-        <div class='event-tags'>
-        <% _.each(tags, function(tag) { %>
-           <span class='label'><%= tag %></span>
-        <% }); %>
-        </div>
-      </div>
+      </li>
     </script>
 
     <script type="text/template" id="paging-template">

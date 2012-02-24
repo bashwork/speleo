@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 // chart factories
 // ------------------------------------------------------------
-var jvmThreadsChartFactory = function(renderTo) {
+var jvmThreadsChartFactory = function(renderTo, title) {
     return new Highcharts.Chart({
         chart: {
             renderTo: renderTo,
@@ -9,7 +9,7 @@ var jvmThreadsChartFactory = function(renderTo) {
             marginRight: 10
         },
         title: {
-            text: 'Threads'
+            text: title,
         },
         credits: {
             enabled: false
@@ -109,7 +109,7 @@ var jvmMemoryChartFactory = function(renderTo, title) {
     });
 }
 
-var osCpuChartFactory = function(renderTo) {
+var osCpuChartFactory = function(renderTo, title) {
     return new Highcharts.Chart({
       chart: {
          renderTo: renderTo,
@@ -117,7 +117,7 @@ var osCpuChartFactory = function(renderTo) {
          marginRight: 10
       },
       title: {
-         text: 'CPU(%)'
+         text: title,
       },
         credits: {
             enabled: false
@@ -157,7 +157,7 @@ var osCpuChartFactory = function(renderTo) {
    });
 }
 
-var osSwapMemoryFactory = function(renderTo, title) {
+var osSwapMemoryChartFactory = function(renderTo, title) {
     return new Highcharts.Chart({
         chart: {
             renderTo: renderTo,
@@ -216,14 +216,14 @@ var osSwapMemoryFactory = function(renderTo, title) {
     });
 }
 
-var osMemoryChartFactory = function(renderTo) {
+var osMemoryChartFactory = function(renderTo, title) {
     return new Highcharts.Chart({
         chart: {
             renderTo: renderTo,
             defaultSeriesType: 'area'
         },
         title: {
-            text: "Mem"
+            text: title,
         },
         credits: {
             enabled: false
@@ -275,6 +275,7 @@ var osMemoryChartFactory = function(renderTo) {
     });
 }
 
+
 // ------------------------------------------------------------
 // views
 // ------------------------------------------------------------
@@ -285,20 +286,13 @@ var GenericChartView = Backbone.View.extend({
   },
 
   /**
-   * @param char The initialized chart to manage
-   */
-  initialize:function(chart) {
-    this.chart = chart;
-  },
-
-  /**
    * Add new data to the supplied chart
    * @param reading The new data to add to the chart
-   * @param current The new max x asix to limit by
    */
-  update: function(reading, current) {
-    this.appendData(reading, current);
-    this.shrink(current);
+  update: function(reading) {
+    var parsed = this.parse(reading);
+    this.appendData(parsed.data, parsed.time);
+    this.shrink(parsed.time);
     this.render();
   },
 
@@ -338,6 +332,187 @@ var GenericChartView = Backbone.View.extend({
 
 });
 
+// ------------------------------------------------------------
+// chart views
+// ------------------------------------------------------------
+var JvmThreadsChartView = GenericChartView.extend({
+  el: $('#node-jvm-threads'),
+
+  initialize: function() {
+    this.chart = jvmThreadsChartFactory(this.el, 'Jvm Threads');
+  },
+
+  parse: function(reading) {
+    var threads = reading.jvm.threads;
+    var dataset = [
+      threads.count,
+      threads.peak_count
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+});
+
+var JvmHeapMemoryChartView = GenericChartView.extend({
+  el: $('#node-jvm-heap-memory'),
+
+  initialize: function() {
+    this.chart = jvmMemoryChartFactory(this.el, 'Jvm Heap Memory');
+  },
+
+  parse: function(reading) {
+    var mem = reading.jvm.mem;
+    var dataset = [
+      mem.heap_committed_in_bytes,
+      mem.heap_used_in_bytes
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+});
+
+var JvmStackMemoryChartView = GenericChartView.extend({
+  el: $('#node-jvm-stack-memory'),
+
+  initialize: function() {
+    this.chart = jvmMemoryChartFactory(this.el, 'Jvm Stack Memory');
+  },
+
+  parse: function(reading) {
+    var mem = reading.jvm.mem;
+    var dataset = [
+      mem.non_heap_committed_in_bytes,
+      mem.non_heap_used_in_bytes
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+
+});
+
+var OsCpuChartView = GenericChartView.extend({
+  el: $('#node-os-cpu'),
+
+  initialize: function() {
+    this.chart = osCpuChartFactory(this.el, "OS CPU Percent");
+  },
+
+  parse: function(reading) {
+    var cpu = reading.os.cpu;
+    var dataset = [
+      os.cpu.idle,
+      os.cpu.sys,
+      os.cpu.user
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+
+});
+
+var OsSwapMemoryChartView = GenericChartView.extend({
+  el: $('#node-os-swap-memory'),
+
+  initialize: function() {
+    this.chart = osSwapMemoryChartFactory(this.el, 'OS Swap Memory');
+  },
+
+  parse: function(reading) {
+    var swap = reading.os.swap;
+    var dataset = [
+      swap.free_in_bytes,
+      swap.used_in_bytes
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+
+});
+
+var OsMemoryChartView = GenericChartView.extend({
+  el: $('#node-os-main-memory'),
+
+  initialize: function() {
+    this.chart = osMemoryChartFactory(this.el, ' OS Main Memory');
+  },
+
+  parse: function(reading) {
+    var mem = reading.os.mem;
+    var dataset = [
+      mem.actual_used_in_bytes + mem.actual_free_in_bytes,
+      mem.used_int_bytes,
+      mem.actual_used_in_bytes
+    ];
+    return {
+      data: dataset,
+      time: reading.os.timestamp
+    };
+  }
+
+});
+
+
+// ------------------------------------------------------------
+// information table views
+// ------------------------------------------------------------
+var SystemNodeTableView = Backbone.View.extend({
+  el: $('#node-system-info'),
+  template: _.template($('#system-info-template').html()),
+
+  render: function() {
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
+  }
+
+});
+
+var JvmNodeTableView = Backbone.View.extend({
+  el: $('#node-jvm-info'),
+  template: _.template($('#jvm-info-template').html()),
+
+  render: function() {
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
+  }
+
+});
+
+var HealthNodeView = Backbone.View.extend({
+  tagName: 'em',
+  template: _.template($('#health-node-template').html()),
+  initailize: function(args) {
+    this.model.bind('change', this.render, this);
+    this.model.bind('destroy', this.remove, this);
+  },
+
+  remove: function() {
+    $(this.el).remove();
+  },
+
+  events: {
+    'click .btn': 'toggleNodeview'
+  },
+
+  toggleNodeview: function() {
+    var node = $(this.el).text();
+  },
+
+  render: function() {
+    $(this.el).html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
 
 // ------------------------------------------------------------
 // router
@@ -347,6 +522,7 @@ var Router = Backbone.Router.extend({
     '': 'index',
   },
 });
+
 
 // ------------------------------------------------------------
 // models
@@ -361,6 +537,7 @@ var HealthNode = Backbone.Model.extend({
 var HealthNodeCollection = Backbone.Collection.extend({
   model: HealthNode,
   localStorage: new Store('health-nodes'),
+
 });
 
 
@@ -375,49 +552,68 @@ var ElasticHealthAppView = Backbone.View.extend({
     delay: 2,
     connected: false
   },
-  template: _.template($('#info-template').html()),
 
-  el: $('#health-app'),
+  template: _.template($('#info-template').html()),
   events: {
     'click #health-enable': 'toggleUpdating'
   },
 
   initialize: function() {
+    HealthNodes.bind('add', this.addHealthNode);
     this.elastic = new ElasticSearch({
       host: this.host,
       port: this.port
     });
-    //this.toggleUpdating();
-    this.elastic.adminClusterNodeInfo({
-      callback: this.updateInformation
-    });
+
+    this.charts = [
+      new JvmThreadsChartView(),
+      new JvmHeapMemoryChartView(),
+      new JvmStackMemoryChartView(),
+      new OsCpuChartView(),
+      new OsSwapMemoryChartView(),
+      new OsMemoryChartView()
+    ];
+    this.toggleUpdating();
   },
 
-  updateInformation: function(d, x) {
-    _.each(nodes, function(node) {
-      HealthNodes.create(node);
-    });
+  addHealthNode: function(node) {
+    var view = new HealthNodeView({ model: node });
+    $('#health-nodes').append(view.render().el);
   },
 
   pollingCallback: function() {
     if (this.connected) {
       setInterval(function() {
-        this.elastic.adminClusterNodeStats({
-          callback: this.newReading
-        });
+         this.elastic.adminClusterNodeStats({
+           callback: this.newReading
+         });
+         this.elastic.adminClusterNodeInfo({
+           callback: this.updateInformation
+         });
       }, this.delay);
     }
   },
 
+  updateInformation: function(data, xhr) {
+    HealthNodes.reset();
+    _.each(data.nodes, function(node) {
+      HealthNodes.create(node);
+    });
+  },
+
   newReading: function(data, xhr) {
+    _.each(this.charts, function(chart) {
+      chart.update(data);
+    });
     this.pollingCallback();
   },
 
   toggleUpdating: function() {
     this.connected = !this.connected;
     if (this.connected) {
-      this.elastic.adminClusterNodeStats({
-        callback: this.newReading
+      //this.elastic.adminClusterNodeStats({ callback: this.newReading });
+      this.elastic.adminClusterNodeInfo({
+        callback: this.updateInformation
       });
       $(this.el).text('Stop Polling');
     } else {
