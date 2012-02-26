@@ -335,6 +335,10 @@ var GenericChartView = Backbone.View.extend({
 
   render: function() {
     this.chart.redraw();
+  },
+
+  timeToIndex: function(ticks) {
+    return ticks
   }
 
 });
@@ -376,14 +380,18 @@ var JvmThreadsChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var threads = reading.jvm.threads;
-    var dataset = [
-      threads.count,
-      threads.peak_count
-    ];
+    var threads = reading.get('jvm').threads;
+    if (!threads) {
+      var dataset = [0,0];
+    } else {
+      var dataset = [
+        threads.count,
+        threads.peak_count
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('jvm').timestamp,
     };
   }
 });
@@ -396,14 +404,18 @@ var JvmHeapMemoryChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var mem = reading.jvm.mem;
-    var dataset = [
-      mem.heap_committed_in_bytes,
-      mem.heap_used_in_bytes
-    ];
+    var mem = reading.get('jvm').mem;
+    if (!mem) {
+      var dataset = [0,0];
+    } else {
+      var dataset = [
+        mem.heap_committed_in_bytes,
+        mem.heap_used_in_bytes
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('os').timestamp
     };
   }
 });
@@ -416,14 +428,18 @@ var JvmStackMemoryChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var mem = reading.jvm.mem;
-    var dataset = [
-      mem.non_heap_committed_in_bytes,
-      mem.non_heap_used_in_bytes
-    ];
+    var mem = reading.get('jvm').mem;
+    if (!mem) {
+      var dataset = [0,0];
+    } else {
+      var dataset = [
+        mem.non_heap_committed_in_bytes,
+        mem.non_heap_used_in_bytes
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('os').timestamp
     };
   }
 
@@ -437,15 +453,19 @@ var OsCpuChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var cpu = reading.os.cpu;
-    var dataset = [
-      os.cpu.idle,
-      os.cpu.sys,
-      os.cpu.user
-    ];
+    var cpu = reading.get('os').cpu;
+    if (!cpu) {
+      var dataset = [0,0,0];
+    } else {
+      var dataset = [
+        os.cpu.idle,
+        os.cpu.sys,
+        os.cpu.user
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('os').timestamp
     };
   }
 
@@ -459,14 +479,18 @@ var OsSwapMemoryChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var swap = reading.os.swap;
-    var dataset = [
-      swap.free_in_bytes,
-      swap.used_in_bytes
-    ];
+    var swap = reading.get('os').swap;
+    if (!swap) {
+      var dataset = [0,0];
+    } else {
+      var dataset = [
+        swap.free_in_bytes,
+        swap.used_in_bytes
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('os').timestamp
     };
   }
 
@@ -480,17 +504,47 @@ var OsMemoryChartView = GenericChartView.extend({
   },
 
   parse: function(reading) {
-    var mem = reading.os.mem;
-    var dataset = [
-      mem.actual_used_in_bytes + mem.actual_free_in_bytes,
-      mem.used_int_bytes,
-      mem.actual_used_in_bytes
-    ];
+    var mem = reading.get('os').mem;
+    if (!mem) {
+      var dataset = [0,0,0];
+    } else {
+      var dataset = [
+        mem.actual_used_in_bytes + mem.actual_free_in_bytes,
+        mem.used_int_bytes,
+        mem.actual_used_in_bytes
+      ];
+    }
     return {
       data: dataset,
-      time: reading.os.timestamp
+      time: reading.get('os').timestamp
     };
   }
+
+});
+
+var ChartViewCollection = Backbone.View.extend({
+  initialize: function() {
+    this.charts = [
+      new JvmThreadsChartView(),
+      new JvmHeapMemoryChartView(),
+      new JvmStackMemoryChartView(),
+      new OsCpuChartView(),
+      new OsSwapMemoryChartView(),
+      new OsMemoryChartView()
+    ];
+  },
+
+  update:function(data) {
+    _.each(this.charts, function(chart) {
+      chart.update(data);
+    });
+  },
+
+  clear:function() {
+    _.each(this.charts, function(chart) {
+      chart.clear();
+    });
+  },
 
 });
 
@@ -519,6 +573,24 @@ var JvmNodeTableView = Backbone.View.extend({
   render: function() {
     $(this.el).html(this.template(this.model.toJSON()));
     return this;
+  }
+
+});
+
+var TableViewCollection = Backbone.View.extend({
+
+  initialize: function() {
+    this.tables = [
+      new SystemNodeTableView({ model: null }),
+      new JvmNodeTableView({ model: null }),
+    ];
+  },
+
+  update:function(model) {
+    _.each(this.tables, function(table) {
+      table.model = model;
+      table.render();
+    });
   }
 
 });
@@ -556,80 +628,93 @@ var HealthNodeCollection = Backbone.Collection.extend({
 // ------------------------------------------------------------
 var ElasticHealthAppView = Backbone.View.extend({
 
-  defaults: {
-    host: 'localhost',
-    port: 9200,
-    delay: 2,
-    connected: false
-  },
-
-  template: _.template($('#info-template').html()),
+  el: $('#health-toolbar'),
   events: {
-    'click #health-enable': 'toggleUpdating'
+    'click #health-enable': 'toggleUpdating',
+    'click .node-toggle': 'switchHealthNode'
   },
 
   initialize: function() {
-    HealthNodes.bind('add', this.addHealthNode);
+    HealthNodes.bind('add', this.addHealthNode, this);
+    //HealthNodes.bind('change', this.updateHealthNode, this);
+    this.config = { // store all of this in the dom
+      host: 'localhost',
+      port: 9200,
+      delay: 5000,
+      connected: false,
+      current: null
+    };
     this.elastic = new ElasticSearch({
-      host: this.host,
-      port: this.port
+      host: this.config.host,
+      port: this.config.port
     });
-
-    this.charts = [
-      new JvmThreadsChartView(),
-      new JvmHeapMemoryChartView(),
-      new JvmStackMemoryChartView(),
-      new OsCpuChartView(),
-      new OsSwapMemoryChartView(),
-      new OsMemoryChartView()
-    ];
+    this.charts = new ChartViewCollection();
+    this.tables = new TableViewCollection();
     this.toggleUpdating();
+  },
+
+  switchHealthNode: function(node) { 
+    var name = node.target.innerText;
+    var handle = HealthNodes.find(function(n) {
+      return n.get('name') === name;
+    });
+    this.tables.update(handle);
+    this.charts.clear();
+    this.charts.update(handle);
+    // highlight current button
+    // - disable this click
+  },
+
+  updateHealthNode: function(node) {
+    this.tables.update(node);
+    this.charts.update(node);
   },
 
   addHealthNode: function(node) {
     var view = new HealthNodeView({ model: node });
-    $('#health-nodes').append(view.render().el);
+    var mark = view.render().el;
+    $('#health-nodes', this.el).append(mark);
   },
 
   pollingCallback: function() {
-    if (this.connected) {
+    // in case we haven't gotten initial feed yet
+    if (this.config.connected && !this.config.current) {
+      setInterval(this.pollingCallback, this.config.delay);
+    } else if (this.config.connected) {
       setInterval(function() {
+         console.log('inside node data');
          this.elastic.adminClusterNodeStats({
-           callback: this.newReading
+           callback: this.newReading, // change and merge model
+           nodes: [this.config.current.get('id')]
          });
-         this.elastic.adminClusterNodeInfo({
-           callback: this.updateInformation
-         });
-      }, this.delay);
+      }, this.config.delay);
     }
-  },
-
-  updateInformation: function(data, xhr) {
-    HealthNodes.reset();
-    _.each(data.nodes, function(node) {
-      HealthNodes.create(node);
-    });
-  },
-
-  newReading: function(data, xhr) {
-    var node = data.nodes[_.first(_.keys(data.nodes))];
-    _.each(window.app.charts, function(chart) {
-      chart.update(node);
-    });
-    //this.pollingCallback();
   },
 
   toggleUpdating: function() {
-    this.connected = !this.connected;
-    if (this.connected) {
-      //this.elastic.adminClusterNodeStats({ callback: this.newReading });
+    console.log('toggle that updating');
+    this.config.connected = !this.config.connected;
+    if (this.config.connected) {
       this.elastic.adminClusterNodeInfo({
-        callback: this.updateInformation
+        callback: this.updateNodeInformation
       });
-      $(this.el).text('Stop Polling');
+      //this.pollingCallback();
+      //$(this.el).text('Stop Polling');
     } else {
-      $(this.el).text('Start Polling');
+      //$(this.el).text('Start Polling');
     }
+  },
+
+  /**
+   * Elastic Search Callbacks
+   */
+
+  updateNodeInformation: function(data, xhr) {
+    HealthNodes.reset();
+    _.each(data.nodes, function(node, key) {
+      node.id = key; // cid?
+      HealthNodes.create(node);
+    });
   },
 
 });
