@@ -35,3 +35,7 @@ body {
 .event-time {
   color: #ccc;
 }
+
+table tbody {
+  display: none;
+}

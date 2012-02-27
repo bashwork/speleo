@@ -292,8 +292,8 @@ var GenericChartView = Backbone.View.extend({
    */
   update: function(reading) {
     var parsed = this.parse(reading);
-    this.appendData(parsed.data, parsed.time);
-    this.shrink(parsed.time);
+    this._appendData(parsed.data, parsed.time);
+    this._shrink(parsed.time);
     this.render();
   },
 
@@ -302,7 +302,7 @@ var GenericChartView = Backbone.View.extend({
    * @param reading The new data to add to the chart
    * @param current The new x axis value to link with
    */
-  appendData: function(reading, current) {
+  _appendData: function(reading, current) {
     if (this.first) {
       _.each(this.chart.series, function(chart) {
         chart.addPoint([current - 1, null], false, false);
@@ -318,7 +318,7 @@ var GenericChartView = Backbone.View.extend({
    * Shrink the chart data series to stay in alloted space
    * @param current The new max x asix to limit by
    */
-  shrink: function(current) {
+  _shrink: function(current) {
     var threshold = current - this.size;
     _.each(this.chart.series, function(series) {
       while(series.data[0].category && series.data[0].category < threshold) {
@@ -343,28 +343,45 @@ var GenericChartView = Backbone.View.extend({
 
 });
 
-var HealthNodeView = Backbone.View.extend({
-  tagName: 'em',
-  template: _.template($('#health-node-template').html()),
-  initailize: function(args) {
-    this.model.bind('change', this.render, this);
-    this.model.bind('destroy', this.remove, this);
-  },
-
-  remove: function() {
-    $(this.el).remove();
-  },
-
+var GenericTableView = Backbone.View.extend({
   events: {
-    'click .btn': 'toggleNodeview'
+    'click table': 'toggleTable'
   },
 
-  toggleNodeview: function() {
-    var node = $(this.el).text();
+  toggleTable: function() {
+    $('tbody', this.el).toggle('fast');
   },
 
   render: function() {
+    var current = $('tbody', this.el).css('display');
     $(this.el).html(this.template(this.model.toJSON()));
+    $('tbody', this.el).css('display', current);
+    return this;
+  }
+
+});
+
+
+var HealthNodeView = Backbone.View.extend({
+  tagName: 'em',
+  template: _.template($('#health-node-template').html()),
+  initialize: function() {
+    this.model.bind('destroy', this.remove, this);
+    this.model.bind('change:current', this.update, this);
+    HealthNodes.bind('reset',  this.remove, this);
+  },
+
+  remove: function() {
+    this.$el.remove();
+  },
+
+  update: function() {
+    var method = this.model.get('current') ? 'addClass' : 'removeClass';
+    $('.btn', this.el)[method]('btn-primary disabled');
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
   }
 });
@@ -555,40 +572,24 @@ var ChartViewCollection = Backbone.View.extend({
 // - update dynamic information
 // - add information retrieved from update
 // ------------------------------------------------------------
-var SystemNodeTableView = Backbone.View.extend({
+var SystemNodeTableView = GenericTableView.extend({
   el: $('#node-system-info'),
-  template: _.template($('#system-info-template').html()),
-  events: {
-    'click table': 'toggleTable'
-  },
-
-  toggleTable: function() {
-    $('tbody', this.el).slideToggle('slow');
-  },
-
-  render: function() {
-    $(this.el).html(this.template(this.model.toJSON()));
-    return this;
-  }
-
+  template: _.template($('#system-info-template').html())
 });
 
-var JvmNodeTableView = Backbone.View.extend({
+var JvmNodeTableView = GenericTableView.extend({
   el: $('#node-jvm-info'),
-  template: _.template($('#jvm-info-template').html()),
-  events: {
-    'click table': 'toggleTable'
-  },
+  template: _.template($('#jvm-info-template').html())
+});
 
-  toggleTable: function() {
-    $('tbody', this.el).slideToggle('slow');
-  },
+var IndexNodeTableView = GenericTableView.extend({
+  el: $('#node-index-info'),
+  template: _.template($('#index-info-template').html())
+});
 
-  render: function() {
-    $(this.el).html(this.template(this.model.toJSON()));
-    return this;
-  }
-
+var NetworkNodeTableView = GenericTableView.extend({
+  el: $('#node-network-info'),
+  template: _.template($('#network-info-template').html())
 });
 
 var TableViewCollection = Backbone.View.extend({
@@ -597,6 +598,8 @@ var TableViewCollection = Backbone.View.extend({
     this.tables = [
       new SystemNodeTableView({ model: null }),
       new JvmNodeTableView({ model: null }),
+      new IndexNodeTableView({ model: null }),
+      new NetworkNodeTableView({ model: null })
     ];
   },
 
@@ -624,6 +627,9 @@ var Router = Backbone.Router.extend({
 // models
 // ------------------------------------------------------------
 var HealthNode = Backbone.Model.extend({
+  defaults: {
+    current: false
+  }
 });
 
 
@@ -659,8 +665,13 @@ var HealthNodeCollection = Backbone.Collection.extend({
 // main 
 // ------------------------------------------------------------
 var ElasticHealthAppView = Backbone.View.extend({
+  /**
+   * Get event callbacks consistent (this!)
+   */
 
   el: $('#health-toolbar'),
+  nodesEl: $('#health-nodes'),
+  enableEl: $('#health-enable'),
   events: {
     'click #health-enable': 'toggleUpdating',
     'click .node-toggle': 'switchHealthNode'
@@ -670,72 +681,73 @@ var ElasticHealthAppView = Backbone.View.extend({
     HealthNodes.bind('add', this.addHealthNode, this);
     HealthNodes.bind('change', this.updateHealthNode, this);
 
-    this.config = { // store all of this in the dom
-      host: 'localhost',
-      port: 9200,
-      delay: 5000,
-      connected: false,
-    };
+    _.bindAll(this, 'pollingCallback');
+
     this.elastic = new ElasticSearch({
-      host: this.config.host,
-      port: this.config.port
+      host: window.config.host,
+      port: window.config.port
     });
+
     this.charts = new ChartViewCollection();
     this.tables = new TableViewCollection();
     this.toggleUpdating();
   },
 
   switchHealthNode: function(node) { 
-    HealthNodes.setAll('active', false);
-    var name = node.target.innerText;
-    var handle = HealthNodes.getBy('name', name);
+    HealthNodes.setAll('current', false);
+    var name   = node.target.innerText,
+        handle = HealthNodes.getBy('name', name);
+
     if (handle) {
-      handle.set('active', true);
+      handle.set('current', true);
       this.tables.update(handle);
       this.charts.clear();
       this.charts.update(handle);
     }
-    // highlight current button
-    // - disable this click
-  },
-
-  updateHealthNode: function(node) {
-    this.tables.update(node);
-    this.charts.update(node);
   },
 
   addHealthNode: function(node) {
     var view = new HealthNodeView({ model: node });
-    var mark = view.render().el;
-    $('#health-nodes', this.el).append(mark);
+    this.nodesEl.append(view.render().el);
+  },
+
+  updateHealthNode: function(node) {
+    if (node.get('current')) {
+      this.tables.update(node);
+      this.charts.update(node);
+    }
   },
 
   pollingCallback: function() {
-    // in case we haven't gotten initial feed yet
-    if (this.config.connected && !HealthNodes.current()) {
-      setInterval(this.pollingCallback, this.config.delay);
-    } else if (this.config.connected) {
-      setInterval(function() {
-         console.log('inside node data');
-         this.elastic.adminClusterNodeStats({
-           callback: this.mergeNewInformation,
-           nodes: [HealthNodes.current().id]
-         });
-      }, this.config.delay);
+    var self = this;
+    var request = {
+      callback: function(data, xhr) {
+        self.mergeNewInformation(data, xhr);
+        self.pollingCallback();
+      }
+    };
+
+    if (HealthNodes.current()) {
+      request.nodes = [HealthNodes.current().id];
+    }
+
+    if (window.config.connected) {
+      _.delay(function() {
+         self.elastic.adminClusterNodeStats(request);
+      }, window.config.delay);
     }
   },
 
   toggleUpdating: function() {
-    console.log('toggle that updating');
-    this.config.connected = !this.config.connected;
-    if (this.config.connected) {
+    window.config.connected = !window.config.connected;
+    if (window.config.connected) {
       this.elastic.adminClusterNodeInfo({
         callback: this.updateNodeInformation
       });
-      //this.pollingCallback();
-      //$(this.el).text('Stop Polling');
+      this.pollingCallback();
+      $(this.enableEl).text('Stop Polling');
     } else {
-      //$(this.el).text('Start Polling');
+      $(this.enableEl).text('Start Polling');
     }
   },
 
@@ -754,7 +766,8 @@ var ElasticHealthAppView = Backbone.View.extend({
   mergeNewInformation: function(data, xhr) {
     _.each(data.nodes, function(node, key) {
       var mark = HealthNodes.getBy('id', key);
-      mark.set(node);
+      mark.set($.extend(true, mark.toJSON(), node), { silent: true });
+      mark.set('dirty', !mark.get('dirty')); // hack
     });
   },
 
@@ -765,6 +778,12 @@ var ElasticHealthAppView = Backbone.View.extend({
 // page ready
 // ------------------------------------------------------------
 jQuery(function initialize($) {
+  window.config = {
+      host: 'localhost',
+      port: 9200,
+      delay: 5000,
+      connected: false,
+  };
   window.HealthNodes = new HealthNodeCollection();
   window.app = new ElasticHealthAppView();
   app.router = new Router();
