@@ -6,12 +6,6 @@
 // router
 // ------------------------------------------------------------
 var Router = Backbone.Router.extend({
-  /**
-   * - handle dashboard
-   * - handle about
-   * - handle contact (send email to support)
-   * - handle statistics (a whole new iteration)
-   */
   routes : {
     '': 'index',
   },
@@ -22,11 +16,16 @@ var Router = Backbone.Router.extend({
 // main 
 // ------------------------------------------------------------
 var QueryAppView = Backbone.View.extend({
+  /**
+   * add common requests autocomplete
+   * - select correct method
+   */
 
   el: $('#query-app'),
   queryDataEl: $('#query-data'),
   queryActionEl: $('#query-action'),
   queryPathEl: $('#query-path'),
+  queryResults: $('#query-results'),
 
   events: {
     'click #query-submit': 'executeQueryButton',
@@ -40,16 +39,16 @@ var QueryAppView = Backbone.View.extend({
   },
 
   displayResults: function(data, xhr) {
-    console.log(data);
     $('#query-results').html(JSON.stringify(data, null, ' '));
     prettyPrint();
   },
 
   resetQueryButton: function(e) {
     e.preventDefault();
-    this.queryDataEl.input.val('');
-    this.queryActionEl.input.val('GET');
-    this.queryPathEl.input.val('');
+    this.queryDataEl.val('');
+    this.queryActionEl.val('POST');
+    this.queryPathEl.val('');
+    this.queryResults.html('');
   },
 
   executeQueryButton: function(e) {
