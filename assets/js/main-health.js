@@ -558,6 +558,13 @@ var ChartViewCollection = Backbone.View.extend({
 var SystemNodeTableView = Backbone.View.extend({
   el: $('#node-system-info'),
   template: _.template($('#system-info-template').html()),
+  events: {
+    'click table': 'toggleTable'
+  },
+
+  toggleTable: function() {
+    $('tbody', this.el).slideToggle('slow');
+  },
 
   render: function() {
     $(this.el).html(this.template(this.model.toJSON()));
@@ -569,6 +576,13 @@ var SystemNodeTableView = Backbone.View.extend({
 var JvmNodeTableView = Backbone.View.extend({
   el: $('#node-jvm-info'),
   template: _.template($('#jvm-info-template').html()),
+  events: {
+    'click table': 'toggleTable'
+  },
+
+  toggleTable: function() {
+    $('tbody', this.el).slideToggle('slow');
+  },
 
   render: function() {
     $(this.el).html(this.template(this.model.toJSON()));
@@ -620,6 +634,24 @@ var HealthNodeCollection = Backbone.Collection.extend({
   model: HealthNode,
   localStorage: new Store('health-nodes'),
 
+  current: function() {
+    return this.find(function(node) {
+      return node.current;
+    });
+  },
+
+  setAll: function(field, value) {
+    this.each(function(node) {
+      node.set(field, value);
+    });
+  },
+
+  getBy: function(key, value) {
+    return this.find(function(n) {
+      return n.get(key) === value;
+    });
+  }
+
 });
 
 
@@ -636,13 +668,13 @@ var ElasticHealthAppView = Backbone.View.extend({
 
   initialize: function() {
     HealthNodes.bind('add', this.addHealthNode, this);
-    //HealthNodes.bind('change', this.updateHealthNode, this);
+    HealthNodes.bind('change', this.updateHealthNode, this);
+
     this.config = { // store all of this in the dom
       host: 'localhost',
       port: 9200,
       delay: 5000,
       connected: false,
-      current: null
     };
     this.elastic = new ElasticSearch({
       host: this.config.host,
@@ -654,13 +686,15 @@ var ElasticHealthAppView = Backbone.View.extend({
   },
 
   switchHealthNode: function(node) { 
+    HealthNodes.setAll('active', false);
     var name = node.target.innerText;
-    var handle = HealthNodes.find(function(n) {
-      return n.get('name') === name;
-    });
-    this.tables.update(handle);
-    this.charts.clear();
-    this.charts.update(handle);
+    var handle = HealthNodes.getBy('name', name);
+    if (handle) {
+      handle.set('active', true);
+      this.tables.update(handle);
+      this.charts.clear();
+      this.charts.update(handle);
+    }
     // highlight current button
     // - disable this click
   },
@@ -678,14 +712,14 @@ var ElasticHealthAppView = Backbone.View.extend({
 
   pollingCallback: function() {
     // in case we haven't gotten initial feed yet
-    if (this.config.connected && !this.config.current) {
+    if (this.config.connected && !HealthNodes.current()) {
       setInterval(this.pollingCallback, this.config.delay);
     } else if (this.config.connected) {
       setInterval(function() {
          console.log('inside node data');
          this.elastic.adminClusterNodeStats({
-           callback: this.newReading, // change and merge model
-           nodes: [this.config.current.get('id')]
+           callback: this.mergeNewInformation,
+           nodes: [HealthNodes.current().id]
          });
       }, this.config.delay);
     }
@@ -714,6 +748,13 @@ var ElasticHealthAppView = Backbone.View.extend({
     _.each(data.nodes, function(node, key) {
       node.id = key; // cid?
       HealthNodes.create(node);
+    });
+  },
+
+  mergeNewInformation: function(data, xhr) {
+    _.each(data.nodes, function(node, key) {
+      var mark = HealthNodes.getBy('id', key);
+      mark.set(node);
     });
   },
 
