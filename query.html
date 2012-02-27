@@ -1,0 +1,103 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Some Pithy Text</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/google-prettify.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li class="active"><a href="#">Home</a></li> 
+              <li><a href="#about">About</a></li> 
+              <li><a href="#contact">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="query-app">
+
+        <div class="row">
+          <div class="span4">
+            <form id='query-form' class='well form-vertical'>
+
+              <div class='control-group'>
+                <label class='control-label' for='query-path'>Path</label>
+                <div class='controls'>
+                  <input id='query-path' type='text' class='input-xlarge' placeholder='The path to query against' />
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='query-action'>Method</label>
+                <div class='controls'>
+                  <select id='query-action'>
+                    <option>POST</option>
+                    <option>GET</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='query-data'>Query Data</label>
+                <div class='controls'>
+                  <textarea id='query-data' type='text' class='input-xlarge' rows="20"></textarea>
+                </div>
+              </div>
+
+              <div class='form-actions'>
+                <button id='query-submit' type='submit' class='btn bth-primary'><i class='icon-ok'></i> Execute</button>
+                <button id='query-reset' class='btn'><i class='icon-remove'></i> Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <div class='span8'>
+            <pre id='query-results' class="prettyprint linenums"></pre>
+          </div>
+        </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/google-prettify.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/lib/elasticsearch.js"></script> 
+    <script src="./assets/js/main-query.js"></script> 
+
+  </body> 
+</html>
