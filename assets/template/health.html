@@ -1,0 +1,159 @@
+<script type="text/template" id="health-main-template">
+  <div class="row">
+    <div class="span12">
+      <div id='health-toolbar' class="well">
+      <a class="btn btn-primary" id='health-enable' href="#">Start Polling</a>
+        <div id='health-nodes' class="btn-group pull-right"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span6">
+      <div id='node-system-info' class="wel"></div>
+    </div>
+  
+    <div class="span6">
+      <div id='node-jvm-info' class="wel"></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span6">
+      <div id='node-index-info' class="wel"></div>
+    </div>
+  
+    <div class="span6">
+      <div id='node-network-info' class="wel"></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span4">
+      <div id="node-jvm-threads"></div>
+    </div>
+  
+    <div class="span4">
+      <div id="node-jvm-heap-memory"></div>
+    </div>
+  
+    <div class="span4">
+      <div id="node-jvm-stack-memory"></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span4">
+      <div id='node-os-cpu'></div>
+    </div>
+  
+    <div class="span4">
+      <div id='node-os-swap-memory'></div>
+    </div>
+  
+    <div class="span4">
+      <div id='node-os-main-memory'></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="health-sys-info-template">
+  <div class='info-block'>
+    <table class='table table-bordered table-striped table-condensed'>
+    <thead>
+      <tr>
+        <th>System Information <i class='icon-plus pull-right'></i></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr><td>node name</td><td><%= name %></td></tr>
+    <tr><td>uptime</td><td><%= os.uptime %></td></tr>
+    <tr><td>cpu</td><td><%= os.cpu.model %></td></tr>
+    <tr><td>cpu vendor</td><td><%= os.cpu.vendor %></td></tr>
+    <tr><td>cpu cores</td><td><%= os.cpu.total_cores %></td></tr>
+    <tr><td>cpu cache size</td><td><%= os.cpu.cache_size %></td></tr>
+    <tr><td>total memory</td><td><%= os.mem.total %></td></tr>
+    <tr><td>total swap</td><td><%= os.swap.total %></td></tr>
+    <tr><td>process id</td><td><%= process.id %></td></tr>
+    <tr><td>max file handles</td><td><%= process.max_file_descriptors %></td></tr>
+    <tr><td>open file handles</td><td><%= process.open_file_descriptors %></td></tr>
+    <tr><td>http addres</td><td><%= http_address %></td></tr>
+    <tr><td>transport addres</td><td><%= transport_address %></td></tr>
+    <tr><td>bound addres</td><td><%= transport.bound_address %></td></tr>
+    <tr><td>publish addres</td><td><%= transport.publish_address %></td></tr>
+    </tbody>
+    </table>
+  </div>
+</script>
+
+<script type="text/template" id="health-jvm-info-template">
+  <div class='info-block'>
+    <table class='table table-bordered table-striped table-condensed'>
+    <thead>
+      <tr>
+        <th>JVM Information <i class='icon-plus pull-right'></i></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr><td>uptime</td><td><%= jvm.uptime %></td></tr>
+    <tr><td>name</td><td><%= jvm.vm_name %></td></tr>
+    <tr><td>vendor</td><td><%= jvm.vm_vendor %></td></tr>
+    <tr><td>vm version</td><td><%= jvm.vm_version %></td></tr>
+    <tr><td>java version</td><td><%= jvm.version %></td></tr>
+    <tr><td>gc collections</td><td><%= jvm.gc.collection_count %></td></tr>
+    <tr><td>gc time</td><td><%= jvm.gc.collection_time %></td></tr>
+    </tbody>
+    </table>
+  </div>
+</script>
+
+<script type="text/template" id="health-idx-info-template">
+  <div class='info-block'>
+    <table class='table table-bordered table-striped table-condensed'>
+    <thead>
+      <tr>
+        <th>Index Information <i class='icon-plus pull-right'></i></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr><td>total size</td><td><%= indices.store.size %></td></tr>
+    <tr><td>total documents</td><td><%= indices.docs.count %></td></tr>
+    <tr><td>index count</td><td><%= indices.indexing.index_total %></td></tr>
+    <tr><td>index time</td><td><%= indices.indexing.index_time %></td></tr>
+    <tr><td>search count</td><td><%= indices.search.query_total %></td></tr>
+    <tr><td>search time</td><td><%= indices.search.query_time %></td></tr>
+    <tr><td>refresh count</td><td><%= indices.refresh.total %></td></tr>
+    <tr><td>refresh time</td><td><%= indices.refresh.total_time %></td></tr>
+    <tr><td>flush count</td><td><%= indices.flush.total %></td></tr>
+    <tr><td>flush time</td><td><%= indices.flush.total_time %></td></tr>
+    </tbody>
+    </table>
+  </div>
+</script>
+
+<script type="text/template" id="health-net-info-template">
+  <div class='info-block'>
+    <table class='table table-bordered table-striped table-condensed'>
+    <thead>
+      <tr>
+        <th>Network Information <i class='icon-plus pull-right'></i></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr><td>current connections</td><td><%= network.tcp.curr_stab %></td></tr>
+    <tr><td>total active</td><td><%= network.tcp.active_opens %></td></tr>
+    <tr><td>total passive</td><td><%= network.tcp.passive_opens %></td></tr>
+    <tr><td>receive size</td><td><%= transport.rx_size %></td></tr>
+    <tr><td>receive count</td><td><%= transport.rx_count %></td></tr>
+    <tr><td>transfer size</td><td><%= transport.tx_size %></td></tr>
+    <tr><td>transfer count</td><td><%= transport.tx_count %></td></tr>
+    <tr><td>current http</td><td><%= http.current_open %></td></tr>
+    <tr><td>total http</td><td><%= http.total_opened %></td></tr>
+    </tbody>
+    </table>
+  </div>
+</script>
+
+<script type="text/template" id="health-node-template">
+  <a class='btn node-toggle' href='#<%= name %>'><%= name %></a>
+</script>

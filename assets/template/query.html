@@ -1,0 +1,43 @@
+<script type="text/template" id="query-main-template">
+  <div class="row">
+    <div class="span4">
+      <form id='query-form' class='well form-vertical'>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-path'>Path</label>
+          <div class='controls'>
+            <input id='query-path' type='text' class='input-xlarge' placeholder='The path to query against' />
+          </div>
+        </div>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-action'>Method</label>
+          <div class='controls'>
+            <select id='query-action'>
+              <option value='POST'>post</option>
+              <option value='GET'>get</option>
+              <option value='PUT'>put</option>
+              <option value='DELETE'>delete</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-data'>Query Data</label>
+          <div class='controls'>
+            <textarea id='query-data' type='text' class='input-xlarge' rows="20"></textarea>
+          </div>
+        </div>
+  
+        <div class='form-actions'>
+          <button id='query-submit' type='submit' class='btn bth-primary'><i class='icon-ok'></i> Execute</button>
+          <button id='query-reset' class='btn'><i class='icon-remove'></i> Reset</button>
+        </div>
+      </form>
+    </div>
+  
+    <div class='span8'>
+      <pre id='query-results' class="prettyprint linenums"></pre>
+    </div>
+  </div>
+</script>

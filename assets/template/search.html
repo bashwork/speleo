@@ -1,0 +1,55 @@
+<script type="text/template" id="search-main-template">
+  <form id='search-events' class='well form-search'>
+    <input id='new-event' type='text' class='input-xlarge search-query' placeholder='What are you looking for' />
+    <button id='new-event-submit' type='submit' class='btn'><i class='icon-search'></i> Search</button>
+  </form>
+
+  <div id='event-graph'>
+  </div>
+
+  <div id='event-pager' class='pagination'>
+    <ul>
+    <li><a href='#'>Prev</a></li>
+    <li class='active'><a href='#'>1</a></li>
+    <li><a href='#'>2</a></li>
+    <li><a href='#'>3</a></li>
+    <li><a href='#'>4</a></li>
+    <li><a href='#'>5</a></li>
+    <li><a href='#'>Next</a></li>
+    </ul>
+  </div>
+
+  <div id="events">
+    <ul id='event-list'></ul>
+  </div>
+</script>
+
+<script type="text/template" id="search-event-template">
+  <li class='well'>
+    <a class="close event-close">&times;</a>
+    <div class='event'>
+      <div class='event-time'>
+        <span class='event-time-date'><%= time %></span>
+        <span class='event-time-time'><%= date %></span>
+      </div>
+      <div class='event-text'><%= text %></div>
+      <div class='event-tags'>
+      <% _.each(tags, function(tag) { %>
+         <span class='label'><%= tag %></span>
+      <% }); %>
+      </div>
+    </div>
+  </li>
+</script>
+
+<script type="text/template" id="search-paging-template">
+  <ul>
+    <li><a href='#'>Prev</a></li>
+    <% _.each(pages, function(page) { %>
+      <li class=<% page.active ? 'active' : '' %>
+        <a href='#'><%= page.id %></a>
+      </li>
+    <% }); %>
+    <li><a href='#'>Next</a></li>
+  </ul>
+</script>

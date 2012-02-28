@@ -44,6 +44,7 @@ var EventCollection = Backbone.Collection.extend({
 // views
 // ------------------------------------------------------------
 var EventView = Backbone.View.extend({
+  tagName: 'li',
   template: _.template($('#event-template').html()),
 
   events: {
@@ -53,25 +54,26 @@ var EventView = Backbone.View.extend({
   },
 
   initailize: function(args) {
-    this.model.bind('change', this.render, this);
+    this.model.bind('change',  this.render, this);
     this.model.bind('destroy', this.remove, this);
   },
 
   render: function() {
-   $(this.el).html(this.template(this.model.toJSON()));
+   this.$el.html(this.template(this.model.toJSON()))
+     .addClass('well');
    return this;
   },
 
   remove: function() {
-    $(this.el).remove();
+    this.$el.remove();
   },
 
   gainfocus: function() {
-    $(this.el).addClass('focused');
+    this.$el.addClass('focused');
   },
 
   losefocus: function() {
-    $(this.el).removeClass('focused');
+    this.$el.removeClass('focused');
   }
 });
 
