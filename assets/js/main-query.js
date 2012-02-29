@@ -1,3 +1,48 @@
+window.querySuggestions = [
+  '_search',
+  '_aliases',
+  '_analyze',
+  '_bulk',
+  '_cache/clear',
+  '_cluster',
+  '_cluster/state',
+  '_cluster/health',
+  '_cluster/settings',
+  '_cluster/nodes/',
+  '_cluster/nodes/stats',
+  '_cluster/nodes/_shutdown',
+  '_count?q=',
+  '_mget',
+  '_msearch',
+  '_percolator',
+  '_segments',
+  '_stats',
+  '_status',
+  '_template',
+  '_all',
+  '_all/_query?q=',
+];
+
+/*
+ * implement custom matcher to test for these
+  '/.../_bulk',
+  '/.../_count',
+  '/.../_mapping',
+  '/.../_setting',
+  '/.../_refresh',
+  '/.../_optimize',
+  '/.../_flush',
+  '/.../_query?q=',
+  '/.../_status',
+  '/.../_segments',
+  '/.../_cache/clear',
+  '/.../_update',
+  '/.../_search',
+  '/.../_mlt',
+  '/.../_msearch',
+  '/.../_percolate',
+ */
+
 // ------------------------------------------------------------
 // main 
 // ------------------------------------------------------------
@@ -19,6 +64,9 @@ var QueryAppView = Backbone.View.extend({
   },
 
   initialize:function() {
+    this.queryPathEl.typeahead({
+      source: window.querySuggestions
+    });
     this.elastic = new ElasticSearch({
       callback: this.displayResults
     });
