@@ -46,49 +46,64 @@
   <!-- content -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div class="container"> 
-      <div id="query-app">
+      <div id="about-app">
 
-        <div class="row">
-          <div class="span4">
-            <form id='query-form' class='well form-vertical'>
-
-              <div class='control-group'>
-                <label class='control-label' for='query-path'>Path</label>
-                <div class='controls'>
-                  <input id='query-path' type='text' class='input-xlarge' placeholder='The path to query against' />
-                </div>
-              </div>
-
-              <div class='control-group'>
-                <label class='control-label' for='query-action'>Method</label>
-                <div class='controls'>
-                  <select id='query-action'>
-                    <option>POST</option>
-                    <option>GET</option>
-                    <option>PUT</option>
-                    <option>DELETE</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class='control-group'>
-                <label class='control-label' for='query-data'>Query Data</label>
-                <div class='controls'>
-                  <textarea id='query-data' type='text' class='input-xlarge' rows="20"></textarea>
-                </div>
-              </div>
-
-              <div class='form-actions'>
-                <button id='query-submit' type='submit' class='btn bth-primary'><i class='icon-ok'></i> Execute</button>
-                <button id='query-reset' class='btn'><i class='icon-remove'></i> Reset</button>
-              </div>
-            </form>
-          </div>
-
-          <div class='span8'>
-            <pre id='query-results' class="prettyprint linenums"></pre>
-          </div>
+        <div class='hero-unit'>
+          <h1 id='dash-query'>Speleo Log Monitor</h1>
+          <p>Find what you are looking for without spending so
+          much time on that <em>find</em> part.
+          <p>
         </div>
+
+        <div id='about-carousel' class='carousel'>
+          <div class='carousel-inner'>
+
+            <div class='item'>
+              <img src="./assets/img/about-search.png" />
+              <div class='carousel-caption'>
+                <h4>Powerful Search Interface</h4>
+                <p>Find what you are looking for quick!
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
+              <img src="./assets/img/about-health.png" />
+              <div class='carousel-caption'>
+                <h4>Complete Health Overview</h4>
+                <p>See how your system is really doing in real time
+                   without confusing metrics.
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
+              <img src="./assets/img/about-dashboard.png" />
+              <div class='carousel-caption'>
+                <h4>Versitile Dashboard Utility</h4>
+                <p>So you can easily watch the status of anything you
+                   want in one convenient display.
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
+              <img src="./assets/img/about-query.png" />
+              <div class='carousel-caption'>
+                <h4>Custom Query Utility</h4>
+                <p>For those cases when you have to execute that one off
+                   monster of a query
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <a class="carousel-control left" href="#about-carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#about-carousel" data-slide="next">&rsaquo;</a>
+        </div>
+
+      </div>
     </div>
 
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -100,7 +115,7 @@
     <script src="./assets/js/lib/bootstrap.js"></script> 
     <script src="./assets/js/lib/backbone.js"></script> 
     <script src="./assets/js/lib/elasticsearch.js"></script> 
-    <script src="./assets/js/main-query.js"></script> 
+    <script src="./assets/js/main-about.js"></script> 
 
   </body> 
 </html>
