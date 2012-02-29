@@ -159,6 +159,7 @@ var AppView = Backbone.View.extend({
    */
 
   el: $('#event-app'),
+  listEl: $('#event-list'),
   events: {
     'keypress #new-event': 'searchEvents',
     'click #new-event-submit': 'searchEventsButton'
@@ -167,9 +168,9 @@ var AppView = Backbone.View.extend({
   initialize: function() {
     this.input  = this.$('#new-event');
     this.button = this.$('#new-event-submit');
-    //this.events = new EventCollection();
     Events.bind('add', this.addEvent, this);
     Events.bind('reset', this.addEvents, this);
+    _.bindAll(this, 'addEvent', 'addEvents');
     Events.fetch();
 
     this.chart = new ChartView();
@@ -191,8 +192,12 @@ var AppView = Backbone.View.extend({
   },
 
   addEvent: function(event) {
-    var view = new EventView({model: event});
-    $('#event-list').append(view.render().el);
+    var view = new EventView({model: event}),
+        elem = view.render().$el;
+
+    elem.hide()
+      .appendTo(this.listEl)
+      .fadeIn('slow');
   },
 
   addEvents: function() {
