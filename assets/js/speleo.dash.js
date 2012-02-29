@@ -71,6 +71,9 @@ var DashboardAppView = Backbone.View.extend({
   el: '#event-list',
 
   initialize: function() {
+    this.elastic = new ElasticSearch({
+      callback: this.displayResults
+    });
     DashEvents.bind('add', this.addEvent, this);
     DashEvents.bind('reset', this.addAllEvents, this);
     _.bindAll(this, 'create', 'addEvent');
