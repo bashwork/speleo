@@ -41,10 +41,11 @@ var DashEventView = Backbone.View.extend({
 
   render: function() {
    if (this.model.get('to_be_removed')) {
-     this.$el.css('opacity', '0.4');
+     this.$el.css('opacity', '0.5');
    } else {
      this.$el.html(this.template(this.model.toJSON()))
-       .addClass('well focused');
+       .addClass('well')
+       .css({ 'backgroundColor':'#FCF8E3' });
    }
    return this;
   },
@@ -96,8 +97,8 @@ var DashboardAppView = Backbone.View.extend({
 
     elem.hide()
       .prependTo(this.el)
-      .slideDown(function() {
-        $(this).removeClass('focused');
+      .slideDown(400, function() {
+        elem.animate({ 'backgroundColor': '#F5F5F5' }, 1000);
       });
   },
 
