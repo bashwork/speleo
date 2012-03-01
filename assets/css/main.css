@@ -39,3 +39,7 @@ body {
 table tbody {
   display: none;
 }
+
+#health-toolbar {
+  padding-bottom: 0px;
+}

@@ -1,12 +1,24 @@
+window.valid_times = {
+  '1 second':   1000,
+  '5 seconds':  5000,
+  '10 seconds': 10000,
+  '15 seconds': 15000,
+  '30 seconds': 30000,
+  '60 seconds': 60000,
+  '1 minute':   60000,
+  '2 minutes':  120000,
+  '5 minutes':  300000,
+  '10 minutes': 600000,
+  '15 minutes': 900000,
+  '30 minutes': 1800000,
+  '60 minutes': 3600000,
+  '1 hour':     3600000,
+};
+
 // ------------------------------------------------------------
 // views
 // ------------------------------------------------------------
 var GenericChartView = Backbone.View.extend({
-
-  defaults: {
-    size: 100,
-    first: true,
-  },
 
   /**
    * Add new data to the supplied chart
@@ -25,14 +37,8 @@ var GenericChartView = Backbone.View.extend({
    * @param current The new x axis value to link with
    */
   _appendData: function(reading, current) {
-    if (this.first) {
-      _.each(this.chart.series, function(chart) {
-        chart.addPoint([current - 1, null], false, false);
-      }); // hack
-      this.first = false;
-    }
-    _.each(_.zip(reading, this.chart.series), function(pair) {
-      pair[1].addPoint([current, pair[0]], false, false);
+    _.each(_.zip(this.chart.series, reading), function(pair) {
+      pair[0].addPoint([current, pair[1]], false, false);
     });
   },
 
@@ -41,10 +47,13 @@ var GenericChartView = Backbone.View.extend({
    * @param current The new max x asix to limit by
    */
   _shrink: function(current) {
-    var threshold = current - this.size;
+    var threshold = current - window.config.chart_window;
     _.each(this.chart.series, function(series) {
-      while(series.data[0].category && series.data[0].category < threshold) {
-        series.data[0].remove(false);
+      if (series.data && series.data.length > 0) {
+        while (series.data[0].category
+            && series.data[0].category < threshold) {
+          series.data[0].remove(false);
+        }
       }
     });
   },
@@ -58,10 +67,6 @@ var GenericChartView = Backbone.View.extend({
   render: function() {
     this.chart.redraw();
   },
-
-  timeToIndex: function(ticks) {
-    return ticks
-  }
 
 });
 
@@ -197,9 +202,9 @@ var OsCpuChartView = GenericChartView.extend({
       var dataset = [0,0,0];
     } else {
       var dataset = [
-        os.cpu.idle,
-        os.cpu.sys,
-        os.cpu.user
+        cpu.idle,
+        cpu.sys,
+        cpu.user
       ];
     }
     return {
@@ -398,9 +403,13 @@ var ElasticHealthAppView = Backbone.View.extend({
   el: $('#health-toolbar'),
   nodesEl: $('#health-nodes'),
   enableEl: $('#health-enable'),
+  delayEl: $('#health-delay'),
+  windowEl: $('#health-window'),
   events: {
     'click #health-enable': 'toggleUpdating',
-    'click .node-toggle': 'switchHealthNode'
+    'click .node-toggle': 'switchHealthNode',
+    'blur #health-delay': 'switchDelayValue',
+    'blur #health-window': 'switchWindowValue',
   },
 
   initialize: function() {
@@ -413,10 +422,24 @@ var ElasticHealthAppView = Backbone.View.extend({
       host: window.config.host,
       port: window.config.port
     });
+    this.delayEl.typeahead({  source: _.keys(window.valid_times) });
+    this.windowEl.typeahead({ source: _.keys(window.valid_times) });
 
     this.charts = new ChartViewCollection();
     this.tables = new TableViewCollection();
     this.toggleUpdating();
+  },
+
+  switchDelayValue:function(e) {
+    console.log('update delay value');
+    var value = window.valid_times[this.delayEl.val()];
+    window.config.delay = value ? value : 5000;
+  },
+
+  switchWindowValue:function(e) {
+    console.log('update window value');
+    var value = window.valid_times[this.windowEl.val()];
+    window.config.chart_window = value ? value : 60000
   },
 
   switchHealthNode: function(node) { 
@@ -507,8 +530,9 @@ jQuery(function initialize($) {
   window.config = {
       host: 'localhost',
       port: 9200,
-      delay: 5000,
+      delay: 1000,
       connected: false,
+      chart_window: 60000,
   };
   window.HealthNodes = new HealthNodeCollection();
   window.app = new ElasticHealthAppView();

@@ -59,8 +59,12 @@
         <div class="row">
           <div class="span12">
             <div id='health-toolbar' class="well">
-            <a class="btn btn-primary" id='health-enable' href="#">Start Polling</a>
-              <div id='health-nodes' class="btn-group pull-right"></div>
+              <form class="form-inline">
+                <button class="btn btn-primary" id='health-enable'>Start Polling</button>
+                <input id='health-delay'  type="text" class="input-medium" placeholder="Refresh Delay" />
+                <input id='health-window' type="text" class="input-medium" placeholder="Chart Window" />
+                <div id='health-nodes' class="btn-group pull-right"> </div>
+              </form>
             </div>
           </div>
         </div>
