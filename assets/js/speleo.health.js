@@ -164,11 +164,11 @@ var JvmHeapMemoryChartView = GenericChartView.extend({
   }
 });
 
-var JvmStackMemoryChartView = GenericChartView.extend({
+var JvmOtherMemoryChartView = GenericChartView.extend({
   el: $('#node-jvm-stack-memory'),
 
   initialize: function() {
-    this.chart = jvmMemoryChartFactory(this.el, 'Jvm Stack Memory');
+    this.chart = jvmMemoryChartFactory(this.el, 'Jvm Other Memory');
   },
 
   parse: function(reading) {
@@ -254,7 +254,7 @@ var OsMemoryChartView = GenericChartView.extend({
     } else {
       var dataset = [
         mem.actual_used_in_bytes + mem.actual_free_in_bytes,
-        mem.used_int_bytes,
+        mem.used_in_bytes,
         mem.actual_used_in_bytes
       ];
     }
@@ -271,22 +271,27 @@ var ChartViewCollection = Backbone.View.extend({
     this.charts = [
       new JvmThreadsChartView(),
       new JvmHeapMemoryChartView(),
-      new JvmStackMemoryChartView(),
+      new JvmOtherMemoryChartView(),
       new OsCpuChartView(),
       new OsSwapMemoryChartView(),
       new OsMemoryChartView()
     ];
+    _.each(this.charts, function(chart) {
+      chart.chart.showLoading();
+    });
   },
 
   update:function(data) {
     _.each(this.charts, function(chart) {
       chart.update(data);
+      chart.chart.hideLoading();
     });
   },
 
   clear:function() {
     _.each(this.charts, function(chart) {
       chart.clear();
+      chart.chart.showLoading();
     });
   },
 
@@ -518,6 +523,11 @@ var ElasticHealthAppView = Backbone.View.extend({
       mark.set($.extend(true, mark.toJSON(), node), { silent: true });
       mark.set('dirty', !mark.get('dirty')); // hack
     });
+
+    // choose one of the nodes to monitor
+    if (!HealthNodes.getBy('current', true)) {
+      $('.node-toggle:first').click();
+    }
   },
 
 });

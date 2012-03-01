@@ -44,8 +44,8 @@ var jvmThreadsChartFactory = function(renderTo, title) {
             enabled: false
         },
         series: [
-            { name: 'count', data: [] },
-            { name: 'peak count', data: [] }
+            { name: 'current', data: [] },
+            { name: 'peak', data: [] }
         ]
     });
 }
@@ -103,8 +103,8 @@ var jvmMemoryChartFactory = function(renderTo, title) {
             }
         },
         series: [
-            { name: 'Heap Allocated', data: [] },
-            { name: 'Heap Used', data: [] }
+            { name: 'allocated', data: [] },
+            { name: 'used', data: [] }
         ]
     });
 }
@@ -150,9 +150,9 @@ var osCpuChartFactory = function(renderTo, title) {
          }
       },
       series: [
-          { name: 'Idle', data: [] },
-          { name: 'Sys', data: [] },
-          { name: 'User', data: [] }
+          { name: 'idle', data: [] },
+          { name: 'sys', data: [] },
+          { name: 'user', data: [] }
       ]
    });
 }
@@ -210,8 +210,8 @@ var osSwapMemoryChartFactory = function(renderTo, title) {
             }
         },
         series: [
-            { name: 'Free', data: [] },
-            { name: 'Used', data: [] }
+            { name: 'free', data: [] },
+            { name: 'used', data: [] }
         ]
     });
 }
@@ -268,9 +268,9 @@ var osMemoryChartFactory = function(renderTo, title) {
             }
         },
         series: [
-            { name: 'Total Mem', data: [] },
-            { name: 'Used', data: [] },
-            { name: 'Actual Used', data: [] }
+            { name: 'total', data: [] },
+            { name: 'used', data: [] },
+            { name: 'actual', data: [] }
         ]
     });
 }
