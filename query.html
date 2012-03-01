@@ -30,11 +30,11 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="search.html">Search</a></li> 
-              <li><a href="about.html">About</a></li> 
-              <li><a href="contact.html">Contact</a></li> 
               <li><a href="health.html">Health</a></li> 
               <li class='active'><a href="query.html">Query</a></li> 
               <li><a href="dashboard.html">Dashboard</a></li> 
+              <li><a href="about.html">About</a></li> 
+              <li><a href="contact.html">Contact</a></li> 
             </ul> 
             <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
           </div>
@@ -64,10 +64,11 @@
                 <label class='control-label' for='query-action'>Method</label>
                 <div class='controls'>
                   <select id='query-action'>
-                    <option>POST</option>
-                    <option>GET</option>
-                    <option>PUT</option>
-                    <option>DELETE</option>
+                    <option value='POST'>post</option>
+                    <option value='GET'>get</option>
+                    <option value='PUT'>put</option>
+                    <option value='DELETE'>delete</option>
+                    <option value='HEAD'>head</option>
                   </select>
                 </div>
               </div>
