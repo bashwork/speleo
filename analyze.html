@@ -1,0 +1,121 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Text Analyzer</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/google-prettify.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li><a href="search.html">Search</a></li> 
+              <li><a href="health.html">Health</a></li> 
+              <li><a href="query.html">Query</a></li> 
+              <li class='active'><a href="analyze.html">Analyze</a></li> 
+              <li><a href="dashboard.html">Dashboard</a></li> 
+              <li><a href="about.html">About</a></li> 
+              <li><a href="contact.html">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="analyze-app">
+
+        <div class="row">
+          <div class="span4">
+            <form id='analyze-form' class='well form-vertical'>
+
+              <div class='control-group'>
+                <label class='control-label' for='analyze-analyzer'>Analyzer</label>
+                <div class='controls'>
+                  <select id='analyze-analyzer'>
+                  </select>
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='analyze-filters'>Filters</label>
+                <div class='controls'>
+                  <select id='analyze-filters'>
+                  </select>
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='analyze-tokenizers'>Tokenizers</label>
+                <div class='controls'>
+                  <select id='analyze-tokenizers'>
+                  </select>
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='query-data'>Text To Analyze</label>
+                <div class='controls'>
+                  <textarea id='analyze_text' type='text' class='input-xlarge' rows="20"></textarea>
+                </div>
+              </div>
+
+              <div class='form-actions'>
+                <button id='analyze-submit' type='submit' class='btn btn-primary'><i class='icon-ok'></i> Analyze</button>
+                <button id='analyze-reset' class='btn'><i class='icon-remove'></i> Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <div class='span8'>
+            <pre id='analyze-results' class="prettyprint linenums"></pre>
+          </div>
+        </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- templates -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script type="text/template" id="options-template">
+      <% _.each(values, function(value) { %>
+         <option value='<%= value %>'><%= value %></option>
+      <% }); %>
+    </script>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/google-prettify.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/lib/elasticsearch.js"></script> 
+    <script src="./assets/js/speleo.analyze.js"></script> 
+
+  </body> 
+</html>

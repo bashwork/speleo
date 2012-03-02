@@ -1,6 +1,7 @@
-window.querySuggestions = [
+window.root_query_suggestions = [
   '_search',
   '_aliases',
+  '_analyze',
   '_analyze',
   '_bulk',
   '_cache/clear',
@@ -11,16 +12,16 @@ window.querySuggestions = [
   '_cluster/nodes/',
   '_cluster/nodes/stats',
   '_cluster/nodes/_shutdown',
-  '_count?q=',
+  '_count',
   '_mget',
   '_msearch',
   '_percolator',
+  '_river',
   '_segments',
   '_stats',
   '_status',
   '_template',
   '_all',
-  '_all/_query?q=',
 ];
 
 /*
@@ -65,7 +66,7 @@ var QueryAppView = Backbone.View.extend({
 
   initialize:function() {
     this.queryPathEl.typeahead({
-      source: window.querySuggestions
+      source: window.root_query_suggestions
     });
     this.elastic = new ElasticSearch({
       callback: this.displayResults
