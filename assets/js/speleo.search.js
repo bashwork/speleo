@@ -3,10 +3,11 @@
 // ------------------------------------------------------------
 var Event = Backbone.Model.extend({
   defaults: {
-    date: '12/2/2012',
-    time: '12:34:09 PM',
-    text: '',
-    tags: ['debug', 'production']
+    date:  '12/2/2012',
+    time:  '12:34:09 PM',
+    text:  '',
+    title:  '',
+    tags:  ['debug', 'production']
   }
 
   /**
@@ -36,6 +37,13 @@ var EventCollection = Backbone.Collection.extend({
     return this.filter(function(event) {
       return _.include(event.tags, tag);
     });
+  },
+
+  make: function(hit) {
+    var source = hit['_source'];
+    delete hit['_source'];
+    source.tags = [hit['_index'], hit['_type']];
+    return Events.create(_.extend(source, hit));
   }
 
 });
@@ -88,15 +96,20 @@ var ChartView = Backbone.View.extend({
    */
 
   initialize:function() {
-    this.update(window.graphMockData);
+    this.update();
   },
 
   handleSelect: function(e) {
     console.log(e.point);
   },
 
-  update: function(data) {
-    this.data = data;
+  update: function() {
+    var groups = Events.groupBy(function(event) {
+      return event.get('date') + event.get('time');
+    });
+    this.data = _.map(_.keys(groups), function(key) {
+      return [key, _.size(groups[key])];
+    });
     this.render();
   },
 
@@ -170,25 +183,45 @@ var AppView = Backbone.View.extend({
     this.button = this.$('#new-event-submit');
     Events.bind('add', this.addEvent, this);
     Events.bind('reset', this.addEvents, this);
-    _.bindAll(this, 'addEvent', 'addEvents');
+    _.bindAll(this, 'addEvent', 'addEvents', 'parseResults');
     Events.fetch();
 
+    this.elastic = new ElasticSearch({
+      callback: this.parseResults
+    });
     this.chart = new ChartView();
+  },
+
+  parseResults: function(data, xhr) {
+    Events.reset();
+    _.each(data.hits.hits, Events.make);
+    this.chart.update();
+    //this.paging.render();
+  },
+
+  executeSearch: function() {
+    var text = this.input.val();
+    this.elastic.search({
+      queryDSL: {
+        query: { 
+          'query_string': { query: text }
+        }
+      }
+    });
+    this.input.val('');
   },
 
   searchEventsButton: function(e) {
     e.preventDefault();
     var text = this.input.val();
     if (!text) return;
-    Events.create({text: text});
-    this.input.val('');
+    this.executeSearch();
   },
 
   searchEvents: function(e) {
     var text = this.input.val();
     if (!text || e.keyCode != 13) return;
-    Events.create({text: text});
-    this.input.val('');
+    this.executeSearch();
   },
 
   addEvent: function(event) {
