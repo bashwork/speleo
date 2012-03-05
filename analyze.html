@@ -36,6 +36,17 @@
               <li><a href="dashboard.html">Dashboard</a></li> 
               <li><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
+              <li class="dropdown" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>
+                  Utilities
+                  <b class="caret"></b>
+                </a>
+                <ul class='dropdown-menu'>
+                  <li><a href="query.html">Query</a></li> 
+                  <li class='divider'></li> 
+                  <li class='active'><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
             </ul> 
             <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
           </div>
@@ -62,6 +73,13 @@
               </div>
 
               <div class='control-group'>
+                <label class='control-label' for='analyze-index'>Index</label>
+                <div class='controls'>
+                  <input id='analyze-index' type='text' placeholder="Use this index's settings"/>
+                </div>
+              </div>
+
+              <div class='control-group'>
                 <label class='control-label' for='analyze-filters'>Filters</label>
                 <div class='controls'>
                   <select id='analyze-filters'>
@@ -78,9 +96,9 @@
               </div>
 
               <div class='control-group'>
-                <label class='control-label' for='query-data'>Text To Analyze</label>
+                <label class='control-label' for='analyze-text'>Text To Analyze</label>
                 <div class='controls'>
-                  <textarea id='analyze_text' type='text' class='input-xlarge' rows="20"></textarea>
+                  <textarea id='analyze-text' type='text' class='input-xlarge' rows="20"></textarea>
                 </div>
               </div>
 

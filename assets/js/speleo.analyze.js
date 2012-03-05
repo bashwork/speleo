@@ -80,6 +80,7 @@ var AnalyzeAppView = Backbone.View.extend({
 
   el: $('#analyze-app'),
   queryTextEl: $('#analyze-text'),
+  queryIndexEl: $('#analyze-index'),
   queryAnalyzerEl: $('#analyze-analyzer'),
   queryFiltersEl: $('#analyze-filters'),
   queryTokenizersEl: $('#analyze-tokenizers'),
@@ -92,14 +93,38 @@ var AnalyzeAppView = Backbone.View.extend({
   },
 
   initialize:function() {
-    _.bindAll(this, 'displayResults');
+    _.bindAll(this, 'displayResults', 'initSuggestions');
     this.elastic = new ElasticSearch({
       callback: this.displayResults
     });
-    this.queryAnalyzerEl.popover(window.utility.popover_options(window.analysis.analyzers));
-    this.queryTokenizersEl.popover(window.utility.popover_options(window.analysis.tokenizers));
-    this.queryFiltersEl.popover(window.utility.popover_options(window.analysis.filters));
+    this.elastic.adminIndicesMappingGet({
+      callback: this.initSuggestions
+    });
+    this.queryAnalyzerEl.popover(this.popover_options(window.analysis.analyzers));
+    this.queryTokenizersEl.popover(this.popover_options(window.analysis.tokenizers));
+    this.queryFiltersEl.popover(this.popover_options(window.analysis.filters));
     this.render();
+  },
+
+  initSuggestions:function(data, xhr) {
+    var keys = _.keys(data);
+    this.queryIndexEl.typeahead({ source: keys });
+  },
+
+  popover_options: function(database) {
+    return {
+      delay: { show: 1000, hide: 500 },
+      title: function() {
+        var name = $(this).val(),
+            name = name || 'hover For Selection',
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+        return name + ' Help';
+      },
+      content: function() {
+        var name = $(this).val();
+        return database[name] || "Choose an item to learn more about";
+      }
+    };
   },
 
   render: function() {
@@ -123,7 +148,7 @@ var AnalyzeAppView = Backbone.View.extend({
   resetQueryButton: function(e) {
     e.preventDefault();
     this.queryTextEl.val('');
-    this.queryAnalyzerEl.val('standard');
+    this.queryAnalyzerEl.val('');
     this.queryFiltersEl.val('');
     this.queryTokenizersEl.val('');
     this.queryResultsEl.html('');
@@ -133,14 +158,17 @@ var AnalyzeAppView = Backbone.View.extend({
     e.preventDefault();
     var anal = this.queryAnalyzerEl.val(),
         filt = this.queryFiltersEl.val(),
+        indx = this.queryIndexEl.val(),
         toke = this.queryTokenizersEl.val(),
         text = this.queryTextEl.val(),
-        quer = this.buildQuery(anal, filt, toke);
-    this.elastic.request('GET', quer, text);
+        quer = this.buildQuery(anal, indx, filt, toke);
+    this.elastic.request('POST', quer, text);
   },
 
-  buildQuery: function(anal, filt, toke) {
-    var query = '';
+  buildQuery: function(anal, indx, filt, toke) {
+    var base  = '_analyze',
+        query = '';
+    if (indx) { base = indx + "/" + base; }
     if (anal) {
       query += "?analyzer=" + anal;
     } else {
@@ -159,28 +187,11 @@ var AnalyzeAppView = Backbone.View.extend({
       }
     }
 
-    return '_analyze' + query;
+    return base + query;
   }
 
 });
 
-window.utility = {
-  popover_options: function(database) {
-    return {
-      delay: { show: 1000, hide: 500 },
-      title: function() {
-        var name = $(this).val(),
-            name = name || 'hover For Selection',
-            name = name.charAt(0).toUpperCase() + name.slice(1);
-        return name + ' Help';
-      },
-      content: function() {
-        var name = $(this).val();
-        return database[name] || "Choose an item to learn more about";
-      }
-    };
-  }
-};
 
 
 // ------------------------------------------------------------
