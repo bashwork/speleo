@@ -55,20 +55,15 @@
         <div id='event-graph'>
         </div>
 
-        <div id='event-pager' class='pagination'>
-          <ul>
-          <li><a href='#'>Prev</a></li>
-          <li class='active'><a href='#'>1</a></li>
-          <li><a href='#'>2</a></li>
-          <li><a href='#'>3</a></li>
-          <li><a href='#'>4</a></li>
-          <li><a href='#'>5</a></li>
-          <li><a href='#'>Next</a></li>
-          </ul>
+        <div id='event-status'>
         </div>
 
-        <div id="events">
-          <ul id='event-list'></ul>
+        <div class='row'>
+          <div class="span12">
+          <div id="events">
+            <ul id='event-list'></ul>
+          </div>
+          </div>
         </div>
 
       </div>
@@ -94,16 +89,34 @@
         </div>
     </script>
 
-    <script type="text/template" id="paging-template">
-      <ul>
-        <li><a href='#'>Prev</a></li>
-        <% _.each(pages, function(page) { %>
-          <li class=<% page.active ? 'active' : '' %>
-            <a href='#'><%= page.id %></a>
-          </li>
-        <% }); %>
-        <li><a href='#'>Next</a></li>
-      </ul>
+    <script type="text/template" id="status-template">
+      <div class="row">
+        <div class="span8">
+          <div id='event-pager' class='pagination'>
+            <ul>
+              <li><a href='#'>Prev</a></li>
+              <% _.each(pages, function(page) { %>
+                <li class=<%= page == 0 ? 'active' : '' %>>
+                  <a href='#'><%= page %></a>
+                </li>
+              <% }); %>
+              <li><a href='#'>Next</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="span2">
+          <div class="pull-right" style="padding-top:5px;">
+            <p><i class='icon-pencil'></i> Best match <%= score %></p>
+            <p><i class='icon-signal'></i> Found <%= count %> events</p>
+          </div>
+        </div>
+        <div class="span2">
+          <div class="pull-right" style="padding-top:5px;">
+            <p><i class='icon-time'></i> Query took <%= time %></p>
+            <p><i class='icon-ok'></i> <%= error ? 'Possible Errors' : 'No Errors' %></p>
+          </div>
+        </div>
+      </div>
     </script>
 
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -117,7 +130,6 @@
     <script src="./assets/js/lib/backbone-localstorage.js"></script> 
     <script src="./assets/js/lib/elasticsearch.js"></script> 
     <script src="./assets/js/speleo.search.js"></script> 
-    <script src="./assets/js/speleo.search.mock.js"></script> 
 
   </body> 
 </html>

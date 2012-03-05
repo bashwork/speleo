@@ -143,6 +143,42 @@ var ChartView = Backbone.View.extend({
   }
 });
 
+var StatusView = Backbone.View.extend({
+
+  el: '#event-status',
+  template: _.template($('#status-template').html()),
+  events: {
+    'click #event-pager li': 'changePage'
+  },
+
+  initialize:function() {
+    this.status = {}
+  },
+
+  changePage: function(e) {
+    var page = e.target.innerHTML;
+    $(e.target)
+      .parent().addClass('active')
+      .siblings().removeClass('active');
+    console.log('switch to page ' + page);
+  },
+
+  update: function(data) {
+    this.status.count = data.hits.total || 0;
+    this.status.score = data.hits.max_score || 0.0;
+    this.status.error = data.timed_out || false;
+    this.status.time  = data.took || 0;
+    this.status.pages = _.range(this.status.count/4);
+    this.render();
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.status));
+    return this.$el;
+  }
+
+});
+
 // ------------------------------------------------------------
 // router
 // ------------------------------------------------------------
@@ -190,13 +226,14 @@ var AppView = Backbone.View.extend({
       callback: this.parseResults
     });
     this.chart = new ChartView();
+    this.status = new StatusView();
   },
 
   parseResults: function(data, xhr) {
     Events.reset();
     _.each(data.hits.hits, Events.make);
     this.chart.update();
-    //this.paging.render();
+    this.status.update(data);
   },
 
   executeSearch: function() {
