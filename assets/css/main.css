@@ -43,3 +43,7 @@ table tbody {
 #health-toolbar {
   padding-bottom: 0px;
 }
+
+#event-pager {
+  font-size: 80%;
+}

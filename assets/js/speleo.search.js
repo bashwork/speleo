@@ -8,12 +8,9 @@ var Event = Backbone.Model.extend({
     text:  '',
     title:  '',
     tags:  ['debug', 'production']
-  }
+  },
 
-  /**
-   * handle merging all the tags somehow
-   * - deal with the date and time
-   */
+  sync: function(m, m, o) {}
 
 });
 
@@ -97,6 +94,7 @@ var ChartView = Backbone.View.extend({
 
   initialize:function() {
     this.update();
+    this.chart.showLoading();
   },
 
   handleSelect: function(e) {
@@ -104,6 +102,7 @@ var ChartView = Backbone.View.extend({
   },
 
   update: function() {
+    if (this.chart) this.chart.showLoading();
     var groups = Events.groupBy(function(event) {
       return event.get('date') + event.get('time');
     });
@@ -111,6 +110,7 @@ var ChartView = Backbone.View.extend({
       return [key, _.size(groups[key])];
     });
     this.render();
+    if (this.chart) this.chart.hideLoading();
   },
 
   render: function() {
@@ -160,20 +160,26 @@ var StatusView = Backbone.View.extend({
     $(e.target)
       .parent().addClass('active')
       .siblings().removeClass('active');
-    console.log('switch to page ' + page);
+    Notifier.trigger('changeEventPage', parseInt(page));
   },
 
   update: function(data) {
+    var cevent = window.config.eventsPerPage,
+        cpages = window.config.eventPages;
+
     this.status.count = data.hits.total || 0;
     this.status.score = data.hits.max_score || 0.0;
     this.status.error = data.timed_out || false;
     this.status.time  = data.took || 0;
-    this.status.pages = _.range(this.status.count/4);
+    this.status.pages = _.range(_.min([(this.status.count / cevent), cpages]));
     this.render();
+    Notifier.trigger('changeEventPage', 0);
   },
 
   render: function() {
-    this.$el.html(this.template(this.status));
+    this.$el.slideUp();
+    this.$el.html(this.template(this.status))
+        .slideDown();
     return this.$el;
   }
 
@@ -209,35 +215,32 @@ var AppView = Backbone.View.extend({
 
   el: $('#event-app'),
   listEl: $('#event-list'),
+  inputEl: $('#new-event'),
   events: {
     'keypress #new-event': 'searchEvents',
     'click #new-event-submit': 'searchEventsButton'
   },
 
   initialize: function() {
-    this.input  = this.$('#new-event');
-    this.button = this.$('#new-event-submit');
-    Events.bind('add', this.addEvent, this);
-    Events.bind('reset', this.addEvents, this);
-    _.bindAll(this, 'addEvent', 'addEvents', 'parseResults');
-    Events.fetch();
+    Notifier.bind('changeEventPage', this.changeEvents, this);
+    _.bindAll(this, 'parseResults', 'addEvent');
 
     this.elastic = new ElasticSearch({
       callback: this.parseResults
     });
-    this.chart = new ChartView();
+    this.chart  = new ChartView();
     this.status = new StatusView();
   },
 
   parseResults: function(data, xhr) {
     Events.reset();
+    this.status.update(data);
     _.each(data.hits.hits, Events.make);
     this.chart.update();
-    this.status.update(data);
   },
 
   executeSearch: function() {
-    var text = this.input.val();
+    var text = this.inputEl.val();
     this.elastic.search({
       queryDSL: {
         query: { 
@@ -245,34 +248,41 @@ var AppView = Backbone.View.extend({
         }
       }
     });
-    this.input.val('');
+    this.inputEl.val('');
   },
 
   searchEventsButton: function(e) {
     e.preventDefault();
-    var text = this.input.val();
+    var text = this.inputEl.val();
     if (!text) return;
     this.executeSearch();
   },
 
   searchEvents: function(e) {
-    var text = this.input.val();
+    var text = this.inputEl.val();
     if (!text || e.keyCode != 13) return;
     this.executeSearch();
   },
 
   addEvent: function(event) {
-    var view = new EventView({model: event}),
+    var view = new EventView({ model: event }),
         elem = view.render().$el;
-
-    elem.hide()
-      .appendTo(this.listEl)
-      .fadeIn('slow');
+    elem.appendTo(this.listEl);
   },
 
-  addEvents: function() {
-    Events.each(this.addEvent);
-  },
+  changeEvents: function(page) {
+    var count = window.config.eventsPerPage,
+        self  = this;
+
+    this.listEl.fadeOut('fast', function() {
+      $(this).html('');
+      Events.chain()
+        .rest(page * count).first(count)
+        .each(self.addEvent)
+        .value();
+      self.listEl.slideDown();
+    });
+  }
 });
 
 
@@ -280,6 +290,11 @@ var AppView = Backbone.View.extend({
 // page ready
 // ------------------------------------------------------------
 jQuery(function initialize($) {
+  window.config = {
+    eventsPerPage: 3,
+    eventPages: 16,
+  };
+  window.Notifier = _.extend({}, Backbone.Events);
   window.Events = new EventCollection();
   window.app = new AppView();
   app.router = new Router();
