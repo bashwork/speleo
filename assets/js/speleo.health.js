@@ -37,8 +37,9 @@ var GenericChartView = Backbone.View.extend({
    * @param current The new x axis value to link with
    */
   _appendData: function(reading, current) {
+    var shift = this.shift ? this.shift : false;
     _.each(_.zip(this.chart.series, reading), function(pair) {
-      pair[0].addPoint([current, pair[1]], false, false);
+      pair[0].addPoint([current, pair[1]], false, shift);
     });
   },
 
@@ -53,6 +54,7 @@ var GenericChartView = Backbone.View.extend({
         while (series.data[0].category
             && series.data[0].category < threshold) {
           series.data[0].remove(false);
+          this.shift = true;
         }
       }
     });
@@ -62,6 +64,7 @@ var GenericChartView = Backbone.View.extend({
     _.each(this.chart.series, function(series) {
       series.setData([], true);
     });
+    this.shift = false;
   },
 
   render: function() {
@@ -413,8 +416,9 @@ var ElasticHealthAppView = Backbone.View.extend({
   events: {
     'click #health-enable': 'toggleUpdating',
     'click .node-toggle': 'switchHealthNode',
-    'blur #health-delay': 'switchDelayValue',
-    'blur #health-window': 'switchWindowValue',
+    'blur #health-delay': 'switchConfigValues',
+    'blur #health-window': 'switchConfigValues',
+    'submit form': 'switchConfigValues'
   },
 
   initialize: function() {
@@ -435,16 +439,12 @@ var ElasticHealthAppView = Backbone.View.extend({
     this.toggleUpdating();
   },
 
-  switchDelayValue:function(e) {
-    console.log('update delay value');
-    var value = window.valid_times[this.delayEl.val()];
-    window.config.delay = value ? value : 5000;
-  },
-
-  switchWindowValue:function(e) {
-    console.log('update window value');
-    var value = window.valid_times[this.windowEl.val()];
-    window.config.chart_window = value ? value : 60000
+  switchConfigValues:function(e) {
+    e.preventDefault();
+    var dvalue = window.valid_times[this.delayEl.val()],
+        wvalue = window.valid_times[this.windowEl.val()];
+    window.config.delay = dvalue ? dvalue : 5000;
+    window.config.chart_window = wvalue ? wvalue : 60000
   },
 
   switchHealthNode: function(node) { 
