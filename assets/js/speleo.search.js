@@ -1,4 +1,12 @@
 // ------------------------------------------------------------
+// global config
+// ------------------------------------------------------------
+window.config = {
+  eventsPerPage: 3,
+  eventPages: 16,
+};
+
+// ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
 var Event = Backbone.Model.extend({
@@ -11,6 +19,47 @@ var Event = Backbone.Model.extend({
   },
 
   sync: function(m, m, o) {}
+
+});
+
+var SearchStatus = Backbone.Model.extend({
+  defaults: {
+    count: 0,
+    score: 0.0,
+    error: false,
+    time:  0,
+    pages: [],
+    eventsPerPage: window.config.eventsPerPage,
+    eventPages: window.config.eventPages
+  },
+
+  update: function(data) {
+    var pageCount = _.min([ this.get('eventPages'),
+        data.hits.total / this.get('eventsPerPage')]);
+    this.set({
+      'count': data.hits.total,
+      'score': data.hits.max_score,
+      'error': data.timed_out,
+      'time':  data.took,
+      'pages': _.range(pageCount)
+    });
+  }
+});
+
+var ChartStatus = Backbone.Model.extend({
+  defaults: {
+    data: [],
+  },
+
+  update: function() {
+    var groups = Events.groupBy(function(event) {
+        return event.get('date') + event.get('time');
+      }),
+      data = _.map(_.keys(groups), function(key) {
+        return [key, _.size(groups[key])];
+      });
+    this.set('data', data);
+  }
 
 });
 
@@ -95,6 +144,7 @@ var ChartView = Backbone.View.extend({
   initialize:function() {
     this.update();
     this.chart.showLoading();
+    this.model.bind('change', this.update, this);
   },
 
   handleSelect: function(e) {
@@ -103,12 +153,6 @@ var ChartView = Backbone.View.extend({
 
   update: function() {
     if (this.chart) this.chart.showLoading();
-    var groups = Events.groupBy(function(event) {
-      return event.get('date') + event.get('time');
-    });
-    this.data = _.map(_.keys(groups), function(key) {
-      return [key, _.size(groups[key])];
-    });
     this.render();
     if (this.chart) this.chart.hideLoading();
   },
@@ -137,9 +181,10 @@ var ChartView = Backbone.View.extend({
       series: [{
         type: 'column',
         name: 'recent events',
-        data: this.data
+        data: this.model.get('data'),
       }]
     });
+    return this;
   }
 });
 
@@ -151,8 +196,8 @@ var StatusView = Backbone.View.extend({
     'click #event-pager li': 'changePage'
   },
 
-  initialize:function() {
-    this.status = {}
+  initialize: function() {
+    this.model.bind('change', this.render, this);
   },
 
   changePage: function(e) {
@@ -163,24 +208,12 @@ var StatusView = Backbone.View.extend({
     Notifier.trigger('changeEventPage', parseInt(page));
   },
 
-  update: function(data) {
-    var cevent = window.config.eventsPerPage,
-        cpages = window.config.eventPages;
-
-    this.status.count = data.hits.total || 0;
-    this.status.score = data.hits.max_score || 0.0;
-    this.status.error = data.timed_out || false;
-    this.status.time  = data.took || 0;
-    this.status.pages = _.range(_.min([(this.status.count / cevent), cpages]));
-    this.render();
-    Notifier.trigger('changeEventPage', 0);
-  },
-
   render: function() {
     this.$el.slideUp();
-    this.$el.html(this.template(this.status))
+    this.$el.html(this.template(this.model.toJSON()))
         .slideDown();
-    return this.$el;
+    Notifier.trigger('changeEventPage', 0);
+    return this;
   }
 
 });
@@ -228,15 +261,15 @@ var AppView = Backbone.View.extend({
     this.elastic = new ElasticSearch({
       callback: this.parseResults
     });
-    this.chart  = new ChartView();
-    this.status = new StatusView();
+    this.chart  = new ChartView({  model: new ChartStatus() });
+    this.status = new StatusView({ model: new SearchStatus() });
   },
 
   parseResults: function(data, xhr) {
-    Events.reset();
-    this.status.update(data);
+    Events.reset({ silent : true });
+    this.status.model.update(data);
     _.each(data.hits.hits, Events.make);
-    this.chart.update();
+    this.chart.model.update();
   },
 
   executeSearch: function() {
@@ -290,10 +323,6 @@ var AppView = Backbone.View.extend({
 // page ready
 // ------------------------------------------------------------
 jQuery(function initialize($) {
-  window.config = {
-    eventsPerPage: 3,
-    eventPages: 16,
-  };
   window.Notifier = _.extend({}, Backbone.Events);
   window.Events = new EventCollection();
   window.app = new AppView();
