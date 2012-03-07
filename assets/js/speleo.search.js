@@ -6,6 +6,35 @@ window.config = {
   eventPages: 16,
 };
 
+var searchChartFactory = function(options) {
+  return new Highcharts.StockChart({
+    chart: {
+      renderTo: options.selector,
+      alignTicks: false,
+      borderWidth: 1,
+      borderColor: '#eee'
+    },
+    plotOptions: {
+      column: {
+        events: {
+          click: options.callback
+        }
+      }
+    },
+    credits: {
+      enabled: false,
+    },
+    rangeSelector: {
+      selected: 1
+    },
+    series: [{
+      type: 'column',
+      name: 'recent events',
+      data: options.data,
+    }]
+  });
+}
+
 // ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
@@ -13,13 +42,13 @@ var Event = Backbone.Model.extend({
   defaults: {
     date:  '12/2/2012',
     time:  '12:34:09 PM',
+    temp:  Math.floor(Math.random() * 1000000000000),
     text:  '',
     title:  '',
     tags:  ['debug', 'production']
   },
 
   sync: function(m, m, o) {}
-
 });
 
 var SearchStatus = Backbone.Model.extend({
@@ -35,7 +64,7 @@ var SearchStatus = Backbone.Model.extend({
 
   update: function(data) {
     var pageCount = _.min([ this.get('eventPages'),
-        data.hits.total / this.get('eventsPerPage')]);
+        _.size(data.hits.hits) / this.get('eventsPerPage')]);
     this.set({
       'count': data.hits.total,
       'score': data.hits.max_score,
@@ -53,13 +82,16 @@ var ChartStatus = Backbone.Model.extend({
 
   update: function() {
     var groups = Events.groupBy(function(event) {
-        return event.get('date') + event.get('time');
+        //return event.get('date') + event.get('time');
+        return event.get('temp');
       }),
       data = _.map(_.keys(groups), function(key) {
-        return [key, _.size(groups[key])];
+        return [parseInt(key), _.size(groups[key])];
       });
-    this.set('data', data);
-  }
+    data = data.length > 0 ? data : [[0,0]];
+    this.set('data', data, { silent: true });
+    this.trigger('change');
+  },
 
 });
 
@@ -89,7 +121,7 @@ var EventCollection = Backbone.Collection.extend({
     var source = hit['_source'];
     delete hit['_source'];
     source.tags = [hit['_index'], hit['_type']];
-    return Events.create(_.extend(source, hit));
+    return new Event(_.extend(source, hit));
   }
 
 });
@@ -134,6 +166,8 @@ var EventView = Backbone.View.extend({
 
 var ChartView = Backbone.View.extend({
 
+  el: '#event-graph',
+
   /**
    * handle re-rendering
    * - convert new data to correct format
@@ -141,49 +175,29 @@ var ChartView = Backbone.View.extend({
    * - handle window filters
    */
 
-  initialize:function() {
-    this.update();
-    this.chart.showLoading();
-    this.model.bind('change', this.update, this);
+  initialize: function() {
+    this.model.bind('change', this.render, this);
   },
 
   handleSelect: function(e) {
     console.log(e.point);
   },
 
-  update: function() {
-    if (this.chart) this.chart.showLoading();
-    this.render();
-    if (this.chart) this.chart.hideLoading();
-  },
-
   render: function() {
-    this.chart = new Highcharts.StockChart({
-      chart: {
-        renderTo: 'event-graph',
-        alignTicks: false,
-        borderWidth: 1,
-        borderColor: '#eee'
-      },
-      plotOptions: {
-        column: {
-          events: {
-            click: this.handleSelect
-          }
-        }
-      },
-      credits: {
-        enabled: false,
-      },
-      rangeSelector: {
-        selected: 1
-      },
-      series: [{
-        type: 'column',
-        name: 'recent events',
-        data: this.model.get('data'),
-      }]
-    });
+    //this.chart = searchChartFactory({
+    //  selector: 'event-graph',
+    //  data: this.model.get('data'),
+    //  callback: this.handleSelect
+    //});
+    if (!this.chart) {
+      this.chart = searchChartFactory({
+        selector: 'event-graph',
+        data: [[0,0]],
+        callback: this.handleSelect
+      });
+    }
+    this.chart.series[0].setData(this.model.get('data'), true);
+    this.chart.series[0].show();
     return this;
   }
 });
@@ -266,9 +280,8 @@ var AppView = Backbone.View.extend({
   },
 
   parseResults: function(data, xhr) {
-    Events.reset({ silent : true });
     this.status.model.update(data);
-    _.each(data.hits.hits, Events.make);
+    Events.reset(_.map(data.hits.hits, Events.make));
     this.chart.model.update();
   },
 
