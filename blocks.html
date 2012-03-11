@@ -1,0 +1,89 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Some Pithy Text</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li><a href="search.html">Search</a></li> 
+              <li><a href="health.html">Health</a></li> 
+              <li><a href="query.html">Query</a></li> 
+              <li><a href="dashboard.html">Dashboard</a></li> 
+              <li class='active'><a href="blocks.html">Blocks</a></li> 
+              <li><a href="about.html">About</a></li> 
+              <li><a href="contact.html">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="block-app">
+
+        <form id='block-create' class='well form-inline'>
+          <input id='block-title' type='text' class='input-xlarge search-query' placeholder='What do you want to call this block' />
+          <input id='block-query' type='text' class='input-xxlarge search-query' placeholder='What do you want this block to monitor' />
+          <button id='block-submit' type='submit' class='btn'><i class='icon-plus'></i> Create</button>
+        </form>
+
+        <div id='block-status' class='thumbnails'>
+        </div>
+
+      </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- templates -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script type="text/template" id="block-template">
+        <a class="close block-close">&times;</a>
+        <div class='thumbnail'>
+          <h3><%= title %></h3>
+          <p><%= text %></p>
+          <button class='btn btn-<%= status %> btn-large'>
+            <%= count %>
+          </button>
+        </div>
+    </script>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/highstock.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/lib/elasticsearch.js"></script> 
+    <script src="./assets/js/speleo.blocks.js"></script> 
+
+  </body> 
+</html>
