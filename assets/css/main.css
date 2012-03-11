@@ -47,3 +47,12 @@ table tbody {
 #event-pager {
   font-size: 80%;
 }
+
+#block-status .thumbnail {
+  text-align:center;
+  padding: 1em;
+}
+
+#block-status button {
+ padding-left: 5em;
+ padding-right: 5em;
