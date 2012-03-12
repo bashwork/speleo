@@ -5,7 +5,7 @@
   <!-- configuration -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <head> 
-    <title>Speleo|Some Pithy Text</title> 
+    <title>Speleo|Settings Manager</title> 
     <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
     <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
     <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
@@ -32,7 +32,8 @@
               <li><a href="health.html">Health</a></li> 
               <li><a href="query.html">Query</a></li> 
               <li><a href="dashboard.html">Dashboard</a></li> 
-              <li class='active'><a href="blocks.html">Blocks</a></li> 
+              <li><a href="blocks.html">Blocks</a></li> 
+              <li class='active'><a href="settings.html">Settings</a></li> 
               <li><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
             </ul> 
@@ -46,15 +47,14 @@
   <!-- content -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div class="container"> 
-      <div id="block-app">
+      <div id="settings-app">
 
-        <form id='block-create' class='well form-inline'>
-          <input id='block-title' type='text' class='input-xlarge search-query' placeholder='What do you want to call this block' />
-          <input id='block-query' type='text' class='input-xxlarge search-query' placeholder='What do you want this block to monitor' />
-          <button id='block-submit' type='submit' class='btn'><i class='icon-plus'></i> Create</button>
-        </form>
-
-        <div id='block-status' class='thumbnails'>
+        <div class="span6">
+          <div id='setting-index' class='well'>
+            <select id='setting-name' class='input-xlarge'>
+              <option value='null'>Select An Index</option>
+            </select>
+          </div>
         </div>
 
       </div>
@@ -63,36 +63,25 @@
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <!-- templates -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <script type="text/template" id="block-template">
-        <a class="close block-close">&times;</a>
-        <div class='thumbnail'>
-          <h3><%= title %></h3>
-          <p><%= text %></p>
-          <button class='btn btn-<%= status %> btn-large'>
-            <%= count %>
-          </button>
-        </div>
-    </script>
-
-    <script type="text/template" id="block-table-template">
+    <script type="text/template" id="settings-template">
       <table class='table table-striped tabled-condensed'>
         <thead>
           <tr>
-            <th>#</th>
-          <% _.each(titles, function(titles) { %>
-            <th><%= title %></th>
-          <% }); %>
+            <th>key</th>
+            <th>value</th>
           </tr>
         </thead>
         <tbody>
-        <% _.each(columns, function(column, index) { %>
           <tr>
-            <td><%= index %></td>
-          <% _.each(_.values(column), function(value) { %>
-            <td><%= value %></td>
-          <% }); %>
+            <td>name</td>
+            <td><%= name %></td>
           </tr>
-        <% }); %>
+          <% _.each(_.keys(settings), function(setting) { %>
+          <tr>
+            <td><%= setting %></td>
+            <td><%= settings[setting] %></td>
+          </tr>
+          <% }); %>
         </tbody>
       </table>
     </script>
@@ -103,10 +92,9 @@
     <script src="./assets/js/lib/jquery.js"></script> 
     <script src="./assets/js/lib/underscore.js"></script> 
     <script src="./assets/js/lib/bootstrap.js"></script> 
-    <script src="./assets/js/lib/highcharts.js"></script> 
     <script src="./assets/js/lib/backbone.js"></script> 
     <script src="./assets/js/lib/elasticsearch.js"></script> 
-    <script src="./assets/js/speleo.blocks.js"></script> 
+    <script src="./assets/js/speleo.settings.js"></script> 
 
   </body> 
 </html>

@@ -145,9 +145,9 @@ var EventView = Backbone.View.extend({
   },
 
   render: function() {
-   this.$el.html(this.template(this.model.toJSON()))
-     .addClass('well');
-   return this;
+    this.$el.html(this.template(this.model.toJSON()))
+      .addClass('well');
+    return this;
   },
 
   remove: function() {
