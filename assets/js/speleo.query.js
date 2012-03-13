@@ -54,7 +54,6 @@ var QueryAppView = Backbone.View.extend({
    */
 
   el: $('#query-app'),
-  queryDataEl: $('#query-data'),
   queryActionEl: $('#query-action'),
   queryPathEl: $('#query-path'),
   queryResults: $('#query-results'),
@@ -71,6 +70,13 @@ var QueryAppView = Backbone.View.extend({
     this.elastic = new ElasticSearch({
       callback: this.displayResults
     });
+    var jsmode = require('ace/mode/javascript').Mode;
+    this.editor = ace.edit('query-data');
+    this.editor.getSession().setMode(new jsmode());
+    this.editor.renderer.setShowGutter(false);
+    this.editor.renderer.setShowPrintMargin(false);
+    this.editor.renderer.setHScrollBarAlwaysVisible(false);
+    this.editor.setHighlightActiveLine(false);
   },
 
   displayResults: function(data, xhr) {
@@ -80,16 +86,16 @@ var QueryAppView = Backbone.View.extend({
 
   resetQueryButton: function(e) {
     e.preventDefault();
-    this.queryDataEl.val('');
     this.queryActionEl.val('POST');
     this.queryPathEl.val('');
     this.queryResults.html('');
+    this.editor.getSession().setValue('');
   },
 
   executeQueryButton: function(e) {
     e.preventDefault();
     var path = this.queryPathEl.val(),
-        data = this.queryDataEl.val(),
+        data = this.editor.getSession().getValue(),
         meth = this.queryActionEl.val();
     if (meth === "GET" && !path) return;
     else if (meth === "DELETE" && !path) return;

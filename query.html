@@ -63,7 +63,7 @@
               <div class='control-group'>
                 <label class='control-label' for='query-action'>Method</label>
                 <div class='controls'>
-                  <select id='query-action'>
+                  <select id='query-action' class='input-xlarge'>
                     <option value='POST'>post</option>
                     <option value='GET'>get</option>
                     <option value='PUT'>put</option>
@@ -76,7 +76,7 @@
               <div class='control-group'>
                 <label class='control-label' for='query-data'>Query Data</label>
                 <div class='controls'>
-                  <textarea id='query-data' type='text' class='input-xlarge' rows="20"></textarea>
+                  <div id='query-data'></div>
                 </div>
               </div>
 
@@ -102,6 +102,8 @@
     <script src="./assets/js/lib/bootstrap.js"></script> 
     <script src="./assets/js/lib/backbone.js"></script> 
     <script src="./assets/js/lib/elasticsearch.js"></script> 
+    <script src="./assets/js/lib/ace/ace.js"></script> 
+    <script src="./assets/js/lib/ace/mode-javascript.js"></script> 
     <script src="./assets/js/speleo.query.js"></script> 
 
   </body> 
