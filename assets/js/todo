@@ -1,0 +1,119 @@
+--------------------------------------------------------
+Speleo
+--------------------------------------------------------
+
+* build specific page templates and views
+* require.js ?
+* make common reusable view elements that can be reused
+  everywhere:
+
+  - chart result views
+  - table result views
+  - single value views
+  - search result views
+  - search query builder with suggest
+
+* add one page routing
+* save page state between switches (service)
+* performance test
+* I18N
+
+--------------------------------------------------------
+Speleo Service
+--------------------------------------------------------
+
+* manage elastic search configuration
+
+  - rivers (custom)
+  - index schema
+  - analyzers
+
+* authentication and authorization
+* statistics api
+* save views/searches
+* report/image generation
+* attach link to hue
+* load balance elastic search
+* alerts
+
+  - email
+  - sms
+  - snmp trap
+  - udp message
+* load balanced
+* database configuration (zookeeper)
+
+--------------------------------------------------------
+Speleo Health
+--------------------------------------------------------
+
+* better view of indexes
+* graph view of agents and collectors
+
+--------------------------------------------------------
+Speleo Query
+--------------------------------------------------------
+
+* complete suggest query builder
+
+  - all methods and sub methods
+  - lookup possible namespace values
+
+--------------------------------------------------------
+Speleo Dashboard
+--------------------------------------------------------
+
+* link auto update polling
+* change search filter dynamically and refresh
+
+--------------------------------------------------------
+Speleo Search
+--------------------------------------------------------
+
+* query builder -> convert query to elastic search
+* click on chart and chart filter
+* sidebar for suggested tag filter
+* speed up slow updates
+* send to dashboard
+
+--------------------------------------------------------
+Speleo Blocks
+--------------------------------------------------------
+
+* save
+* authorize
+* live update (done)
+* apply to new search (generic dash)
+* apply in time range (search)
+* block builder page (live)
+
+  - dynamic options based on block type
+  - jquery movable to arrange
+
+* time limit
+
+--------------------------------------------------------
+Speleo Statistics
+--------------------------------------------------------
+
+* save these from the river to the service
+* ability to query with dsl
+
+--------------------------------------------------------
+Speleo Collector
+--------------------------------------------------------
+
+* collapse the same events (add a count)
+* simplify deployment and management of
+  
+  - flume agent
+  - flume collector
+  - elastic search nodes
+  - main service
+
+* collect statistics
+* bayesian log type detector and parsing
+* hot cold log data
+  
+  - let elastic search expire incoming data
+  - push data to hadoop

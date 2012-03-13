@@ -7,8 +7,9 @@ var Event = Backbone.Model.extend({
     time: '12:34:09 PM',
     text: '',
     tags: ['debug', 'production'],
-  }
+  },
 
+  sync: function(m, m, o) {}
 });
 
 
@@ -16,8 +17,7 @@ var Event = Backbone.Model.extend({
 // collections
 // ------------------------------------------------------------
 var EventCollection = Backbone.Collection.extend({
-  model: Event,
-  localStorage: new Store('dash-events')
+  model: Event
 });
 
 
@@ -78,8 +78,6 @@ var DashboardAppView = Backbone.View.extend({
     DashEvents.bind('add', this.addEvent, this);
     DashEvents.bind('reset', this.addAllEvents, this);
     _.bindAll(this, 'create', 'addEvent');
-    DashEvents.fetch();
-
     _.delay(this.create, 5000);
   },
 

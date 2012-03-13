@@ -1,4 +1,11 @@
 // ------------------------------------------------------------
+// configuration
+// ------------------------------------------------------------
+window.config = {
+  delay: 1000,
+};
+
+// ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
 var Block = Backbone.Model.extend({
@@ -6,7 +13,7 @@ var Block = Backbone.Model.extend({
     date:  '12/2/2012',
     time:  '12:34:09 PM',
     text:  '',
-    type:  'box',
+    type:  'single',
     count: 0,
     title: '',
     status: 'inverse',
@@ -20,19 +27,7 @@ var Block = Backbone.Model.extend({
 // collections
 // ------------------------------------------------------------
 var BlockCollection = Backbone.Collection.extend({
-  model: Block,
-
-  make: function(data) {
-    var block = {
-      'title': 'example',
-      'count': data.hits.total,
-      'score': data.hits.max_score,
-      'speed': data.took,
-      'error': data.timed_out
-    };
-    return new Block(block);
-  }
-
+  model: Block
 });
 
 // ------------------------------------------------------------
@@ -69,33 +64,63 @@ var BlockView = Backbone.View.extend({
 var BlockAppView = Backbone.View.extend({
 
   el: $('#block-app'),
+  blockCreateEl: $('#block-create'),
+  blockFormEl: $('#block-form'),
   blockTitleEl: $('#block-title'),
+  blockTypeEl: $('#block-type'),
   blockQueryEl: $('#block-query'),
   blockStatusEl: $('#block-status'),
 
   events: {
+    'click #block-create': 'toggle',
     'click #block-submit': 'createBlock',
+    'click #block-cancel': 'cancelBlock',
+    'click #block-form .close': 'toggle',
   },
 
   initialize:function() {
     this.elastic = new ElasticSearch();
     Blocks.bind('add', this.addBlock, this);
+
     _.bindAll(this);
-    _.delay(this.updateBlocks, 1000);
+    _.delay(this.updateBlocks, window.config.delay);
+  },
+
+  toggle: function(e) {
+    var self = this;
+    if (self.blockCreateEl.css('display') === 'none') {
+      this.blockFormEl.slideToggle(function() {
+        self.blockCreateEl.fadeToggle();
+      });
+    } else {
+      this.blockCreateEl.fadeToggle(function() {
+        self.blockFormEl.slideToggle();
+      });
+    }
+  },
+
+  cancelBlock: function(e) {
+    e.preventDefault();
+    this.blockTitleEl.val('').focus();
+    this.blockQueryEl.val('');
+    this.blockTypeEl.val('single');
   },
 
   createBlock: function(e) {
     e.preventDefault();
     var title = this.blockTitleEl.val(),
+        type  = this.blockTypeEl.val(),
         query = this.blockQueryEl.val();
     if (!title || !query) return;
 
-    Blocks.add(new Block({
+    Blocks.create({
       title: title,
-      query: query
-    }));
+      query: query,
+      type:  type
+    });
 
-    this.blockTitleEl.val('');
+    this.blockTitleEl.val('').focus();
+    this.blockTypeEl.val('single');
     this.blockQueryEl.val('');
   },
 
@@ -109,7 +134,6 @@ var BlockAppView = Backbone.View.extend({
           }
         },
 
-
         callback: function(data, xhr) {
           block.set({
             'count': data.hits.total,
@@ -121,7 +145,7 @@ var BlockAppView = Backbone.View.extend({
         }
       });
     });
-    _.delay(this.updateBlocks, 1000);
+    _.delay(this.updateBlocks, window.config.delay);
   },
 
   addBlock: function(event) {

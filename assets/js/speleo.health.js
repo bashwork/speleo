@@ -368,7 +368,9 @@ var Router = Backbone.Router.extend({
 var HealthNode = Backbone.Model.extend({
   defaults: {
     current: false
-  }
+  },
+
+  sync: function(m, m, o) {}
 });
 
 
@@ -377,7 +379,6 @@ var HealthNode = Backbone.Model.extend({
 // ------------------------------------------------------------
 var HealthNodeCollection = Backbone.Collection.extend({
   model: HealthNode,
-  localStorage: new Store('health-nodes'),
 
   current: function() {
     return this.find(function(node) {

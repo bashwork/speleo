@@ -56,3 +56,11 @@ body {
 #block-status button {
  padding-left: 5em;
  padding-right: 5em;
+}
+
+#block-form {
+ display:none;
+}
+#block-create {
+ margin-bottom: 2em;
+}

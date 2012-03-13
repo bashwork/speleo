@@ -101,7 +101,6 @@ var ChartStatus = Backbone.Model.extend({
 // ------------------------------------------------------------
 var EventCollection = Backbone.Collection.extend({
   model: Event,
-  localStorage: new Store('events'),
 
   comparator: function(event) {
     return event.get('date');
