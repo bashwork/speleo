@@ -64,6 +64,7 @@ var QueryAppView = Backbone.View.extend({
   },
 
   initialize:function() {
+    _.bindAll(this);
     this.queryPathEl.typeahead({
       source: window.root_query_suggestions
     });
@@ -80,8 +81,12 @@ var QueryAppView = Backbone.View.extend({
   },
 
   displayResults: function(data, xhr) {
-    $('#query-results').html(JSON.stringify(data, null, ' '));
-    prettyPrint();
+    var self = this;
+    this.queryResults.fadeToggle('fast', function() {
+      self.queryResults.html(JSON.stringify(data, null, ' '));
+      self.queryResults.fadeToggle('fast');
+      prettyPrint();
+    });
   },
 
   resetQueryButton: function(e) {
