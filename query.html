@@ -55,21 +55,27 @@
               <div class='control-group'>
                 <label class='control-label' for='query-path'>Path</label>
                 <div class='controls'>
-                  <input id='query-path' type='text' class='input-xlarge' data-provide='typeahead' 
+                  <div class='input-prepend'>
+                    <span class='add-on'><i class='icon-road'></i></span>
+                    <input id='query-path' type='text' class='input-xlarge' data-provide='typeahead' 
                          autocomplete='off' placeholder='The path to query against' />
+                  </div>
                 </div>
               </div>
 
               <div class='control-group'>
                 <label class='control-label' for='query-action'>Method</label>
                 <div class='controls'>
-                  <select id='query-action' class='input-xlarge'>
-                    <option value='POST'>post</option>
-                    <option value='GET'>get</option>
-                    <option value='PUT'>put</option>
-                    <option value='DELETE'>delete</option>
-                    <option value='HEAD'>head</option>
-                  </select>
+                  <div class='input-prepend'>
+                    <span class='add-on'><i class='icon-random'></i></span>
+                    <select id='query-action' class='input-xlarge'>
+                      <option value='POST'>post</option>
+                      <option value='GET'>get</option>
+                      <option value='PUT'>put</option>
+                      <option value='DELETE'>delete</option>
+                      <option value='HEAD'>head</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
