@@ -69,7 +69,12 @@ var DashEventView = Backbone.View.extend({
 // ------------------------------------------------------------
 var DashboardAppView = Backbone.View.extend({
 
-  el: '#event-list',
+  el: '#dash-app',
+  listEl: $('#event-list'),
+  queryEl: $('#dash-query'),
+  events: {
+    'dblclick #dash-query': 'changeQuery'
+  },
 
   initialize: function() {
     this.elastic = new ElasticSearch({
@@ -77,8 +82,13 @@ var DashboardAppView = Backbone.View.extend({
     });
     DashEvents.bind('add', this.addEvent, this);
     DashEvents.bind('reset', this.addAllEvents, this);
-    _.bindAll(this, 'create', 'addEvent');
+
+    _.bindAll(this);
     _.delay(this.create, 5000);
+  },
+
+  changeQuery: function(e) {
+    var text = this.queryEl.text();
   },
 
   create:function() {
@@ -94,7 +104,7 @@ var DashboardAppView = Backbone.View.extend({
         elem = view.render().$el;
 
     elem.hide()
-      .prependTo(this.el)
+      .prependTo(this.listEl)
       .slideDown(400, function() {
         elem.animate({ 'backgroundColor': '#F5F5F5' }, 1000);
       });
@@ -103,7 +113,7 @@ var DashboardAppView = Backbone.View.extend({
   trimEvents: function() {
     var bheight = $('body').outerHeight(),
         wheight = $(window).height(),
-        lheight = $('li', this.$el).height() || 0;
+        lheight = $('li', this.listEl).height() || 0;
 
     while ((bheight + lheight) >= wheight) {
       DashEvents.first().destroy();
