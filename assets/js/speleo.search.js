@@ -6,6 +6,10 @@ window.config = {
   eventPages: 16,
 };
 
+
+// ------------------------------------------------------------
+// chart factory
+// ------------------------------------------------------------
 var searchChartFactory = function(options) {
   return new Highcharts.StockChart({
     chart: {
@@ -35,9 +39,74 @@ var searchChartFactory = function(options) {
   });
 }
 
+
+// ------------------------------------------------------------
+// query builder
+// ------------------------------------------------------------
+BuildQuery = function(options) {
+  this.options = _.extend({}, this.defaults, options);
+};
+
+/**
+ *
+ * facets = ['tags', 'names',
+ *   {
+ *     'name': 'locations',
+ *     'global': true',
+ *     'filters': {
+ *       'env': 'prod',
+ *     }
+ *   }
+ * ]
+ */
+BuildQuery.prototype.build = function() {
+  var query = {
+    'query':  {},
+    'facets': {},
+    'from': this.options.start,
+    'size': this.options.count,
+  };
+
+  _.each(this.options.facets, function(facet) {
+    var name = facet.name || facet;
+    query.facets[name] = {
+      terms: { field : name },
+      global: facet.global || false,
+    };
+
+    if (facet.filters) {
+      query.facets[name]['facet_filter'] = {
+        'term': facet.filters,
+      };
+    }
+  });
+};
+
+BuildQuery.prototype.defaults = {
+  count: 10,
+  start:  0,
+  facets: [],
+};
+
+
 // ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
+var Facet = Backbone.Model.extend({
+  defaults: {
+    rank:   0,
+    name:  '',
+    group: '',
+    total:  0
+  },
+
+  percent: function() {
+    return rank / total;
+  },
+
+  sync: function(m, m, o) {}
+});
+
 var Event = Backbone.Model.extend({
   defaults: {
     date:  '12/2/2012',
@@ -121,6 +190,41 @@ var EventCollection = Backbone.Collection.extend({
     delete hit['_source'];
     source.tags = [hit['_index'], hit['_type']];
     return new Event(_.extend(source, hit));
+  }
+
+});
+
+var FacetCollection = Backbone.Collection.extend({
+  model: Facet,
+
+  comparator: function(facet) {
+    return facet.get('rank');
+  },
+
+  groups: function() {
+    return _.keys(this.groupBy(function(facet) {
+      return facet.get('group');
+    }));
+  },
+
+  byGroup:function(group) {
+    return this.filter(function(facet) {
+      return facet.get('group') === group;
+    });
+  },
+
+  parse: function(data) {
+    var self = this; this.reset();
+    _.each(_.keys(data.facets), function(key) {
+      _.each(data[key].terms, function(term) {
+        self.create({
+          'group': key,
+          'rank':  term.count,
+          'name':  term.term,
+          'total': data[key].total
+        });
+      });
+    });
   }
 
 });

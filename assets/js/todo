@@ -66,6 +66,10 @@ Speleo Dashboard
 
 * link auto update polling
 * change search filter dynamically and refresh
+* percolate in the future
+
+  - custom alert api
+  - wait for percolate through elastic
 
 --------------------------------------------------------
 Speleo Search

@@ -29,11 +29,22 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="search.html">Search</a></li> 
-              <li><a href="health.html">Health</a></li> 
-              <li><a href="query.html">Query</a></li> 
-              <li><a href="dashboard.html">Dashboard</a></li> 
-              <li><a href="blocks.html">Blocks</a></li> 
-              <li class='active'><a href="settings.html">Settings</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown active" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li class='active'><a href="settings.html">Settings</a></li> 
+                  <li><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
               <li><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
             </ul> 
@@ -49,11 +60,20 @@
     <div class="container"> 
       <div id="settings-app">
 
-        <div class="span6">
-          <div id='setting-index' class='well'>
-            <select id='setting-name' class='input-xlarge'>
-              <option value='null'>Select An Index</option>
-            </select>
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='setting-index'>
+              <h3>Index Settings</h3>
+              <select id='setting-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='setting-cluster'>
+              <h3>Cluster Settings</h3>
+            </div>
           </div>
         </div>
 
@@ -64,7 +84,7 @@
   <!-- templates -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <script type="text/template" id="settings-template">
-      <table class='table table-striped tabled-condensed'>
+      <table class='table tabled-condensed table-bordered'>
         <thead>
           <tr>
             <th>key</th>
@@ -79,7 +99,7 @@
           <% _.each(_.keys(settings), function(setting) { %>
           <tr>
             <td><%= setting %></td>
-            <td><%= settings[setting] %></td>
+            <td><span><%= settings[setting] %></span><input type='text' class='input-small'/></td>
           </tr>
           <% }); %>
         </tbody>

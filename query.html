@@ -30,9 +30,22 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="search.html">Search</a></li> 
-              <li><a href="health.html">Health</a></li> 
-              <li class='active'><a href="query.html">Query</a></li> 
-              <li><a href="dashboard.html">Dashboard</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown active" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="settings.html">Settings</a></li> 
+                  <li class='active'><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
               <li><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
             </ul> 

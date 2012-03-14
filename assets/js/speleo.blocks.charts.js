@@ -85,6 +85,8 @@ var pieChartFactory = function(options) {
 // ------------------------------------------------------------
 // views
 // ------------------------------------------------------------
+// use facets for the view
+// ------------------------------------------------------------
 var PieChartBlockView = Backbone.View.extend({
   tagName: 'li',
   events: {

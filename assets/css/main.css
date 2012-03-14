@@ -112,3 +112,32 @@ body {
 .ace_sb {
   overflow-y:auto !important;
 }
+
+.setting-block h3 {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+  padding: 0px;
+}
+
+.setting-block {
+  position:relative;
+}
+.setting-block select {
+  position:absolute;
+  top: 1em;
+  right: 1.5em;
+}
+
+.setting-block table {
+  background: #fff;
+}
+
+.setting-block table th {
+  background: #eee;
+}
+
+.setting-block td span          { display:block; }
+.setting-block td input         { display:none;  }
+.setting-block td.editing span  { display:none;  }
+.setting-block td.editing input { display:block; }
+

@@ -38,9 +38,22 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="search.html">Search</a></li> 
-              <li class='active'><a href="health.html">Health</a></li> 
-              <li><a href="query.html">Query</a></li> 
-              <li><a href="dashboard.html">Dashboard</a></li> 
+              <li class="dropdown active" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li class='active'><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="settings.html">Settings</a></li> 
+                  <li><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
               <li><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
             </ul> 
@@ -212,7 +225,8 @@
           </tr>
         </thead>
         <tbody>
-        <tr><td>current connections</td><td><%= network.tcp.curr_stab %></td></tr>
+        <tr><td>current connections</td><td><%= network.tcp.curr_estab %></td></tr>
+        <tr><td>reset connections</td><td><%= network.tcp.estab_resets %></td></tr>
         <tr><td>total active</td><td><%= network.tcp.active_opens %></td></tr>
         <tr><td>total passive</td><td><%= network.tcp.passive_opens %></td></tr>
         <tr><td>receive size</td><td><%= transport.rx_size %></td></tr>

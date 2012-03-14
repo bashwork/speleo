@@ -30,9 +30,22 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="search.html">Search</a></li> 
-              <li><a href="health.html">Health</a></li> 
-              <li><a href="query.html">Query</a></li> 
-              <li><a href="dashboard.html">Dashboard</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="settings.html">Settings</a></li> 
+                  <li><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
               <li class='active'><a href="about.html">About</a></li> 
               <li><a href="contact.html">Contact</a></li> 
             </ul> 
@@ -88,11 +101,41 @@
             </div>
 
             <div class='item'>
+              <img src="./assets/img/about-blocks.png" />
+              <div class='carousel-caption'>
+                <h4>Monitoring Blocks</h4>
+                <p>See everything about your system without having to
+                   turn your head.
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
               <img src="./assets/img/about-query.png" />
               <div class='carousel-caption'>
                 <h4>Custom Query Utility</h4>
                 <p>For those cases when you have to execute that one off
                    monster of a query
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
+              <img src="./assets/img/about-analyze.png" />
+              <div class='carousel-caption'>
+                <h4>Index Analyzer Utility</h4>
+                <p>See what your indexer is really doing to your data
+                   without having to pull out the engine
+                </p>
+              </div>
+            </div>
+
+            <div class='item'>
+              <img src="./assets/img/about-settings.png" />
+              <div class='carousel-caption'>
+                <h4>Live Settings Manager</h4>
+                <p>Change the system on the fly without ssh, ftp,
+                   omg, wtf, etc.
                 </p>
               </div>
             </div>
