@@ -2,6 +2,7 @@
 Speleo
 --------------------------------------------------------
 
+* make iconography consistent (and other elements too)
 * build specific page templates and views
 * require.js ?
 * make common reusable view elements that can be reused
@@ -29,6 +30,9 @@ Speleo Service
   - analyzers
 
 * authentication and authorization
+
+  - api proxy
+
 * statistics api
 * save views/searches
 * report/image generation
@@ -40,6 +44,7 @@ Speleo Service
   - sms
   - snmp trap
   - udp message
+
 * load balanced
 * database configuration (zookeeper)
 
@@ -54,7 +59,6 @@ Speleo Health
 Speleo Query
 --------------------------------------------------------
 
-* ace editor
 * complete suggest query builder
 
   - all methods and sub methods
@@ -87,7 +91,6 @@ Speleo Blocks
 
 * save
 * authorize
-* live update (done)
 * apply to new search (generic dash)
 * apply in time range (search)
 * block builder page (live)
@@ -122,3 +125,11 @@ Speleo Collector
   
   - let elastic search expire incoming data
   - push data to hadoop
+
+--------------------------------------------------------
+Speleo Settings
+--------------------------------------------------------
+
+* growl alert on success/failure
+* add roles
+* add all possible settings and bind them
