@@ -135,9 +135,9 @@ body {
 .setting-block table th {
   background: #eee;
 }
+.setting-block ul { display: none }
 
 .setting-block td span          { display:block; }
 .setting-block td input         { display:none;  }
 .setting-block td.editing span  { display:none;  }
 .setting-block td.editing input { display:block; }
-

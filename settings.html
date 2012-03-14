@@ -77,6 +77,38 @@
           </div>
         </div>
 
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='operation-index'>
+              <h3>Index Operations</h3>
+              <select id='operation-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_refresh'><i class='icon-refresh'></i> Refresh</a></li>
+                <li><a href='#' data-action='_flush'><i class='icon-download-alt'></i> Flush</a></li>
+                <li><a href='#' data-action='_optimize'><i class='icon-cog'></i> Optimize</a></li>
+                <li><a href='#' data-action='_cache/clear'><i class='icon-fire'></i> Clear Cache</a></li>
+                <li><a href='#' data-method='DELETE'><i class='icon-trash'></i> Delete</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='operation-cluster'>
+              <h3>Cluster Operations</h3>
+              <select id='cluster-name' class='input-xlarge'>
+                <option value='null'>Select A Node</option>
+                <option value='_master'>Current Master</option>
+                <option value='_all'>Entire Cluster</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_shutdown'><i class='icon-eye-close'></i> Shutdown</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

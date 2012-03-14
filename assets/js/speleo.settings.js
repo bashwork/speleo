@@ -133,12 +133,18 @@ var SettingsView = Backbone.View.extend({
 var SettingsAppView = Backbone.View.extend({
 
   el: $('#settings-app'),
-  indexEl: $('#setting-name'),
   settingsEl: $('#setting-index'),
   clusterEl: $('#setting-cluster'),
+  settingIdxEl: $('#setting-name'),
+  clusterIdxEl: $('#cluster-name'),
+  operationIdxEl: $('#operation-name'),
 
   events: {
     'change #setting-name': 'changeSettings',
+    'change #operation-name': 'changeOperation',
+    'change #cluster-name': 'changeOperation',
+    'click  #operation-index a': 'indexOperation',
+    'click  #operation-cluster a': 'clusterOperation',
   },
 
   initialize:function() {
@@ -153,8 +159,8 @@ var SettingsAppView = Backbone.View.extend({
     this.elastic.request("GET", "_settings", "", function(d,x) {
       _.each(_.keys(d), function(key) {
         Settings.create(_.extend({ name : key }, d[key]), { silent: true });
-        $('<option></option>').attr("value", key).text(key)
-          .appendTo(self.indexEl);
+        $('<option/>').attr("value", key).text(key).appendTo(self.settingIdxEl);
+        $('<option/>').attr("value", key).text(key).appendTo(self.operationIdxEl);
       });
     });
 
@@ -163,21 +169,70 @@ var SettingsAppView = Backbone.View.extend({
       var view = new SettingsView({ model: setting });
       self.clusterEl.append(view.render().el);
     });
+
+    this.elastic.request("GET", "_cluster/nodes", "", function(d,x) {
+      _.each(_.keys(d.nodes), function(node) {
+        $('<option/>').attr("value", node).text(d.nodes[node].name).appendTo(self.clusterIdxEl);
+      });
+    })
   },
 
   render: function(setting) {
-    if (this.view) this.view.remove();
     this.view = new SettingsView({ model: setting });
-    this.settingsEl.append(this.view.render().el);
+    var elem = this.view.render().$el.hide();
+    this.settingsEl.append(elem);
+    elem.slideDown();
+  },
+
+  changeOperation: function(e) {
+    var elem = $(e.target),
+        text = elem.val();
+    if (text === "null") {
+      elem.next().slideUp()
+    } else {
+      elem.next().slideDown()
+    }
+  },
+
+  clusterOperation: function(e) {
+    var elem = $(e.target),
+        indx = '_cluster/nodes/' + this.clusterIdxEl.val(),
+        meth = elem.data('method') || 'POST',
+        quer = indx + '/' + elem.data('action') || '';
+
+    this.elastic.request(meth, quer, '', function(d,x) {
+      console.log(d);
+    });
+  },
+
+  indexOperation: function(e) {
+    var elem = $(e.target),
+        indx = this.operationIdxEl.val(),
+        meth = elem.data('method') || 'GET',
+        quer = indx + '/' + elem.data('action') || '';
+
+    this.elastic.request(meth, quer, '', function(d,x) {
+      console.log(d);
+    });
+  },
+
+  removeSetting: function() {
+    var self  = this;
+        defer = $.Deferred();
+
+    if (this.view) {
+     this.view.$el.slideUp(function(){
+        self.view.remove();
+        defer.resolve();
+      });
+    } else { defer.resolve(); }
+    return defer;
   },
 
   changeSettings: function(e) {
-    e.preventDefault();
-    var name = $(e.target).val();
-    if (!name || name === "null") {
-      if (this.view) this.view.remove();
-      return;
-    }
+    var name  = $(e.target).val(),
+        defer = this.removeSetting();
+    if (!name || name === "null") return;
 
     Settings.each(function(setting) {
       setting.set('_active', false, { silent: true });
@@ -185,7 +240,10 @@ var SettingsAppView = Backbone.View.extend({
     var setting = Settings.find(function(setting) {
       return setting.get('name') === name;
     });
-    if (setting) { setting.set('_active', true); }
+
+    if (setting) {
+       defer.always(function() { setting.set('_active', true); });
+    }
   }
 
 });
