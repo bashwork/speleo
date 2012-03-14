@@ -72,8 +72,12 @@ var DashboardAppView = Backbone.View.extend({
   el: '#dash-app',
   listEl: $('#event-list'),
   queryEl: $('#dash-query'),
+  inputEl: $('#dash-query input'),
+  headerEl: $('#dash-query h1'),
   events: {
-    'dblclick #dash-query': 'changeQuery'
+    'dblclick #dash-query': 'editQuery',
+    'keypress #dash-query input': 'updateOnEnter',
+    'blur #dash-query input': 'updateQuery'
   },
 
   initialize: function() {
@@ -87,8 +91,24 @@ var DashboardAppView = Backbone.View.extend({
     _.delay(this.create, 5000);
   },
 
-  changeQuery: function(e) {
-    var text = this.queryEl.text();
+  editQuery: function(e) {
+    var text = this.headerEl.text();
+    this.queryEl.addClass('editing');
+    this.inputEl.val(text).focus();
+  },
+
+  updateOnEnter: function(e) {
+    if (e.keyCode == 13) {
+      this.updateQuery(e);
+    }
+  },
+
+  updateQuery: function(e) {
+    var text = this.inputEl.val();
+    this.headerEl.text(text);
+    this.queryEl.removeClass('editing');
+    DashEvents.each(function(e) { e.destroy() });
+    // update the query udpate
   },
 
   create:function() {
