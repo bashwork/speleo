@@ -1,0 +1,108 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Some Pithy Text</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/google-prettify.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li><a href="search.html">Search</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="settings.html">Settings</a></li> 
+                  <li><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
+              <li><a href="about.html">About</a></li> 
+              <li><a href="contact.html">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right"><a href="#">Login</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="login-app">
+
+        <div class='row'>
+          <div class='offset4 span4'>
+            <form id='login-form' class='well'>
+
+              <div class='control-group'>
+                <label class='control-label' for='login-username'>Username</label>
+                <div class='controls'>
+                  <input id='login-username' type='text' class='input-xlarge' placeholder='Username' />
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='login-password'>Password</label>
+                <div class='controls'>
+                  <input id='login-password' type='password' class='input-xlarge' placeholder='Password' />
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <div class='controls'>
+                  <button type='submit' class='btn btn-primary btn-large'><i class='icon-lock'></i> Login to Speleo</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class='hero-unit'>
+          <h1>Welcome to Speleo</h1>
+          <p>Ready to get started?</p>
+        </div>
+      </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/speleo.login.js"></script> 
+
+  </body> 
+</html>

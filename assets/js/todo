@@ -1,4 +1,11 @@
 --------------------------------------------------------
+Speleo Components
+--------------------------------------------------------
+
+* generic growl alerts
+* system connecting / error modal
+
+--------------------------------------------------------
 Speleo
 --------------------------------------------------------
 
@@ -49,11 +56,17 @@ Speleo Service
 * database configuration (zookeeper)
 
 --------------------------------------------------------
-Speleo Health
+Speleo Collector Health
 --------------------------------------------------------
 
-* better view of indexes
 * graph view of agents and collectors
+
+--------------------------------------------------------
+Speleo Index Health
+--------------------------------------------------------
+
+* top sources
+* index rates
 
 --------------------------------------------------------
 Speleo Query
@@ -84,6 +97,11 @@ Speleo Search
 * sidebar for suggested tag filter
 * speed up slow updates
 * send to dashboard
+* clone splunk
+
+  - recent searches
+  - field suggest with facet matches
+  - suggest matching terms, current matching count
 
 --------------------------------------------------------
 Speleo Blocks
