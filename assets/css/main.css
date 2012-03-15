@@ -141,3 +141,11 @@ body {
 .setting-block td input         { display:none;  }
 .setting-block td.editing span  { display:none;  }
 .setting-block td.editing input { display:block; }
+
+.growl {
+  position:absolute;
+  top: 4em;
+  right: 1em;
+  display: none;
+  opacity: 0.8;
+}
