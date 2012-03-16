@@ -157,6 +157,30 @@ body {
   display:none;
   z-index:1060;
 }
+.spin-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: rotate(360deg) scale(2);
+  opacity: 0;
+}
+.stretch-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: skewX(90deg) scale(2);
+  opacity: 0;
+}
+.flip-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: rotateX(360deg) scale(2);
+  opacity: 0;
+}
 #login-form .control-group {
   margin-bottom: 0.5em;
 }

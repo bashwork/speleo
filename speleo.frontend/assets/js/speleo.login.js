@@ -1,4 +1,49 @@
 // ------------------------------------------------------------
+// model
+// ------------------------------------------------------------
+var Account = Backbone.Model.extend({
+  defaults: {
+    valid : false,
+    username: '',
+    password: ''
+  },
+  localStorage : new Store('account')
+  
+});
+
+// ------------------------------------------------------------
+// views
+// ------------------------------------------------------------
+var LoginBarView = Backbone.View.extend({
+  el: $('#nav-login'),
+  template: _.template($('#nav-login-template').html()),
+  events: {
+    'click a': 'validate'
+  },
+
+  initialize: function() {
+    _.bindAll(this);
+    this.model.bind('change',  this.render);
+    this.model.bind('destroy', this.render);
+  },
+
+  validate: function(e) {
+    var action = $(e.target).data('action');
+    if (action === 'logout') {
+      this.model.set('valid', false);
+      this.model.save();
+    }
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()))
+    return this;
+  }
+  
+});
+
+
+// ------------------------------------------------------------
 // main 
 // ------------------------------------------------------------
 var LoginAppView = Backbone.View.extend({
@@ -12,7 +57,19 @@ var LoginAppView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this);
-    this.blinds();
+    this.animation = _.shuffle(['spin-out', 'stretch-out', 'flip-out'])[0];
+    this.model = new Account({ id: 'speleo' });
+    this.model.bind('change',  this.render);
+    this.model.bind('destroy', this.render);
+    this.navbar = new LoginBarView({ model: this.model });
+    this.model.fetch();
+  },
+
+  render: function() {
+    console.log(this.model);
+    if (!this.model.get('valid')) {
+      this.blinds();
+    }
   },
 
   blinds: function() {
@@ -27,7 +84,7 @@ var LoginAppView = Backbone.View.extend({
 
     };
     this.blind = $('<div/>').css(c).appendTo('html');
-    this.$el.fadeIn('slow');
+    this.$el.removeClass(this.animation).fadeIn(1000);
   },
 
   toggleError: function(e) {
@@ -44,16 +101,18 @@ var LoginAppView = Backbone.View.extend({
     } else if (!pass) {
       this.passwordEl.parents('.control-group').addClass('error');
     } else {
+      this.usernameEl.val(''),
+      this.passwordEl.val('');
       this.login(user, pass);
     }
   },
 
   login: function(user, pass) {
-    this.blind.fadeOut();
-    this.$el.fadeOut();
-    //_.delay(function() {
-    //  window.location.replace('./search.html')
-    //}, 2000);
+    var self = this;
+    this.$el.addClass(this.animation);
+    this.blind.fadeOut(function() { self.$el.hide(); });
+    this.model.set({ username: user, password: pass, valid: true, id: 'speleo' });
+    this.model.save();
   }
 });
 
