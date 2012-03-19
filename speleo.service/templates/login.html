@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block page-title %}Speleo| Login{% end %}
+{% block content %}
+
+        <div class='row'>
+          <div class='offset4 span4'>
+            <form id='login-form' class='well'>
+
+              <div class='control-group'>
+                <label class='control-label' for='login-username'>Username</label>
+                <div class='controls'>
+                  <input id='login-username' type='text' class='input-xlarge' placeholder='Username' />
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <label class='control-label' for='login-password'>Password</label>
+                <div class='controls'>
+                  <input id='login-password' type='password' class='input-xlarge' placeholder='Password' />
+                </div>
+              </div>
+
+              <div class='control-group'>
+                <div class='controls'>
+                  <button type='submit' class='btn btn-primary btn-large'><i class='icon-lock'></i> Login to Speleo</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class='hero-unit'>
+          <h1>Welcome to Speleo</h1>
+          <p>Ready to get started?</p>
+        </div>
+      </div>
+    </div>
+{% end %}
+
+{% block templates %}
+    <script type="text/template" id="nav-login-template">
+      <% if (valid) { %>
+        Logged in as <%= username %> | <a data-action='logout' href='#'>Logout</a>
+      <% } else { %>
+        <a data-action='login' href='#'>Login</a>
+      <% } %>
+    </script>
+{% end %}
+
+{% block extra-tail %}
+    <script src="./assets/js/speleo.login.js"></script> 
+{% end %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block page-title %}Speleo| Service Settings{% end %}
+{% block content %}
+
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='setting-index'>
+              <h3>Index Settings</h3>
+              <select id='setting-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='setting-cluster'>
+              <h3>Cluster Settings</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='operation-index'>
+              <h3>Index Operations</h3>
+              <select id='operation-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_refresh'><i class='icon-refresh'></i> Refresh</a></li>
+                <li><a href='#' data-action='_flush'><i class='icon-download-alt'></i> Flush</a></li>
+                <li><a href='#' data-action='_optimize'><i class='icon-cog'></i> Optimize</a></li>
+                <li><a href='#' data-action='_cache/clear'><i class='icon-fire'></i> Clear Cache</a></li>
+                <li><a href='#' data-method='DELETE'><i class='icon-trash'></i> Delete</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='operation-cluster'>
+              <h3>Cluster Operations</h3>
+              <select id='cluster-name' class='input-xlarge'>
+                <option value='null'>Select A Node</option>
+                <option value='_master'>Current Master</option>
+                <option value='_all'>Entire Cluster</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_shutdown'><i class='icon-eye-close'></i> Shutdown</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+{% end %}
+
+{% block templates %}
+    <script type="text/template" id="settings-template">
+      <table class='table tabled-condensed table-bordered'>
+        <thead>
+          <tr>
+            <th>key</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>name</td>
+            <td><%= name %></td>
+          </tr>
+          <% _.each(_.keys(settings), function(setting) { %>
+          <tr>
+            <td><%= setting %></td>
+            <td><span><%= settings[setting] %></span><input type='text' class='input-small'/></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </script>
+{% end %}
+
+{% block extra-tail %}
+    <script src="./static/js/lib/elasticsearch.js"></script> 
+    <script src="./static/js/speleo.settings.js"></script> 
+{% end %}

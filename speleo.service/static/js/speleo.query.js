@@ -65,7 +65,7 @@ var QueryAppView = Backbone.View.extend({
 
   initialize:function() {
     _.bindAll(this);
-    this.queryPathEl.typeahead({
+    this.queryPathEl.attr('autocomplete', 'off').typeahead({
       source: window.root_query_suggestions
     });
     this.elastic = new ElasticSearch({

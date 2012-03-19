@@ -78,7 +78,7 @@ var AnalyzeAppView = Backbone.View.extend({
    * - select correct method
    */
 
-  el: $('#analyze-app'),
+  el: $('#speleo-app'),
   queryTextEl: $('#analyze-text'),
   queryIndexEl: $('#analyze-index'),
   queryAnalyzerEl: $('#analyze-analyzer'),
@@ -108,7 +108,8 @@ var AnalyzeAppView = Backbone.View.extend({
 
   initSuggestions:function(data, xhr) {
     var keys = _.keys(data);
-    this.queryIndexEl.typeahead({ source: keys });
+    this.queryIndexEl.attr('autocomplete', 'off')
+        .typeahead({ source: keys });
   },
 
   popover_options: function(database) {

@@ -10,7 +10,7 @@ body {
   top: 5px;
   left: 5px;
   width: 60px;
-  z-index:10000;
+  z-index:1040;
 }
 
 #events {
@@ -141,3 +141,54 @@ body {
 .setting-block td input         { display:none;  }
 .setting-block td.editing span  { display:none;  }
 .setting-block td.editing input { display:block; }
+
+.growl {
+  position:absolute;
+  top: 4em;
+  right: 1em;
+  display: none;
+  opacity: 0.8;
+}
+
+#login-form {
+  margin-top: 10em;
+  background: rgba(256,256,256,0.5);
+  position:fixed;
+  display:none;
+  z-index:1060;
+}
+.spin-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: rotate(360deg) scale(2);
+  opacity: 0;
+}
+.stretch-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: skewX(90deg) scale(2);
+  opacity: 0;
+}
+.flip-out {
+  -webkit-transition-property: -webkit-transform opacity;
+  -webkit-transition-duration: 1s, 1s;
+  -webkit-transition-delay: 0, 0;
+  -webkit-transition-timing-function: default, linear;
+  -webkit-transform: rotateX(360deg) scale(2);
+  opacity: 0;
+}
+#login-form .control-group {
+  margin-bottom: 0.5em;
+}
+#login-form .add-on {
+  padding:10px;
+}
+#login-form input {
+  font-size:20px;
+  line-height:20px;
+  padding: 10px;
+}

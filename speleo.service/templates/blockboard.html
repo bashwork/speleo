@@ -1,64 +1,7 @@
-<!DOCTYPE html> 
-<html> 
- 
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <!-- configuration -->
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <head> 
-    <title>Speleo|Some Pithy Text</title> 
-    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
-    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
-    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
-  </head> 
- 
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <!-- navigation -->
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <body> 
+{% extends "base.html" %}
 
-    <div class="navbar navbar-fixed-top"> 
-      <img id='main-logo' src='./assets/img/helmet.png' /> 
-      <div class="navbar-inner"> 
-        <div class="container"> 
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span> 
-          </a> 
-          <a class="brand" href="#">Speleo</a> 
-          <div class="nav-collapse"> 
-            <ul class="nav"> 
-              <li><a href="search.html">Search</a></li> 
-              <li class="dropdown active" id="monitoring-menu">
-                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
-                <ul class='dropdown-menu'>
-                  <li><a href="dashboard.html">Dashboard</a></li> 
-                  <li class='active'><a href="blocks.html">Blockboard</a></li> 
-                  <li><a href="health.html">Health</a></li> 
-                </ul>
-              </li>
-              <li class="dropdown" id="utility-menu">
-                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
-                <ul class='dropdown-menu'>
-                  <li><a href="settings.html">Settings</a></li> 
-                  <li><a href="query.html">Query</a></li> 
-                  <li><a href="analyze.html">Analyze</a></li> 
-                </ul>
-              </li>
-              <li><a href="about.html">About</a></li> 
-              <li><a href="contact.html">Contact</a></li> 
-            </ul> 
-            <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
-          </div>
-        </div> 
-      </div> 
-    </div> 
-
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <!-- content -->
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <div class="container"> 
-      <div id="block-app">
+{% block page-title %}Speleo| Blockboard{% end %}
+{% block content %}
 
         <div class='row'>
           <div class="span12">
@@ -110,13 +53,10 @@
 
        <div id='block-status' class='thumbnails'>
        </div>
+{% end %}
 
-      </div>
-    </div>
+{% block templates %}
 
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <!-- templates -->
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <script type="text/template" id="block-template">
         <a class="close block-close">&times;</a>
         <div class='thumbnail'>
@@ -150,17 +90,10 @@
         </tbody>
       </table>
     </script>
+{% end %}
 
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <!-- javascript -->
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <script src="./assets/js/lib/jquery.js"></script> 
-    <script src="./assets/js/lib/underscore.js"></script> 
-    <script src="./assets/js/lib/bootstrap.js"></script> 
-    <script src="./assets/js/lib/highcharts.js"></script> 
-    <script src="./assets/js/lib/backbone.js"></script> 
-    <script src="./assets/js/lib/elasticsearch.js"></script> 
-    <script src="./assets/js/speleo.blocks.js"></script> 
-
-  </body> 
-</html>
+{% block extra-tail %}
+    <script src="./static/js/lib/highcharts.js"></script> 
+    <script src="./static/js/lib/elasticsearch.js"></script> 
+    <script src="./static/js/speleo.blocks.js"></script> 
+{% end %}

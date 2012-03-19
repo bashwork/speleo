@@ -69,7 +69,7 @@ var DashEventView = Backbone.View.extend({
 // ------------------------------------------------------------
 var DashboardAppView = Backbone.View.extend({
 
-  el: '#dash-app',
+  el: '#speleo-app',
   listEl: $('#event-list'),
   queryEl: $('#dash-query'),
   inputEl: $('#dash-query input'),

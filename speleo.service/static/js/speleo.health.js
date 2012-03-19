@@ -432,8 +432,8 @@ var ElasticHealthAppView = Backbone.View.extend({
       host: window.config.host,
       port: window.config.port
     });
-    this.delayEl.typeahead({  source: _.keys(window.valid_times) });
-    this.windowEl.typeahead({ source: _.keys(window.valid_times) });
+    this.delayEl.attr('autocomplete', 'off').typeahead({  source: _.keys(window.valid_times) });
+    this.windowEl.attr('autocomplete', 'off').typeahead({ source: _.keys(window.valid_times) });
 
     this.charts = new ChartViewCollection();
     this.tables = new TableViewCollection();

@@ -13,3 +13,7 @@ class ContactHandler(tornado.web.RequestHandler):
         message = self.get_argument('message', '')
         self.write(subject + ' ' + email + ' ' + message)
 
+# ------------------------------------------------------------
+# exports
+# ------------------------------------------------------------
+__all__ = ['ContactHandler']

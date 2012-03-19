@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page-title %}Speleo| Dashboard{% end %}
+{% block content %}
+
+        <div id='dash-query' class='hero-unit'>
+          <h1>Current Query</h1>
+          <input type='text' class='input-xxlarge' />
+        </div>
+
+        <div id="events">
+          <ul id='event-list'></ul>
+        </div>
+{% end %}
+
+{% block templates %}
+    <script type="text/template" id="event-template">
+        <a class="close event-close">&times;</a>
+        <div class='event'>
+          <div class='event-time'>
+            <span class='event-time-date'><%= time %></span>
+            <span class='event-time-time'><%= date %></span>
+          </div>
+          <div class='event-text'><%= text %></div>
+          <div class='event-tags'>
+          <% _.each(tags, function(tag) { %>
+             <span class='label'><%= tag %></span>
+          <% }); %>
+          </div>
+        </div>
+    </script>
+{% end %}
+
+{% block extra-tail %}
+    <script src="./static/js/lib/jquery-ui.js"></script> 
+    <script src="./static/js/lib/elasticsearch.js"></script> 
+    <script src="./static/js/speleo.dash.js"></script> 
+{% end %}

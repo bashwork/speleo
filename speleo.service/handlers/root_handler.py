@@ -4,5 +4,5 @@ class RootHandler(tornado.web.RequestHandler):
 
     RoutePath = r'/'
 
-    def get(self, **kwargs):
+    def get(self):
        self.render('index.html')

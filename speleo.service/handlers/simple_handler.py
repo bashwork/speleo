@@ -27,3 +27,8 @@ class HealthHandler(tornado.web.RequestHandler):
 
     def get(self):
         self.render('health.html')
+
+# ------------------------------------------------------------
+# exports
+# ------------------------------------------------------------
+__all__ = ['QueryHandler', 'HealthHandler', 'AnalyzeHandler', 'AboutHandler']

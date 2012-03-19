@@ -63,7 +63,7 @@ var BlockView = Backbone.View.extend({
 // ------------------------------------------------------------
 var BlockAppView = Backbone.View.extend({
 
-  el: $('#block-app'),
+  el: $('#speleo-app'),
   blockCreateEl: $('#block-create'),
   blockFormEl: $('#block-form'),
   blockTitleEl: $('#block-title'),

@@ -132,12 +132,13 @@ var SettingsView = Backbone.View.extend({
 // ------------------------------------------------------------
 var SettingsAppView = Backbone.View.extend({
 
-  el: $('#settings-app'),
+  el: $('#speleo-app'),
   settingsEl: $('#setting-index'),
   clusterEl: $('#setting-cluster'),
   settingIdxEl: $('#setting-name'),
   clusterIdxEl: $('#cluster-name'),
   operationIdxEl: $('#operation-name'),
+  template: _.template($('#alert-template').html()),
 
   events: {
     'change #setting-name': 'changeSettings',
@@ -194,25 +195,35 @@ var SettingsAppView = Backbone.View.extend({
     }
   },
 
+  notify: function(m, o, i, d) {
+    var params = { method: (!o || o === '') ? m : o, source: i, status: d.ok },
+        growl  = $(this.template(params)).appendTo('body').fadeIn();
+    _.delay(function() { growl.alert('close'); }, 5000);
+  },
+
   clusterOperation: function(e) {
-    var elem = $(e.target),
+    var self = this,
+        elem = $(e.target),
         indx = '_cluster/nodes/' + this.clusterIdxEl.val(),
         meth = elem.data('method') || 'POST',
-        quer = indx + '/' + elem.data('action') || '';
+        oper = elem.data('action') || '',
+        quer = indx + '/' + oper;
 
-    this.elastic.request(meth, quer, '', function(d,x) {
-      console.log(d);
+    this.elastic.request(meth, quer, '', function(data, xhr) {
+      self.notify(meth, oper, indx, data);
     });
   },
 
   indexOperation: function(e) {
-    var elem = $(e.target),
+    var self = this,
+        elem = $(e.target),
         indx = this.operationIdxEl.val(),
         meth = elem.data('method') || 'GET',
-        quer = indx + '/' + elem.data('action') || '';
+        oper = elem.data('action') || '',
+        quer = indx + '/' + oper;
 
-    this.elastic.request(meth, quer, '', function(d,x) {
-      console.log(d);
+    this.elastic.request(meth, quer, '', function(data, xhr) {
+      self.notify(meth, oper, indx, data);
     });
   },
 
