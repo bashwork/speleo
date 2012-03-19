@@ -1,153 +1,27 @@
---------------------------------------------------------
-Speleo Components
---------------------------------------------------------
+============================================================
+TODO For Speleo Service
+============================================================
 
-* generic growl alerts
-* system connecting / error modal
+------------------------------------------------------------
+Settings
+------------------------------------------------------------
 
---------------------------------------------------------
-Speleo
---------------------------------------------------------
+* extract configuration for service
+* static path (frontend)
 
-* make iconography consistent (and other elements too)
-* build specific page templates and views
-* require.js ?
-* make common reusable view elements that can be reused
-  everywhere:
+------------------------------------------------------------
+build
+------------------------------------------------------------
 
-  - chart result views
-  - table result views
-  - single value views
-  - search result views
-  - search query builder with suggest
+* build and package frontend code (less, coffee, jsmin)
+* build and package new service release
 
-* add one page routing
-* save page state between switches (service)
-* performance test
-* I18N
+------------------------------------------------------------
+handlers
+------------------------------------------------------------
 
---------------------------------------------------------
-Speleo Service
---------------------------------------------------------
-
-* manage elastic search configuration
-
-  - rivers (custom)
-  - index schema
-  - analyzers
-
-* authentication and authorization
-
-  - api proxy
-
-* statistics api
-* save views/searches
-* report/image generation
-* attach link to hue
-* load balance elastic search
-* alerts
-
-  - email
-  - sms
-  - snmp trap
-  - udp message
-
-* load balanced
-* database configuration (zookeeper)
-
---------------------------------------------------------
-Speleo Collector Health
---------------------------------------------------------
-
-* graph view of agents and collectors
-
---------------------------------------------------------
-Speleo Index Health
---------------------------------------------------------
-
-* top sources
-* index rates
-
---------------------------------------------------------
-Speleo Query
---------------------------------------------------------
-
-* complete suggest query builder
-
-  - all methods and sub methods
-  - lookup possible namespace values
-
---------------------------------------------------------
-Speleo Dashboard
---------------------------------------------------------
-
-* link auto update polling
-* change search filter dynamically and refresh
-* percolate in the future
-
-  - custom alert api
-  - wait for percolate through elastic
-
---------------------------------------------------------
-Speleo Search
---------------------------------------------------------
-
-* query builder -> convert query to elastic search
-* click on chart and chart filter
-* sidebar for suggested tag filter
-* speed up slow updates
-* send to dashboard
-* clone splunk
-
-  - recent searches
-  - field suggest with facet matches
-  - suggest matching terms, current matching count
-
---------------------------------------------------------
-Speleo Blocks
---------------------------------------------------------
-
-* save
-* authorize
-* apply to new search (generic dash)
-* apply in time range (search)
-* block builder page (live)
-
-  - dynamic options based on block type
-  - jquery movable to arrange
-
-* time limit
-
---------------------------------------------------------
-Speleo Statistics
---------------------------------------------------------
-
-* save these from the river to the service
-* ability to query with dsl
-
---------------------------------------------------------
-Speleo Collector
---------------------------------------------------------
-
-* collapse the same events (add a count)
-* simplify deployment and management of
-  
-  - flume agent
-  - flume collector
-  - elastic search nodes
-  - main service
-
-* collect statistics
-* bayesian log type detector and parsing
-* hot cold log data
-  
-  - let elastic search expire incoming data
-  - push data to hadoop
-
---------------------------------------------------------
-Speleo Settings
---------------------------------------------------------
-
-* add chicken test to shutdown/delete
-* add roles
-* add all possible settings and bind them
+* dynamic link to routes
+* index (return single file)
+* authentication
+* elastic proxy/load balancer
+* settings
