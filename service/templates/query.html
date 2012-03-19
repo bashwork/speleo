@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block page-title %}Speleo| Query Utility{% end %}
+{% block content %}
+  <div class="row">
+    <div class="span4">
+      <form id='query-form' class='well form-vertical'>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-path'>Path</label>
+          <div class='controls'>
+            <div class='input-prepend'>
+              <span class='add-on'><i class='icon-road'></i></span>
+              <input id='query-path' type='text' class='input-xlarge' data-provide='typeahead' 
+                   autocomplete='off' placeholder='The path to query against' />
+            </div>
+          </div>
+        </div>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-action'>Method</label>
+          <div class='controls'>
+            <div class='input-prepend'>
+              <span class='add-on'><i class='icon-random'></i></span>
+              <select id='query-action' class='input-xlarge'>
+                <option value='POST'>post</option>
+                <option value='GET'>get</option>
+                <option value='PUT'>put</option>
+                <option value='DELETE'>delete</option>
+                <option value='HEAD'>head</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class='control-group'>
+          <label class='control-label' for='query-data'>Query Data</label>
+          <div class='controls'>
+            <div id='query-data'></div>
+          </div>
+        </div>
+  
+        <div class='form-actions'>
+          <button id='query-submit' type='submit' class='btn btn-primary'><i class='icon-ok'></i> Execute</button>
+          <button id='query-reset' class='btn'><i class='icon-remove'></i> Reset</button>
+        </div>
+      </form>
+    </div>
+  
+    <div class='span8'>
+      <pre id='query-results' class="prettyprint linenums"></pre>
+    </div>
+  </div>
+{% end %}
+
+{% block extra-tail %}
+    <script src="./static/js/lib/google-prettify.js"></script> 
+    <script src="./static/js/lib/elasticsearch.js"></script> 
+    <script src="./static/js/lib/ace/ace.js"></script> 
+    <script src="./static/js/lib/ace/mode-javascript.js"></script> 
+    <script src="./static/js/speleo.query.js"></script> 
+{% end %}

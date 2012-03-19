@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block page-title %}Speleo| Analyze Utility{% end %}
+{% block content %}
+    <div class="row">
+      <div class="span4">
+        <form id='analyze-form' class='well form-vertical'>
+    
+          <div class='control-group'>
+            <label class='control-label' for='analyze-analyzer'>Analyzer</label>
+            <div class='controls'>
+              <div class='input-prepend'>
+                <span class='add-on'><i class='icon-eye-open'></i></span>
+                <select id='analyze-analyzer'>
+                </select>
+              </div>
+            </div>
+          </div>
+    
+          <div class='control-group'>
+            <label class='control-label' for='analyze-index'>Index</label>
+            <div class='controls'>
+              <div class='input-prepend'>
+                <span class='add-on'><i class='icon-list'></i></span>
+                <input id='analyze-index' type='text' placeholder="Use this index's settings"/>
+              </div>
+            </div>
+          </div>
+    
+          <div class='control-group'>
+            <label class='control-label' for='analyze-filters'>Filters</label>
+            <div class='controls'>
+              <div class='input-prepend'>
+                <span class='add-on'><i class='icon-ban-circle'></i></span>
+                <select id='analyze-filters'>
+                </select>
+              </div>
+            </div>
+          </div>
+    
+          <div class='control-group'>
+            <label class='control-label' for='analyze-tokenizers'>Tokenizers</label>
+            <div class='controls'>
+              <div class='input-prepend'>
+                <span class='add-on'><i class='icon-th'></i></span>
+                <select id='analyze-tokenizers'>
+                </select>
+              </div>
+            </div>
+          </div>
+    
+          <div class='control-group'>
+            <label class='control-label' for='analyze-text'>Text To Analyze</label>
+            <div class='controls'>
+              <textarea id='analyze-text' type='text' class='input-xlarge' rows="20"></textarea>
+            </div>
+          </div>
+    
+          <div class='form-actions'>
+            <button id='analyze-submit' type='submit' class='btn btn-primary'><i class='icon-ok'></i> Analyze</button>
+            <button id='analyze-reset' class='btn'><i class='icon-remove'></i> Reset</button>
+          </div>
+        </form>
+      </div>
+    
+      <div class='span8'>
+        <pre id='analyze-results' class="prettyprint linenums"></pre>
+      </div>
+    </div>
+{% end %}
+
+{% block templates %}
+    <script type="text/template" id="options-template">
+      <% _.each(values, function(value) { %>
+         <option value='<%= value %>'><%= value %></option>
+      <% }); %>
+    </script>
+{% end %}
+
+{% block extra-tail %}
+    <script src="./static/js/lib/google-prettify.js"></script> 
+    <script src="./static/js/lib/elasticsearch.js"></script> 
+    <script src="./static/js/speleo.analyze.js"></script> 
+{% end %}

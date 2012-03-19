@@ -1,0 +1,143 @@
+body {
+  padding-top: 60px;
+}
+.navbar .container {
+  padding-left: 3em;
+}
+
+#main-logo {
+  position:fixed;
+  top: 5px;
+  left: 5px;
+  width: 60px;
+  z-index:10000;
+}
+
+#events {
+  overflow:auto;
+}
+
+#event-graph {
+  height:200px;
+}
+
+#event-list {
+  list-style:none;
+  margin-left: 0;
+}
+
+#event-list .focused {
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.event-time {
+  color: #ccc;
+}
+
+#health-app table tbody {
+  display: none;
+}
+
+#health-toolbar {
+  padding-bottom: 0px;
+}
+
+#event-pager {
+  font-size: 80%;
+}
+
+#block-status .thumbnail {
+  text-align:center;
+  padding: 1em;
+}
+
+#block-status button {
+ padding-left: 5em;
+ padding-right: 5em;
+}
+
+#block-form {
+ display:none;
+}
+
+#block-create {
+ margin-bottom: 2em;
+}
+
+#dash-query input { display:none; }
+#dash-query h1 { display:block; }
+
+#dash-query.editing input {
+  display:block;
+  font-size:40px;
+  height: 40px;
+  width: 80%;
+}
+#dash-query.editing h1 { display:none; }
+
+#query-data {
+  position:relative;
+  width: 300px;
+  height: 400px;
+  overflow:hidden;
+  background: #fff;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+#query-data:hover {
+  border-color: rgba(82, 168, 236, 0.8);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-8 */
+}
+
+.ace_sb {
+  overflow-y:auto !important;
+}
+
+.setting-block h3 {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+  padding: 0px;
+}
+
+.setting-block {
+  position:relative;
+}
+.setting-block select {
+  position:absolute;
+  top: 1em;
+  right: 1.5em;
+}
+
+.setting-block table {
+  background: #fff;
+}
+
+.setting-block table th {
+  background: #eee;
+}
+.setting-block ul { display: none }
+
+.setting-block td span          { display:block; }
+.setting-block td input         { display:none;  }
+.setting-block td.editing span  { display:none;  }
+.setting-block td.editing input { display:block; }
