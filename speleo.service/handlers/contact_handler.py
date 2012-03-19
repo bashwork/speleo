@@ -1,6 +1,6 @@
-import tornado.web
+import common
 
-class ContactHandler(tornado.web.RequestHandler):
+class ContactHandler(common.BaseHandler):
 
     RoutePath = r'/contact'
 

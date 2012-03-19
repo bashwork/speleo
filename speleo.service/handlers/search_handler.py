@@ -1,6 +1,6 @@
-import tornado.web
+import common
 
-class SearchHandler(tornado.web.RequestHandler):
+class SearchHandler(common.BaseHandler):
 
     RoutePath = r'/search'
 

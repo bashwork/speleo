@@ -1,6 +1,6 @@
-import tornado.web
+import common
 
-class DashboardHandler(tornado.web.RequestHandler):
+class DashboardHandler(common.BaseHandler):
 
     RoutePath = r'/dashboard'
 

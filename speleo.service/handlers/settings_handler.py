@@ -1,6 +1,6 @@
-import tornado.web
+import common
 
-class SettingsHandler(tornado.web.RequestHandler):
+class SettingsHandler(common.BaseHandler):
 
     RoutePath = r'/settings'
 

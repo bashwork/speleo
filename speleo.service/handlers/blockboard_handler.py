@@ -1,6 +1,6 @@
-import tornado.web
+import common
 
-class BlockboardHandler(tornado.web.RequestHandler):
+class BlockboardHandler(common.BaseHandler):
 
     RoutePath = r'/blockboard'
 

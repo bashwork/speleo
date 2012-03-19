@@ -1,8 +1,8 @@
-import tornado.web
+import common
 
-class RootHandler(tornado.web.RequestHandler):
+class RootHandler(common.BaseHandler):
 
     RoutePath = r'/'
 
     def get(self):
-       self.render('index.html')
+        self.redirect('/about')
