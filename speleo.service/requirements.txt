@@ -1,0 +1,5 @@
+SQLAlchemy==0.7.6
+distribute==0.6.15
+python-ldap==2.4.9
+tornado==2.2
+wsgiref==0.1.2

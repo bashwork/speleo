@@ -363,7 +363,7 @@ var AppView = Backbone.View.extend({
    *   * node modules (for health checking)
    */
 
-  el: $('#event-app'),
+  el: $('#speleo-app'),
   listEl: $('#event-list'),
   inputEl: $('#new-event'),
   events: {

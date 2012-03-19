@@ -1,24 +1,25 @@
-import tornado.web
+import common
 
 # ------------------------------------------------------------
 # page handlers
 # ------------------------------------------------------------
-class LoginHandler(tornado.web.RequestHandler):
+class LoginHandler(common.BaseHandler):
 
     RoutePath = r'/auth/login'
 
     def get(self):
-       self.render('login.html')
+        self.render('login.html')
 
     def post(self):
         pass
 
-class LogoutHandler(tornado.web.RequestHandler):
+class LogoutHandler(common.BaseHandler):
 
     RoutePath = r'/auth/logout'
 
     def get(self):
-       self.render('login.html')
+        self.clear_cookie("user")
+        self.redirect(self.get_argument("next", "/"))
 
 # ------------------------------------------------------------
 # api handlers
