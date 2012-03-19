@@ -6,3 +6,4 @@ from dashboard_handler import *
 from blockboard_handler import *
 from auth_handler import *
 from simple_handler import *
+from proxy_handler import *

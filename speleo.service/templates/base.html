@@ -6,10 +6,10 @@
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <head> 
     <title>{% block page-title %}Speleo|Some Pithy Text{% end %}</title> 
-    <link href="./static/css/bootstrap.css" rel="stylesheet"> 
-    <link href="./static/css/bootstrap-responsive.css" rel="stylesheet"> 
-    <link href="./static/css/google-prettify.css" rel="stylesheet"> 
-    <link href="./static/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+    <link href="/static/css/bootstrap.css" rel="stylesheet"> 
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="/static/css/google-prettify.css" rel="stylesheet"> 
+    <link href="/static/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
     {% block extra-head %}{% end %}
   </head> 
  
@@ -19,7 +19,7 @@
   <body> 
 
     <div class="navbar navbar-fixed-top"> 
-      <img id='main-logo' src='./static/img/helmet.png' /> 
+      <img id='main-logo' src='/static/img/helmet.png' /> 
       <div class="navbar-inner"> 
         <div class="container"> 
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
@@ -50,7 +50,11 @@
               <li><a href="/about">About</a></li> 
               <li><a href="/contact">Contact</a></li> 
             </ul> 
-            <p class="navbar-text pull-right"><a href="/auth/login">Login</a></p>
+            {% if current_user %}
+            <p id='nav-login' class="navbar-text pull-right">Logged in as | <a href="/auth/logout">Logout</a></p>
+            {% else %}
+            <p id='nav-login' class="navbar-text pull-right"><a href="/auth/login">Login</a></p>
+            {% end %}
           </div>
         </div> 
       </div> 
@@ -73,10 +77,10 @@
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <!-- javascript -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <script src="./static/js/lib/jquery.js"></script> 
-    <script src="./static/js/lib/underscore.js"></script> 
-    <script src="./static/js/lib/bootstrap.js"></script> 
-    <script src="./static/js/lib/backbone.js"></script> 
+    <script src="/static/js/lib/jquery.js"></script> 
+    <script src="/static/js/lib/underscore.js"></script> 
+    <script src="/static/js/lib/bootstrap.js"></script> 
+    <script src="/static/js/lib/backbone.js"></script> 
     {% block extra-tail %}{% end %}
 
   </body> 

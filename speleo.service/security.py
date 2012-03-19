@@ -2,8 +2,13 @@ import ldap
 import logging
 
 
-class NoneSecurity(object):
+class DisabledSecurity(object):
     ''' Authentication is disabled completely '''
+
+    def __init__(self):
+        ''' Initializes a new instance of the disabled security
+        '''
+        logging.error("Running the service without security!")
 
     def authenticate(self, username, password):
         ''' Authenticate the supplied user
@@ -55,6 +60,7 @@ class LdapSecurity(object):
         self.bind_dn = kwargs.get('binddn', None)
         self.bind_pw = kwargs.get('bindpw', None)
         self.domain  = kwargs.get('domain', '')
+        logging.info("Authenticating with %s" % self.host)
 
     def authenticate(self, username, password):
         ''' Authenticate the supplied user
@@ -107,3 +113,14 @@ class LdapSecurity(object):
             value = user[meta['field']]
             result[key] = value if meta['group'] else value[0]
         return result
+
+def get_security(name, options):
+    ''' Factory for the security implementations
+
+    :param name: The security implementation to use
+    :param options: The security options to use
+    :returns: An initialized security implementation
+    '''
+    if name.lower() == 'ldap':
+        return LdapSecurity(options)
+    else: return DisabledSecurity()

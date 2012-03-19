@@ -8,10 +8,16 @@ class LoginHandler(common.BaseHandler):
     RoutePath = r'/auth/login'
 
     def get(self):
-        self.render('login.html')
+        self.render('login.html', next=self.get_argument('next', '/'))
 
     def post(self):
-        pass
+        username = self.get_argument('username', '')
+        password = self.get_argument('password', '')
+        session  = self.security.authenticate(username, password)
+        if session:
+            self.set_secure_cookie('user', tornado.escape.json_encode(session))
+            self.redirect(self.get_argument('next', '/'))
+        else: self.redirect('/auth/login')
 
 class LogoutHandler(common.BaseHandler):
 
@@ -19,7 +25,7 @@ class LogoutHandler(common.BaseHandler):
 
     def get(self):
         self.clear_cookie("user")
-        self.redirect(self.get_argument("next", "/"))
+        self.redirect(self.get_argument("next", "/auth/login"))
 
 # ------------------------------------------------------------
 # api handlers

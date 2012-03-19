@@ -2,17 +2,19 @@ import os
 import os.path
 import inspect
 import logging
-import handlers
-import models
 import tornado.ioloop
 import tornado.web
 from tornado.options import define, options
+import handlers
+import models
+import security
 
 # ------------------------------------------------------------ 
 # options
 # ------------------------------------------------------------ 
-define("debug", default=False, help="Set to true to enable debugging", type=bool)
-define("port", default=8888, help="The port to run the service on", type=int)
+define('debug', default=False, help="Set to true to enable debugging", type=bool)
+define('port', default=8888, help="The port to run the service on", type=int)
+define('elastic', default='127.0.0.1:9200', help="The list of elastic search hosts to balance", type=str)
 define('security', default='none', help='none|ldap', type=str)
 define('database', default='sqlite:////tmp/example.db', help="The database connection string to use", type=str)
 define('ldap_host', default='ldap://127.0.0.1', help='The ldap service to authenticate against', type=str)
@@ -36,7 +38,7 @@ class SpeleoApplication(tornado.web.Application):
             'template_path': os.path.join(root_path, 'templates'),
             'login_url':'/auth/login',
             'cookie_secret':'something random should go here',
-            'xsrf_cookies':True,
+            'xsrf_cookies':False,
             'debug': options.debug,
         }
 
@@ -49,6 +51,7 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         # shared
         # ---------------------------------------------------- 
+        self.security = security.get_security(options.security, options)
         self.database = models.get_database(options.database, options.debug)
         #self.cache = memcache.Client([options.cache], debug=options.debug)
 

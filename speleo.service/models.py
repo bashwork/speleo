@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 # ------------------------------------------------------------ 
 # utility methods
@@ -15,7 +16,6 @@ def get_database(connection, debug=False):
     '''
     engine = create_engine(connection, convert_unicode=True, echo=debug)
     Base.metadata.create_all(engine)
-    models.init_db(engine)
     return scoped_session(sessionmaker(bind=engine))
 
 

@@ -7,8 +7,8 @@ var Account = Backbone.Model.extend({
     username: '',
     password: ''
   },
-  localStorage : new Store('account')
-  
+
+  sync: function(m, m, o) {}
 });
 
 // ------------------------------------------------------------

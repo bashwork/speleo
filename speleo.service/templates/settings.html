@@ -2,7 +2,6 @@
 
 {% block page-title %}Speleo| Service Settings{% end %}
 {% block content %}
-
         <div class='row'>
           <div class="span6">
             <div class='setting-block well' id='setting-index'>
@@ -76,9 +75,17 @@
         </tbody>
       </table>
     </script>
+
+    <script type="text/template" id="alert-template">
+      <div class='growl alert fade in <%= status ? 'alert-success' : 'alert-error' %>'>
+        <a class='close' data-dismiss='alert' href='#'>&times;</a>
+        <h4 class='alert-heading'>Operation Status</h4>
+        <p>Operation <%= method %> on <%= source %> <%= status ? 'succeeded' : 'failed' %></p>
+      </div>
+    </script>
 {% end %}
 
 {% block extra-tail %}
-    <script src="./static/js/lib/elasticsearch.js"></script> 
-    <script src="./static/js/speleo.settings.js"></script> 
+    <script src="/static/js/lib/elasticsearch.js"></script> 
+    <script src="/static/js/speleo.settings.js"></script> 
 {% end %}
