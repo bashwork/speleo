@@ -1,0 +1,83 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>{% block page-title %}Speleo|Some Pithy Text{% end %}</title> 
+    <link href="./static/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./static/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./static/css/google-prettify.css" rel="stylesheet"> 
+    <link href="./static/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+    {% block extra-head %}{% end %}
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./static/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li><a href="search">Search</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard">Dashboard</a></li> 
+                  <li><a href="blocks">Blockboard</a></li> 
+                  <li><a href="health">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="settings">Settings</a></li> 
+                  <li><a href="query">Query</a></li> 
+                  <li><a href="analyze">Analyze</a></li> 
+                </ul>
+              </li>
+              <li><a href="about">About</a></li> 
+              <li><a href="contact">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right"><a href="#">Login</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="speleo-app">
+        {% block content %}{% end %}
+      </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- templates -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    {% block templates %}{% end %}
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./static/js/lib/jquery.js"></script> 
+    <script src="./static/js/lib/underscore.js"></script> 
+    <script src="./static/js/lib/bootstrap.js"></script> 
+    <script src="./static/js/lib/backbone.js"></script> 
+    {% block extra-tail %}{% end %}
+
+  </body> 
+</html>

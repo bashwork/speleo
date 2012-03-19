@@ -1,0 +1,152 @@
+<!DOCTYPE html> 
+<html> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- configuration -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <head> 
+    <title>Speleo|Settings Manager</title> 
+    <link href="./assets/css/bootstrap.css" rel="stylesheet"> 
+    <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="./assets/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+  </head> 
+ 
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- navigation -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <body> 
+
+    <div class="navbar navbar-fixed-top"> 
+      <img id='main-logo' src='./assets/img/helmet.png' /> 
+      <div class="navbar-inner"> 
+        <div class="container"> 
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+          </a> 
+          <a class="brand" href="#">Speleo</a> 
+          <div class="nav-collapse"> 
+            <ul class="nav"> 
+              <li><a href="search.html">Search</a></li> 
+              <li class="dropdown" id="monitoring-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li><a href="dashboard.html">Dashboard</a></li> 
+                  <li><a href="blocks.html">Blockboard</a></li> 
+                  <li><a href="health.html">Health</a></li> 
+                </ul>
+              </li>
+              <li class="dropdown active" id="utility-menu">
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#utility-menu'>Utilities <b class="caret"></b></a>
+                <ul class='dropdown-menu'>
+                  <li class='active'><a href="settings.html">Settings</a></li> 
+                  <li><a href="query.html">Query</a></li> 
+                  <li><a href="analyze.html">Analyze</a></li> 
+                </ul>
+              </li>
+              <li><a href="about.html">About</a></li> 
+              <li><a href="contact.html">Contact</a></li> 
+            </ul> 
+            <p class="navbar-text pull-right">Logged in as <a href="#">demo</a></p>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- content -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div class="container"> 
+      <div id="settings-app">
+
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='setting-index'>
+              <h3>Index Settings</h3>
+              <select id='setting-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='setting-cluster'>
+              <h3>Cluster Settings</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class='row'>
+          <div class="span6">
+            <div class='setting-block well' id='operation-index'>
+              <h3>Index Operations</h3>
+              <select id='operation-name' class='input-xlarge'>
+                <option value='null'>Select An Index</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_refresh'><i class='icon-refresh'></i> Refresh</a></li>
+                <li><a href='#' data-action='_flush'><i class='icon-download-alt'></i> Flush</a></li>
+                <li><a href='#' data-action='_optimize'><i class='icon-cog'></i> Optimize</a></li>
+                <li><a href='#' data-action='_cache/clear'><i class='icon-fire'></i> Clear Cache</a></li>
+                <li><a href='#' data-method='DELETE'><i class='icon-trash'></i> Delete</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="span6">
+            <div class='setting-block well' id='operation-cluster'>
+              <h3>Cluster Operations</h3>
+              <select id='cluster-name' class='input-xlarge'>
+                <option value='null'>Select A Node</option>
+                <option value='_master'>Current Master</option>
+                <option value='_all'>Entire Cluster</option>
+              </select>
+              <ul class='nav nav-list'>
+                <li><a href='#' data-action='_shutdown'><i class='icon-eye-close'></i> Shutdown</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- templates -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script type="text/template" id="settings-template">
+      <table class='table tabled-condensed table-bordered'>
+        <thead>
+          <tr>
+            <th>key</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>name</td>
+            <td><%= name %></td>
+          </tr>
+          <% _.each(_.keys(settings), function(setting) { %>
+          <tr>
+            <td><%= setting %></td>
+            <td><span><%= settings[setting] %></span><input type='text' class='input-small'/></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </script>
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- javascript -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script src="./assets/js/lib/jquery.js"></script> 
+    <script src="./assets/js/lib/underscore.js"></script> 
+    <script src="./assets/js/lib/bootstrap.js"></script> 
+    <script src="./assets/js/lib/backbone.js"></script> 
+    <script src="./assets/js/lib/elasticsearch.js"></script> 
+    <script src="./assets/js/speleo.settings.js"></script> 
+
+  </body> 
+</html>
