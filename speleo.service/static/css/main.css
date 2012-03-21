@@ -156,6 +156,7 @@ body {
   position:fixed;
   display:none;
   z-index:1060;
+  -webkit-box-shadow: 0 0 10px #000;
 }
 .spin-out {
   -webkit-transition-property: -webkit-transform opacity;

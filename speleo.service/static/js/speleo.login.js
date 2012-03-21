@@ -69,7 +69,7 @@ var LoginAppView = Backbone.View.extend({
     var h = $(window).height(),
         w = $(window).width();
         c = {
-        background: '#222',
+        background: "url('/static/img/page-cover.png')",
         height: h, width: w,
         'z-index': 1050,
         position:'fixed',
@@ -91,26 +91,16 @@ var LoginAppView = Backbone.View.extend({
 
     if (!user) {
       this.usernameEl.parents('.control-group').addClass('error');
-      // shake
+      this.$el.effect('shake', { times: 3}, 100);
     } else if (!pass) {
       this.passwordEl.parents('.control-group').addClass('error');
-      // shake
+      this.$el.effect('shake', { times: 3}, 100);
     } else {
-      this.$el.submit();
+      var self = this;
+      this.$el.addClass(this.animation);
+      _.delay(function() { self.$el.submit(); }, 1000);
     }
   }
-
-  //login: function(user, pass) {
-  //  var self = this,
-  //      data = 'username=' + user + '&password=' + pass;
-  //  $.post('/auth/login', data, function(d, x) {
-  //    self.$el.addClass(this.animation);
-  //    self.blind.fadeOut(function() { self.$el.hide(); });
-  //    self.model.set({ username: user, password: pass, valid: true });
-  //    self.model.save();
-  //    _.delay(function() { window.location = '/' }, 5000);
-  //  });
-  //}
 });
 
 // ------------------------------------------------------------
