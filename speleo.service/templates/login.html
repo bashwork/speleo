@@ -5,19 +5,20 @@
 
         <div class='row'>
           <div class='offset4 span4'>
-            <form id='login-form' class='well'>
+            <form method='post' action='/auth/login' id='login-form' class='well'>
 
+              <input name='next' type='hidden' value="{{ next }}" />
               <div class='control-group'>
                 <label class='control-label' for='login-username'>Username</label>
                 <div class='controls'>
-                  <input id='login-username' type='text' class='input-xlarge' placeholder='Username' />
+                  <input name='username' id='login-username' type='text' class='input-xlarge' placeholder='Username' />
                 </div>
               </div>
 
               <div class='control-group'>
                 <label class='control-label' for='login-password'>Password</label>
                 <div class='controls'>
-                  <input id='login-password' type='password' class='input-xlarge' placeholder='Password' />
+                  <input name='password' id='login-password' type='password' class='input-xlarge' placeholder='Password' />
                 </div>
               </div>
 

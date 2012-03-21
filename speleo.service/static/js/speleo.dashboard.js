@@ -1,3 +1,9 @@
+Backbone.View.prototype.close = function() {
+  this.remove();
+  this.unbind();
+  if (this.cleanup()) { this.cleanup(); }
+};
+
 // ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
@@ -20,13 +26,17 @@ var EventCollection = Backbone.Collection.extend({
   model: Event
 });
 
+window.JST = {
+  '#event-template': _.template($('#event-template').html())
+};
+
 
 // ------------------------------------------------------------
 // views
 // ------------------------------------------------------------
 var DashEventView = Backbone.View.extend({
   tagName: 'li',
-  template: _.template($('#event-template').html()),
+  template: window.JST['#event-template'],
 
   events: {
     'mouseover': 'gainfocus',
@@ -36,7 +46,7 @@ var DashEventView = Backbone.View.extend({
 
   initialize: function() {
     this.model.bind('change',  this.render, this);
-    this.model.bind('destroy', this.remove, this);
+    this.model.bind('destroy', this.close, this);
   },
 
   render: function() {
@@ -50,8 +60,9 @@ var DashEventView = Backbone.View.extend({
    return this;
   },
 
-  remove: function() {
-    $(this.el).remove();
+  cleanup: function() {
+    this.model.unbind('change',  this.render);
+    this.model.unbind('destroy', this.close);
   },
 
   gainfocus: function() {
@@ -133,14 +144,13 @@ var DashboardAppView = Backbone.View.extend({
   trimEvents: function() {
     var bheight = $('body').outerHeight(),
         wheight = $(window).height(),
-        lheight = $('li', this.listEl).height() || 0;
+        lheight = $('li', this.listEl).height() * 2 || 0;
 
     while ((bheight + lheight) >= wheight) {
       DashEvents.first().destroy();
       DashEvents.first().set({ 'to_be_removed': true });
       bheight = $('body').outerHeight();
     }
-
   },
 
   addAllEvents: function() {

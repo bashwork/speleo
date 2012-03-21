@@ -35,7 +35,7 @@ body {
   color: #ccc;
 }
 
-#health-app table tbody {
+.health-table tbody {
   display: none;
 }
 

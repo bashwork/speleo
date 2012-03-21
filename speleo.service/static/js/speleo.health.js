@@ -349,20 +349,6 @@ var TableViewCollection = Backbone.View.extend({
 
 
 // ------------------------------------------------------------
-// router
-// ------------------------------------------------------------
-var Router = Backbone.Router.extend({
-  routes : {
-    'node/:name': 'switchNode',
-  },
-
-  switchNode: function(name) {
-    // todo
-  }
-});
-
-
-// ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
 var HealthNode = Backbone.Model.extend({
@@ -547,7 +533,4 @@ jQuery(function initialize($) {
   };
   window.HealthNodes = new HealthNodeCollection();
   window.app = new ElasticHealthAppView();
-  app.router = new Router();
-  Backbone.history.start({ pushState : true });
-  app.router.navigate();
 });

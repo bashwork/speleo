@@ -20,7 +20,7 @@ define('database', default='sqlite:////tmp/example.db', help="The database conne
 define('ldap_host', default='ldap://127.0.0.1', help='The ldap service to authenticate against', type=str)
 define('ldap_domain', default='', help='The domain to authenticate users under', type=str)
 define('ldap_basedn', default='', help='The base dn to search for users under', type=str)
-define('ldap_bind_dn', default=None, help='A priviledged user to perform ldap binds', type=str)
+define('ldap_binddn', default=None, help='A priviledged user to perform ldap binds', type=str)
 define('ldap_bind_password', default=None, help='The priviledged user password', type=str)
 
 # ------------------------------------------------------------ 
@@ -61,6 +61,7 @@ class SpeleoApplication(tornado.web.Application):
         tornado.web.Application.__init__(self, routes, **settings)
         logging.debug('Installed Routes')
         for route in routes: logging.debug(route)
+        logging.debug('Service started on port %d' % options.port)
 
 # ------------------------------------------------------------ 
 # service

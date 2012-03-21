@@ -3,7 +3,7 @@ speleo.frontend
 ========================================================
 
 * I18N
-* testing
+* testing (performance, memory leaks)
 * add one page routing (server/frontend/both?)
 * save page state between switches (service)
 * attach link to hue(configure)
@@ -27,6 +27,15 @@ user profile page
 * past dashboards
 * blocks
 * information (readonly)
+    
+--------------------------------------------------------
+plugins
+--------------------------------------------------------
+
+* define dict of utilities and roles
+* memcached monitor
+* redis monitor
+* hue linking
 
 --------------------------------------------------------
 Speleo Settings
