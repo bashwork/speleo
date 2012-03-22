@@ -19,6 +19,7 @@ class DisabledSecurity(object):
         '''
         logging.info("user %s logged in" % username)
         return {
+            'name':     username,
             'username': username,
         }
 
@@ -28,9 +29,10 @@ class LdapSecurity(object):
     '''
     __fields = {
         'email':        { 'group': False, 'field': 'mail', },
+        'name':         { 'group': False, 'field': 'sAMAccountName', },
         'username':     { 'group': False, 'field': 'sAMAccountName', },
-        #'first_name':   { 'group': False, 'field': 'givenName', },
-        #'last_name':    { 'group': False, 'field': 'sn', },
+        'first_name':   { 'group': False, 'field': 'givenName', },
+        'last_name':    { 'group': False, 'field': 'sn', },
         #'roles':        { 'group': True,  'field': 'memberOf', },
         #'dn':           { 'group': False, 'field': 'distinguishedName', },
         #'last_logon':   { 'group': False, 'field': 'lastLogonTimestamp', },

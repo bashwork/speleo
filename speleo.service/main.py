@@ -22,6 +22,8 @@ define('ldap_domain', default='', help='The domain to authenticate users under',
 define('ldap_basedn', default='', help='The base dn to search for users under', type=str)
 define('ldap_binddn', default=None, help='A priviledged user to perform ldap binds', type=str)
 define('ldap_bind_password', default=None, help='The priviledged user password', type=str)
+define('allowed_auth', default=['login'], help='The login systems allowed', type=list)
+
 
 # ------------------------------------------------------------ 
 # application
@@ -49,6 +51,17 @@ class SpeleoApplication(tornado.web.Application):
         routes = [(h.RoutePath, h) for n, h in search if 'Handler' in n]
 
         # ---------------------------------------------------- 
+        # authentication systems
+        # ---------------------------------------------------- 
+        remove = []
+        logins = ['logout'] + options.allowed_auth
+        for path, handler in routes:
+            if path.startswith('/auth/') and path.split('/')[2] not in logins:
+                logging.debug('removing %s authentication service' % path)
+                remove.append((path, handler))
+        for route in remove: routes.remove(route)
+
+        # ---------------------------------------------------- 
         # shared
         # ---------------------------------------------------- 
         self.security = security.get_security(options.security, options)
@@ -60,7 +73,7 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         tornado.web.Application.__init__(self, routes, **settings)
         logging.debug('Installed Routes')
-        for route in routes: logging.debug(route)
+        for route in sorted(routes): logging.debug(route)
         logging.debug('Service started on port %d' % options.port)
 
 # ------------------------------------------------------------ 
