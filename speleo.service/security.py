@@ -1,6 +1,10 @@
-import ldap
+import crypt
+import pwd, spwd
 import logging
 
+try:
+    import ldap
+except ImportError: pass
 
 class DisabledSecurity(object):
     ''' Authentication is disabled completely '''
@@ -120,6 +124,50 @@ class LdapSecurity(object):
             result[key] = value if meta['group'] else value[0]
         return result
 
+class UnixSecurity(object):
+    ''' Use an unix password system as the security managment backend
+    '''
+    __fields = {
+        'name':     { 'group': False, 'field': 'pw_name',  },
+        'username': { 'group': False, 'field': 'pw_name',  },
+        'uid':      { 'group': False, 'field': 'pw_uid',   },
+        'gid':      { 'group': False, 'field': 'pw_gid',   },
+        'comment':  { 'group': False, 'field': 'pw_gecos', },
+    }
+    __attrs = [m['field'] for m in __fields.values()]
+
+    def __init__(self, option):
+        ''' Initialize a new instance of the unix security
+
+        :param options: The configuration options
+        '''
+        pass
+
+    def authenticate(self, username, password):
+        ''' Authenticate the supplied user
+
+        :param username: The username to authenticate
+        :param password: The password to validate the user with
+        :returns: The authenticated user or None
+        '''
+        try:
+            attributes = pwd.getpwnam(username)
+            crpassword = attributes.pw_passwd
+            if crpassword == 'x' or crpassword == '*':
+                crpassword = spwd.getspnam(username).sp_pwd
+            salt = crpassword.find('$', 3)
+            if crypt.crypt(password, crpassword[:salt]) == crpassword:
+                return self._parse_fields(attributes)
+        except Exception, e:
+            logging.error(e)
+        return None
+
+    def _parse_fields(self, attrs):
+        result = {}
+        for key, meta in self.__fields.items():
+            result[key] = getattr(attrs, meta['field'])
+        return result
+
 def get_security(name, options):
     ''' Factory for the security implementations
 
@@ -129,4 +177,6 @@ def get_security(name, options):
     '''
     if name.lower() == 'ldap':
         return LdapSecurity(options)
+    elif name.lower() == 'unix':
+        return UnixSecurity(options)
     else: return DisabledSecurity()
