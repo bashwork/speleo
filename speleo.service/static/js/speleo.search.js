@@ -41,55 +41,6 @@ var searchChartFactory = function(options) {
 
 
 // ------------------------------------------------------------
-// query builder
-// ------------------------------------------------------------
-BuildQuery = function(options) {
-  this.options = _.extend({}, this.defaults, options);
-};
-
-/**
- *
- * facets = ['tags', 'names',
- *   {
- *     'name': 'locations',
- *     'global': true',
- *     'filters': {
- *       'env': 'prod',
- *     }
- *   }
- * ]
- */
-BuildQuery.prototype.build = function() {
-  var query = {
-    'query':  {},
-    'facets': {},
-    'from': this.options.start,
-    'size': this.options.count
-  };
-
-  _.each(this.options.facets, function(facet) {
-    var name = facet.name || facet;
-    query.facets[name] = {
-      terms: { field : name },
-      global: facet.global || false
-    };
-
-    if (facet.filters) {
-      query.facets[name]['facet_filter'] = {
-        'term': facet.filters
-      };
-    }
-  });
-};
-
-BuildQuery.prototype.defaults = {
-  count: 10,
-  start:  0,
-  facets: []
-};
-
-
-// ------------------------------------------------------------
 // models
 // ------------------------------------------------------------
 var Facet = Backbone.Model.extend({

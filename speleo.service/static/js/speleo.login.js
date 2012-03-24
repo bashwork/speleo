@@ -1,49 +1,4 @@
 // ------------------------------------------------------------
-// model
-// ------------------------------------------------------------
-var Account = Backbone.Model.extend({
-  defaults: {
-    valid : false,
-    username: '',
-    password: ''
-  },
-
-  sync: function(x, m, o) {}
-});
-
-// ------------------------------------------------------------
-// views
-// ------------------------------------------------------------
-var LoginBarView = Backbone.View.extend({
-  el: $('#nav-login'),
-  template: _.template($('#nav-login-template').html()),
-  events: {
-    'click a': 'validate'
-  },
-
-  initialize: function() {
-    _.bindAll(this);
-    this.model.bind('change',  this.render);
-    this.model.bind('destroy', this.render);
-  },
-
-  validate: function(e) {
-    var action = $(e.target).data('action');
-    if (action === 'logout') {
-      this.model.set('valid', false);
-      this.model.save();
-    }
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON()))
-    return this;
-  }
-  
-});
-
-
-// ------------------------------------------------------------
 // main 
 // ------------------------------------------------------------
 var LoginAppView = Backbone.View.extend({

@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import relationship, backref
 
 # ------------------------------------------------------------ 
 # utility methods
@@ -35,3 +36,16 @@ class User(Base):
 
     def __repr__(self):
         return "<User(%s)>" % (self.username)
+
+class Query(Base):
+
+    __tablename__ = 'queries'
+
+    id = Column(Integer, primary_key=True)
+    display = Column(String(250), nullable=False)
+    compiled = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", backref=backref('queries', order_by=id))
+
+    def __repr__(self):
+        return "<Query(%s, %s)>" % (self.user.username, self.query)
