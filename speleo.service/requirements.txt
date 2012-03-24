@@ -3,3 +3,6 @@ distribute==0.6.15
 python-ldap==2.4.9
 tornado==2.2
 wsgiref==0.1.2
+webassets==0.6
+closure==20110811
+cssutils==0.9.9
