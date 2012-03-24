@@ -1,0 +1,20 @@
+<table class='table tabled-condensed table-bordered'>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><%= name %></td>
+    </tr>
+    <% _.each(_.keys(settings), function(setting) { %>
+    <tr>
+      <td><%= setting %></td>
+      <td><span><%= settings[setting] %></span><input type='text' class='input-small'/></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

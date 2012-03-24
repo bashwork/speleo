@@ -1,0 +1,18 @@
+<div class='info-block'>
+  <table class='table table-bordered table-striped table-condensed'>
+  <thead>
+    <tr>
+      <th>JVM Information <i class='icon-plus pull-right'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr><td>uptime</td><td><%= jvm.uptime %></td></tr>
+  <tr><td>name</td><td><%= jvm.vm_name %></td></tr>
+  <tr><td>vendor</td><td><%= jvm.vm_vendor %></td></tr>
+  <tr><td>vm version</td><td><%= jvm.vm_version %></td></tr>
+  <tr><td>java version</td><td><%= jvm.version %></td></tr>
+  <tr><td>gc collections</td><td><%= jvm.gc.collection_count %></td></tr>
+  <tr><td>gc time</td><td><%= jvm.gc.collection_time %></td></tr>
+  </tbody>
+  </table>
+</div>

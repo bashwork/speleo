@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="span8">
+    <div id='event-pager' class='pagination'>
+      <ul>
+        <li><a href='#'>Prev</a></li>
+        <% _.each(pages, function(page) { %>
+          <li class=<%= page == 0 ? 'active' : '' %>>
+            <a href='#'><%= page %></a>
+          </li>
+        <% }); %>
+        <li><a href='#'>Next</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="span2">
+    <div class="pull-right" style="padding-top:5px;">
+      <p><i class='icon-pencil'></i> Best score <%= score %></p>
+      <p><i class='icon-signal'></i> Found <%= count %> events</p>
+    </div>
+  </div>
+  <div class="span2">
+    <div class="pull-right" style="padding-top:5px;">
+      <p><i class='icon-time'></i> Query took <%= time %> ms</p>
+      <p><i class='icon-ok'></i> <%= error ? 'Possible Errors' : 'No Errors' %></p>
+    </div>
+  </div>
+</div>

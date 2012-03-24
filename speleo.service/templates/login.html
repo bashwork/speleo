@@ -33,16 +33,6 @@
 
 {% end %}
 
-{% block templates %}
-    <script type="text/template" id="nav-login-template">
-      <% if (valid) { %>
-        Logged in as <%= username %> | <a data-action='logout' href='#'>Logout</a>
-      <% } else { %>
-        <a data-action='login' href='#'>Login</a>
-      <% } %>
-    </script>
-{% end %}
-
 {% block extra-tail %}
     <script src="/static/js/lib/jquery-ui.js"></script> 
     <script src="/static/js/speleo.login.js"></script> 

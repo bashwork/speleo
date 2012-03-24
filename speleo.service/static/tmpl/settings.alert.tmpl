@@ -1,0 +1,5 @@
+<div class='growl alert fade in <%= status ? 'alert-success' : 'alert-error' %>'>
+  <a class='close' data-dismiss='alert' href='#'>&times;</a>
+  <h4 class='alert-heading'>Operation Status</h4>
+  <p>Operation <%= method %> on <%= source %> <%= status ? 'succeeded' : 'failed' %></p>
+</div>

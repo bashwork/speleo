@@ -1,0 +1,21 @@
+<div class='info-block'>
+  <table class='table table-bordered table-striped table-condensed'>
+  <thead>
+    <tr>
+      <th>Network Information <i class='icon-plus pull-right'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr><td>current connections</td><td><%= network.tcp.curr_estab %></td></tr>
+  <tr><td>reset connections</td><td><%= network.tcp.estab_resets %></td></tr>
+  <tr><td>total active</td><td><%= network.tcp.active_opens %></td></tr>
+  <tr><td>total passive</td><td><%= network.tcp.passive_opens %></td></tr>
+  <tr><td>receive size</td><td><%= transport.rx_size %></td></tr>
+  <tr><td>receive count</td><td><%= transport.rx_count %></td></tr>
+  <tr><td>transfer size</td><td><%= transport.tx_size %></td></tr>
+  <tr><td>transfer count</td><td><%= transport.tx_count %></td></tr>
+  <tr><td>current http</td><td><%= http.current_open %></td></tr>
+  <tr><td>total http</td><td><%= http.total_opened %></td></tr>
+  </tbody>
+  </table>
+</div>

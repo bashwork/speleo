@@ -30,6 +30,7 @@ environment.register('javascript', javascript)
 template = Bundle('tmpl/*.tmpl',
     filters='jst', output='asset/speleo.jst.js')
 environment.register('template', template)
+environment.config['jst_compiler'] = '_.template'
 
 if __name__ == "__main__":
     print "Compiled stylesheets: ", environment['stylesheet'].urls()

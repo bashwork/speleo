@@ -1,0 +1,20 @@
+<table class='table table-striped tabled-condensed'>
+  <thead>
+    <tr>
+      <th>#</th>
+    <% _.each(titles, function(titles) { %>
+      <th><%= title %></th>
+    <% }); %>
+    </tr>
+  </thead>
+  <tbody>
+  <% _.each(columns, function(column, index) { %>
+    <tr>
+      <td><%= index %></td>
+    <% _.each(_.values(column), function(value) { %>
+      <td><%= value %></td>
+    <% }); %>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

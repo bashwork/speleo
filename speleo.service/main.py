@@ -65,7 +65,7 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         # shared
         # ---------------------------------------------------- 
-        self.environment = PythonLoader('assets').load_environment()
+        self.assets   = PythonLoader('assets').load_environment()
         self.security = security.get_security(options.security, options)
         self.database = models.get_database(options.database, options.debug)
         #self.cache = memcache.Client([options.cache], debug=options.debug)

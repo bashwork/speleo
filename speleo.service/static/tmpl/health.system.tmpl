@@ -1,0 +1,26 @@
+<div class='info-block'>
+  <table class='table table-bordered table-striped table-condensed'>
+  <thead>
+    <tr>
+      <th>System Information <i class='icon-plus pull-right'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr><td>node name</td><td><%= name %></td></tr>
+  <tr><td>uptime</td><td><%= os.uptime %></td></tr>
+  <tr><td>cpu</td><td><%= os.cpu.model %></td></tr>
+  <tr><td>cpu vendor</td><td><%= os.cpu.vendor %></td></tr>
+  <tr><td>cpu cores</td><td><%= os.cpu.total_cores %></td></tr>
+  <tr><td>cpu cache size</td><td><%= os.cpu.cache_size %></td></tr>
+  <tr><td>total memory</td><td><%= os.mem.total %></td></tr>
+  <tr><td>total swap</td><td><%= os.swap.total %></td></tr>
+  <tr><td>process id</td><td><%= process.id %></td></tr>
+  <tr><td>max file handles</td><td><%= process.max_file_descriptors %></td></tr>
+  <tr><td>open file handles</td><td><%= process.open_file_descriptors %></td></tr>
+  <tr><td>http addres</td><td><%= http_address %></td></tr>
+  <tr><td>transport addres</td><td><%= transport_address %></td></tr>
+  <tr><td>bound addres</td><td><%= transport.bound_address %></td></tr>
+  <tr><td>publish addres</td><td><%= transport.publish_address %></td></tr>
+  </tbody>
+  </table>
+</div>

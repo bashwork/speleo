@@ -1,0 +1,21 @@
+<div class='info-block'>
+  <table class='table table-bordered table-striped table-condensed'>
+  <thead>
+    <tr>
+      <th>Index Information <i class='icon-plus pull-right'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr><td>total size</td><td><%= indices.store.size %></td></tr>
+  <tr><td>total documents</td><td><%= indices.docs.count %></td></tr>
+  <tr><td>index count</td><td><%= indices.indexing.index_total %></td></tr>
+  <tr><td>index time</td><td><%= indices.indexing.index_time %></td></tr>
+  <tr><td>search count</td><td><%= indices.search.query_total %></td></tr>
+  <tr><td>search time</td><td><%= indices.search.query_time %></td></tr>
+  <tr><td>refresh count</td><td><%= indices.refresh.total %></td></tr>
+  <tr><td>refresh time</td><td><%= indices.refresh.total_time %></td></tr>
+  <tr><td>flush count</td><td><%= indices.flush.total %></td></tr>
+  <tr><td>flush time</td><td><%= indices.flush.total_time %></td></tr>
+  </tbody>
+  </table>
+</div>
