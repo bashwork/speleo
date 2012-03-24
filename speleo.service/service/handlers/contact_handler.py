@@ -1,8 +1,8 @@
-import common
+from service.handlers.common import BaseHandler
 
-class ContactHandler(common.BaseHandler):
+class ContactHandler(BaseHandler):
 
-    RoutePath = r'/contact'
+    RoutePath = r'/contact/?'
 
     def get(self):
         self.render('contact.html')

@@ -76,13 +76,22 @@ speleo.model.Event = Backbone.Model.extend({
   sync: function(x, m, o) {}
 });
 
+speleo.model.Account = Backbone.Model.extend({
+  defaults: {
+    name:  '',
+    username:  ''
+  },
+
+  sync: function(x, m, o) {}
+});
+
 
 // ------------------------------------------------------------
 // collections
 // ------------------------------------------------------------
 speleo.group.Event = Backbone.Collection.extend({
   model: speleo.model.Event,
-  url: 'http://localhost:9200/_search/',
+  url: 'http://localhost:8888/api/v1/elastic/search',
   meta: new speleo.model.Meta(),
 
   comparator: function(event) {

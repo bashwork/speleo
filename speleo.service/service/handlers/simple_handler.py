@@ -1,32 +1,32 @@
-import common
 import tornado.web;
+from service.handlers.common import BaseHandler
 
-class AboutHandler(common.BaseHandler):
+class AboutHandler(BaseHandler):
 
-    RoutePath = r'/about'
+    RoutePath = r'/about/?'
 
     def get(self):
         self.render('about.html')
 
-class AnalyzeHandler(common.BaseHandler):
+class AnalyzeHandler(BaseHandler):
 
-    RoutePath = r'/analyze'
+    RoutePath = r'/analyze/?'
 
     @tornado.web.authenticated
     def get(self):
         self.render('analyze.html')
 
-class QueryHandler(common.BaseHandler):
+class QueryHandler(BaseHandler):
 
-    RoutePath = r'/query'
+    RoutePath = r'/query/?'
 
     @tornado.web.authenticated
     def get(self):
         self.render('query.html')
 
-class HealthHandler(common.BaseHandler):
+class HealthHandler(BaseHandler):
 
-    RoutePath = r'/health'
+    RoutePath = r'/health/?'
 
     @tornado.web.authenticated
     def get(self):

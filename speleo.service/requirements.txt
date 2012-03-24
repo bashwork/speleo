@@ -6,3 +6,4 @@ wsgiref==0.1.2
 webassets==0.6
 closure==20110811
 cssutils==0.9.9
+alembic==0.2.1

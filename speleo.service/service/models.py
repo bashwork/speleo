@@ -16,8 +16,10 @@ def get_database(connection, debug=False):
     :param debug: Set to true to debug the operations
     '''
     engine = create_engine(connection, convert_unicode=True, echo=debug)
+    session = scoped_session(sessionmaker(bind=engine))
     Base.metadata.create_all(engine)
-    return scoped_session(sessionmaker(bind=engine))
+    Base.query = session.query_property()
+    return session
 
 
 # ------------------------------------------------------------ 
@@ -28,11 +30,11 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
+    name = Column(String(60), nullable=False)
     username = Column(String(30), nullable=False)
-    first_name = Column(String(30), nullable=False)
-    last_name = Column(String(30), nullable=False)
-    email = Column(String(75), nullable=False)
-    password = Column(String(128), nullable=False)
+    first_name = Column(String(30), nullable=True)
+    last_name = Column(String(30), nullable=True)
+    email = Column(String(75), nullable=True)
 
     def __repr__(self):
         return "<User(%s)>" % (self.username)

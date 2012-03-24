@@ -1,13 +1,13 @@
-import common
 import tornado.web;
+from service.handlers.common import BaseHandler
 
-class SearchHandler(common.BaseHandler):
+class SettingsHandler(BaseHandler):
 
-    RoutePath = r'/search'
+    RoutePath = r'/settings'
 
     @tornado.web.authenticated
     def get(self):
-        self.render('search.html')
+        self.render('settings.html')
 
     @tornado.web.authenticated
     def post(self):
@@ -16,4 +16,4 @@ class SearchHandler(common.BaseHandler):
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['SearchHandler']
+__all__ = ['SettingsHandler']

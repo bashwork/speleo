@@ -1,13 +1,13 @@
-import common
 import tornado.web;
+from service.handlers.common import BaseHandler
 
-class SettingsHandler(common.BaseHandler):
+class DashboardHandler(BaseHandler):
 
-    RoutePath = r'/settings'
+    RoutePath = r'/dashboard'
 
     @tornado.web.authenticated
     def get(self):
-        self.render('settings.html')
+        self.render('dashboard.html')
 
     @tornado.web.authenticated
     def post(self):
@@ -16,4 +16,4 @@ class SettingsHandler(common.BaseHandler):
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['SettingsHandler']
+__all__ = ['DashboardHandler']

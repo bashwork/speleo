@@ -1,13 +1,13 @@
-import common
-import tornado.web;
+import tornado.web
+from service.handlers.common import BaseHandler
 
-class DashboardHandler(common.BaseHandler):
+class BlockboardHandler(BaseHandler):
 
-    RoutePath = r'/dashboard'
+    RoutePath = r'/blockboard'
 
     @tornado.web.authenticated
     def get(self):
-        self.render('dashboard.html')
+        self.render('blockboard.html')
 
     @tornado.web.authenticated
     def post(self):
@@ -16,4 +16,4 @@ class DashboardHandler(common.BaseHandler):
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['DashboardHandler']
+__all__ = ['BlockboardHandler']

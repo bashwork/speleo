@@ -1,14 +1,14 @@
 import logging
-import common
 import tornado.escape
 import tornado.auth
 import tornado.web
+from service.handlers.common import BaseHandler
 
 
 # ------------------------------------------------------------
 # page handlers
 # ------------------------------------------------------------
-class LoginHandler(common.BaseHandler):
+class LoginHandler(BaseHandler):
 
     RoutePath = r'/auth/login'
 
@@ -25,7 +25,7 @@ class LoginHandler(common.BaseHandler):
         else: self.redirect('/auth/login')
 
 
-class GoogleAuthHandler(common.BaseHandler, tornado.auth.GoogleMixin):
+class GoogleAuthHandler(BaseHandler, tornado.auth.GoogleMixin):
 
     RoutePath = r'/auth/google'
 
@@ -43,7 +43,7 @@ class GoogleAuthHandler(common.BaseHandler, tornado.auth.GoogleMixin):
         self.redirect(self.get_argument("next", "/"))
 
 
-class TwitterAuthHandler(common.BaseHandler, tornado.auth.TwitterMixin):
+class TwitterAuthHandler(BaseHandler, tornado.auth.TwitterMixin):
 
     RoutePath = r'/auth/twitter'
 
@@ -61,7 +61,7 @@ class TwitterAuthHandler(common.BaseHandler, tornado.auth.TwitterMixin):
         self.redirect(self.get_argument("next", "/"))
 
 
-class FacebookAuthHandler(common.BaseHandler, tornado.auth.FacebookMixin):
+class FacebookAuthHandler(BaseHandler, tornado.auth.FacebookMixin):
 
     RoutePath = r'/auth/facebook'
 
@@ -79,7 +79,7 @@ class FacebookAuthHandler(common.BaseHandler, tornado.auth.FacebookMixin):
         self.redirect(self.get_argument("next", "/"))
 
 
-class LogoutHandler(common.BaseHandler):
+class LogoutHandler(BaseHandler):
 
     RoutePath = r'/auth/logout'
 

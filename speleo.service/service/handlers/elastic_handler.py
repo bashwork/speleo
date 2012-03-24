@@ -32,7 +32,7 @@ class ElasticProxyHandler(tornado.web.RequestHandler):
 
 class ElasticSearchHandler(tornado.web.RequestHandler):
 
-    RoutePath = r'/api/v1/elastic/search'
+    RoutePath = r'/api/v1/elastic/search/?'
 
     @tornado.web.asynchronous
     def post(self):

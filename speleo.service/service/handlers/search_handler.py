@@ -1,13 +1,13 @@
-import common
-import tornado.web
+import tornado.web;
+from service.handlers.common import BaseHandler
 
-class BlockboardHandler(common.BaseHandler):
+class SearchHandler(BaseHandler):
 
-    RoutePath = r'/blockboard'
+    RoutePath = r'/search'
 
     @tornado.web.authenticated
     def get(self):
-        self.render('blockboard.html')
+        self.render('search.html')
 
     @tornado.web.authenticated
     def post(self):
@@ -16,4 +16,4 @@ class BlockboardHandler(common.BaseHandler):
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['BlockboardHandler']
+__all__ = ['SearchHandler']

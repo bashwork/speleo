@@ -32,6 +32,12 @@ template = Bundle('tmpl/*.tmpl',
 environment.register('template', template)
 environment.config['jst_compiler'] = '_.template'
 
+
+# ------------------------------------------------------------ 
+# exports
+# ------------------------------------------------------------ 
+__all__ = ['Environment']
+
 if __name__ == "__main__":
     print "Compiled stylesheets: ", environment['stylesheet'].urls()
     print "Compiled javascripts: ", environment['javascript'].urls()

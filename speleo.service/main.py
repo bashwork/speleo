@@ -5,10 +5,8 @@ import logging
 import tornado.ioloop
 import tornado.web
 from tornado.options import define, options
-import handlers
-import models
-import security
-from webassets.loaders import PythonLoader
+import service
+
 
 # ------------------------------------------------------------ 
 # options
@@ -48,7 +46,7 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         # handlers
         # ---------------------------------------------------- 
-        search = inspect.getmembers(handlers)
+        search = inspect.getmembers(service.handlers)
         routes = [(h.RoutePath, h) for n, h in search if 'Handler' in n]
 
         # ---------------------------------------------------- 
@@ -65,9 +63,9 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         # shared
         # ---------------------------------------------------- 
-        self.assets   = PythonLoader('assets').load_environment()
-        self.security = security.get_security(options.security, options)
-        self.database = models.get_database(options.database, options.debug)
+        self.assets   = service.environment#PythonLoader('assets').load_environment()
+        self.security = service.get_security(options.security, options)
+        self.database = service.get_database(options.database, options.debug)
         #self.cache = memcache.Client([options.cache], debug=options.debug)
 
         # ---------------------------------------------------- 
