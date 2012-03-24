@@ -3,7 +3,7 @@
 // ------------------------------------------------------------
 window.config = {
   eventsPerPage: 3,
-  eventPages: 16,
+  eventPages: 16
 };
 
 
@@ -26,7 +26,7 @@ var searchChartFactory = function(options) {
       }
     },
     credits: {
-      enabled: false,
+      enabled: false
     },
     rangeSelector: {
       selected: 1
@@ -34,7 +34,7 @@ var searchChartFactory = function(options) {
     series: [{
       type: 'column',
       name: 'recent events',
-      data: options.data,
+      data: options.data
     }]
   });
 }
@@ -64,19 +64,19 @@ BuildQuery.prototype.build = function() {
     'query':  {},
     'facets': {},
     'from': this.options.start,
-    'size': this.options.count,
+    'size': this.options.count
   };
 
   _.each(this.options.facets, function(facet) {
     var name = facet.name || facet;
     query.facets[name] = {
       terms: { field : name },
-      global: facet.global || false,
+      global: facet.global || false
     };
 
     if (facet.filters) {
       query.facets[name]['facet_filter'] = {
-        'term': facet.filters,
+        'term': facet.filters
       };
     }
   });
@@ -85,7 +85,7 @@ BuildQuery.prototype.build = function() {
 BuildQuery.prototype.defaults = {
   count: 10,
   start:  0,
-  facets: [],
+  facets: []
 };
 
 
@@ -104,7 +104,7 @@ var Facet = Backbone.Model.extend({
     return rank / total;
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 var Event = Backbone.Model.extend({
@@ -117,7 +117,7 @@ var Event = Backbone.Model.extend({
     tags:  ['debug', 'production']
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 var SearchStatus = Backbone.Model.extend({
@@ -146,7 +146,7 @@ var SearchStatus = Backbone.Model.extend({
 
 var ChartStatus = Backbone.Model.extend({
   defaults: {
-    data: [],
+    data: []
   },
 
   update: function() {
@@ -160,7 +160,7 @@ var ChartStatus = Backbone.Model.extend({
     data = data.length > 0 ? data : [[0,0]];
     this.set('data', data, { silent: true });
     this.trigger('change');
-  },
+  }
 
 });
 
@@ -335,21 +335,6 @@ var StatusView = Backbone.View.extend({
 
 });
 
-// ------------------------------------------------------------
-// router
-// ------------------------------------------------------------
-var Router = Backbone.Router.extend({
-  /**
-   * - handle dashboard
-   * - handle about
-   * - handle contact (send email to support)
-   * - handle statistics (a whole new iteration)
-   */
-  routes : {
-    '': 'index',
-  },
-});
-
 
 // ------------------------------------------------------------
 // main 
@@ -442,6 +427,4 @@ jQuery(function initialize($) {
   window.Notifier = _.extend({}, Backbone.Events);
   window.Events = new EventCollection();
   window.app = new AppView();
-  app.router = new Router();
-  Backbone.history.start({ pushState : true });
 });

@@ -57,10 +57,10 @@
 var Setting = Backbone.Model.extend({
   defaults: {
     'name': '',
-    '_active': false,
+    '_active': false
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 
@@ -122,7 +122,7 @@ var SettingsView = Backbone.View.extend({
     elem.removeClass('editing');
     $('span', elem).text(text);
     if (sett) { sett.set(name, text); }
-  },
+  }
 
 });
 
@@ -145,7 +145,7 @@ var SettingsAppView = Backbone.View.extend({
     'change #operation-name': 'changeOperation',
     'change #cluster-name': 'changeOperation',
     'click  #operation-index a': 'indexOperation',
-    'click  #operation-cluster a': 'clusterOperation',
+    'click  #operation-cluster a': 'clusterOperation'
   },
 
   initialize:function() {
@@ -165,8 +165,8 @@ var SettingsAppView = Backbone.View.extend({
       });
     });
 
-    this.elastic.request("GET", "_cluster/settings", "", function(d,x) {
-      var setting = new Setting({ name: 'cluster', settings: d.transient });
+    this.elastic.request("GET", "_cluster/settings", "", function(d, x) {
+      var setting = new Setting({ name: 'cluster', settings: d['transient'] });
       var view = new SettingsView({ model: setting });
       self.clusterEl.append(view.render().el);
     });

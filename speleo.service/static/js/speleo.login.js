@@ -8,7 +8,7 @@ var Account = Backbone.Model.extend({
     password: ''
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 // ------------------------------------------------------------

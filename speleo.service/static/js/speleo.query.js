@@ -21,7 +21,7 @@ window.root_query_suggestions = [
   '_stats',
   '_status',
   '_template',
-  '_all',
+  '_all'
 ];
 
 /*
@@ -106,7 +106,7 @@ var QueryAppView = Backbone.View.extend({
     else if (meth === "DELETE" && !path) return;
     else if (!path && !data) return;
     this.elastic.request(meth, path, data);
-  },
+  }
 
 });
 

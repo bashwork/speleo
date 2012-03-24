@@ -12,7 +12,7 @@ window.valid_times = {
   '15 minutes': 900000,
   '30 minutes': 1800000,
   '60 minutes': 3600000,
-  '1 hour':     3600000,
+  '1 hour':     3600000
 };
 
 // ------------------------------------------------------------
@@ -69,7 +69,7 @@ var GenericChartView = Backbone.View.extend({
 
   render: function() {
     this.chart.redraw();
-  },
+  }
 
 });
 
@@ -138,7 +138,7 @@ var JvmThreadsChartView = GenericChartView.extend({
     }
     return {
       data: dataset,
-      time: reading.get('jvm').timestamp,
+      time: reading.get('jvm').timestamp
     };
   }
 });
@@ -296,7 +296,7 @@ var ChartViewCollection = Backbone.View.extend({
       chart.clear();
       chart.chart.showLoading();
     });
-  },
+  }
 
 });
 
@@ -356,7 +356,7 @@ var HealthNode = Backbone.Model.extend({
     current: false
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 
@@ -515,7 +515,7 @@ var ElasticHealthAppView = Backbone.View.extend({
     if (!HealthNodes.getBy('current', true)) {
       $('.node-toggle:first').click();
     }
-  },
+  }
 
 });
 
@@ -529,7 +529,7 @@ jQuery(function initialize($) {
       port: 9200,
       delay: 1000,
       connected: false,
-      chart_window: 60000,
+      chart_window: 60000
   };
   window.HealthNodes = new HealthNodeCollection();
   window.app = new ElasticHealthAppView();

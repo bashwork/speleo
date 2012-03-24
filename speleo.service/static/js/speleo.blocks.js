@@ -2,7 +2,7 @@
 // configuration
 // ------------------------------------------------------------
 window.config = {
-  delay: 1000,
+  delay: 1000
 };
 
 // ------------------------------------------------------------
@@ -17,10 +17,10 @@ var Block = Backbone.Model.extend({
     count: 0,
     title: '',
     status: 'inverse',
-    threshold: 0,
+    threshold: 0
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 // ------------------------------------------------------------
@@ -75,7 +75,7 @@ var BlockAppView = Backbone.View.extend({
     'click #block-create': 'toggle',
     'click #block-submit': 'createBlock',
     'click #block-cancel': 'cancelBlock',
-    'click #block-form .close': 'toggle',
+    'click #block-form .close': 'toggle'
   },
 
   initialize:function() {
@@ -152,7 +152,7 @@ var BlockAppView = Backbone.View.extend({
     var view = new BlockView({ model: event }),
         elem = view.render().$el;
     elem.appendTo(this.blockStatusEl);
-  },
+  }
 
 });
 

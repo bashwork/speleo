@@ -12,10 +12,10 @@ var Event = Backbone.Model.extend({
     date: '12/2/2012',
     time: '12:34:09 PM',
     text: '',
-    tags: ['debug', 'production'],
+    tags: ['debug', 'production']
   },
 
-  sync: function(m, m, o) {}
+  sync: function(x, m, o) {}
 });
 
 
@@ -155,7 +155,7 @@ var DashboardAppView = Backbone.View.extend({
 
   addAllEvents: function() {
     DashEvents.each(this.addEvent);
-  },
+  }
 });
 
 

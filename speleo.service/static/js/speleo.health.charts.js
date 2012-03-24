@@ -9,7 +9,7 @@ var jvmThreadsChartFactory = function(renderTo, title) {
             marginRight: 10
         },
         title: {
-            text: title,
+            text: title
         },
         credits: {
             enabled: false
@@ -117,7 +117,7 @@ var osCpuChartFactory = function(renderTo, title) {
          marginRight: 10
       },
       title: {
-         text: title,
+         text: title
       },
         credits: {
             enabled: false
@@ -223,7 +223,7 @@ var osMemoryChartFactory = function(renderTo, title) {
             defaultSeriesType: 'area'
         },
         title: {
-            text: title,
+            text: title
         },
         credits: {
             enabled: false

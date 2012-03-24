@@ -22,7 +22,7 @@ var lineChartFactory = function(options) {
       borderColor: '#eee'
     },
     credits: {
-      enabled: false,
+      enabled: false
     },
     series: options.data
   });
@@ -47,7 +47,7 @@ var barChartFactory = function(options) {
       }
     },
     credits: {
-      enabled: false,
+      enabled: false
     },
     series: options.data
   });
