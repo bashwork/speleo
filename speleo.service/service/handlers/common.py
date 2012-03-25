@@ -4,6 +4,10 @@ import tornado.escape
 class BaseHandler(tornado.web.RequestHandler):
 
     @property
+    def assets(self):
+        return self.application.assets
+
+    @property
     def security(self):
         return self.application.security
 

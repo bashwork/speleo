@@ -85,7 +85,7 @@ var AnalyzeAppView = Backbone.View.extend({
   queryFiltersEl: $('#analyze-filters'),
   queryTokenizersEl: $('#analyze-tokenizers'),
   queryResultsEl: $('#analyze-results'),
-  optionsTemplate: _.template($('#options-template').html()),
+  optionsTemplate: speleo.template['analyze.options'],
 
   events: {
     'click #analyze-submit': 'executeQueryButton',

@@ -1,5 +1,13 @@
+import os
+import os.path
 import logging
 from webassets import Environment, Bundle
+
+class Assets(object):
+
+    def __init__(self, assets):
+        self.javascripts = assets['javascript'].urls()
+        self.stylesheets = assets['stylesheet'].urls()
 
 def get_assets(options):
     ''' A helper to build the assets for the service
@@ -21,23 +29,37 @@ def get_assets(options):
     # stylesheet bundle
     # ------------------------------------------------------------ 
     stylesheet = Bundle('css/*.css',
-        filters='cssutils', output='asset/speleo.css')
+        filters='cssutils', output='cache/speleo.css')
     environment.register('stylesheet', stylesheet)
-    
-    # ------------------------------------------------------------ 
-    # javascript bundle
-    # ------------------------------------------------------------ 
-    javascript = Bundle('js/lib/*.js', 'js/*.js',
-        filters='closure_js', output='asset/speleo.js')
-    environment.register('javascript', javascript)
     
     # ------------------------------------------------------------ 
     # template bundle
     # ------------------------------------------------------------ 
     template = Bundle('tmpl/*.tmpl',
-        filters='jst', output='asset/speleo.jst.js')
-    environment.register('template', template)
+        filters='jst', output='cache/speleo.jst.js', debug=False)
     environment.config['jst_compiler'] = '_.template'
+    
+    # ------------------------------------------------------------ 
+    # javascript bundle
+    # ------------------------------------------------------------ 
+    javascript = Bundle(
+        Bundle('js/lib/core/jquery.js', 'js/lib/core/underscore.js'),
+        template, # needs underscore
+        Bundle('js/lib/ace/ace.js', 'js/lib/ace/mode-javascript.js'),
+        Bundle('js/lib/*.js', 'js/speleo.js'),
+        filters='closure_js', output='cache/speleo.js')
+    environment.register('javascript', javascript)
+
+    # ------------------------------------------------------------ 
+    # output cache
+    # ------------------------------------------------------------ 
+    if not os.path.exists(os.path.join('./static', 'cache')):
+        os.mkdir(os.path.join('./static', 'cache'))
+
+    # ------------------------------------------------------------ 
+    # initialized
+    # ------------------------------------------------------------ 
+    return Assets(environment)
 
 # ------------------------------------------------------------ 
 # exports
@@ -51,7 +73,6 @@ if __name__ == "__main__":
     class Options(object):
         debug = True
 
-    environment = get_assets(Options())
-    print "Compiled stylesheets: ", environment['stylesheet'].urls()
-    print "Compiled javascripts: ", environment['javascript'].urls()
-    print "Compiled templates: ",   environment['template'].urls()
+    assets = get_assets(Options())
+    print "Compiled stylesheets: ", assets.stylesheets
+    print "Compiled javascripts: ", assets.javascripts

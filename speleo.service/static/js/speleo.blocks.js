@@ -36,7 +36,7 @@ var BlockCollection = Backbone.Collection.extend({
 var BlockView = Backbone.View.extend({
 
   tagName: 'li',
-  template: _.template($('#block-template').html()),
+  template: speleo.template['blockboard.block'],
   events: {
     'click .block-close': 'remove'
   },

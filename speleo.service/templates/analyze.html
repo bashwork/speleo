@@ -69,16 +69,6 @@
     </div>
 {% end %}
 
-{% block templates %}
-    <script type="text/template" id="options-template">
-      <% _.each(values, function(value) { %>
-         <option value='<%= value %>'><%= value %></option>
-      <% }); %>
-    </script>
-{% end %}
-
 {% block extra-tail %}
-    <script src="/static/js/lib/google-prettify.js"></script> 
-    <script src="/static/js/lib/elasticsearch.js"></script> 
     <script src="/static/js/speleo.analyze.js"></script> 
 {% end %}

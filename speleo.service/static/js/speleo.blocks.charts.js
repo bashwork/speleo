@@ -200,7 +200,7 @@ var LineChartBlockView = Backbone.View.extend({
 
 var TableBlockView = Backbone.View.extend({
   tagName: 'li',
-  template: _.template($('#block-table-template').html()),
+  template: speleo.template['blockboard.table'],
   events: {
     'click .block-close': 'remove'
   },

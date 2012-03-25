@@ -26,17 +26,13 @@ var EventCollection = Backbone.Collection.extend({
   model: Event
 });
 
-window.JST = {
-  '#event-template': _.template($('#event-template').html())
-};
-
 
 // ------------------------------------------------------------
 // views
 // ------------------------------------------------------------
 var DashEventView = Backbone.View.extend({
   tagName: 'li',
-  template: window.JST['#event-template'],
+  template: speleo.template['dashboard.event'],
 
   events: {
     'mouseover': 'gainfocus',

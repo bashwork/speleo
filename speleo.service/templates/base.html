@@ -6,10 +6,9 @@
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <head> 
     <title>{% block page-title %}Speleo|Some Pithy Text{% end %}</title> 
-    <link href="/static/css/bootstrap.css" rel="stylesheet"> 
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet"> 
-    <link href="/static/css/google-prettify.css" rel="stylesheet"> 
-    <link href="/static/css/main.css" media="all" rel="stylesheet" type="text/css"/> 
+    {% for stylesheet in handler.assets.stylesheets %}
+      <link href="{{ stylesheet }}" rel="stylesheet" type="text/css" /> 
+    {% end %}
     {% block extra-head %}{% end %}
   </head> 
  
@@ -77,10 +76,9 @@
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <!-- javascript -->
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <script src="/static/js/lib/jquery.js"></script> 
-    <script src="/static/js/lib/underscore.js"></script> 
-    <script src="/static/js/lib/bootstrap.js"></script> 
-    <script src="/static/js/lib/backbone.js"></script> 
+    {% for javascript in handler.assets.javascripts %}
+      <script src="{{ javascript }}"></script> 
+    {% end %}
     {% block extra-tail %}{% end %}
 
   </body> 
