@@ -1,3 +1,4 @@
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,13 +10,14 @@ from sqlalchemy.orm import relationship, backref
 # ------------------------------------------------------------ 
 Base = declarative_base()
 
-def get_database(connection, debug=False):
+def get_database(options):
     ''' Retrieve a database instance from the given config
 
-    :param connection: The connection string to the database
-    :param debug: Set to true to debug the operations
+    :param options.connection: The connection string to the database
+    :param options.debug: Set to true to debug the operations
     '''
-    engine = create_engine(connection, convert_unicode=True, echo=debug)
+    logging.debug("Initializing database: %s" % options.database)
+    engine = create_engine(options.database, convert_unicode=True, echo=options.debug)
     session = scoped_session(sessionmaker(bind=engine))
     Base.metadata.create_all(engine)
     Base.query = session.query_property()

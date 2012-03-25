@@ -168,15 +168,15 @@ class UnixSecurity(object):
             result[key] = getattr(attrs, meta['field'])
         return result
 
-def get_security(name, options):
+def get_security(options):
     ''' Factory for the security implementations
 
-    :param name: The security implementation to use
     :param options: The security options to use
     :returns: An initialized security implementation
     '''
-    if name.lower() == 'ldap':
+    security = options.security.lower()
+    if security == 'ldap':
         return LdapSecurity(options)
-    elif name.lower() == 'unix':
+    elif security == 'unix':
         return UnixSecurity(options)
     else: return DisabledSecurity()

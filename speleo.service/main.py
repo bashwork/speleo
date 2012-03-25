@@ -13,6 +13,7 @@ import service
 # ------------------------------------------------------------ 
 define('debug', default=False, help="Set to true to enable debugging", type=bool)
 define('port', default=8888, help="The port to run the service on", type=int)
+define('asset_url', default='/static', help='The url used for static assets', type=str)
 define('elastic', default='127.0.0.1:9200', help="The list of elastic search hosts to balance", type=str)
 define('security', default='none', help='none|ldap', type=str)
 define('database', default='sqlite:////tmp/example.db', help="The database connection string to use", type=str)
@@ -31,7 +32,7 @@ class SpeleoApplication(tornado.web.Application):
 
     def __init__(self):
         # ---------------------------------------------------- 
-        # settings
+        # service settings
         # ---------------------------------------------------- 
         root_path = os.path.dirname(__file__)
         settings = {
@@ -44,7 +45,7 @@ class SpeleoApplication(tornado.web.Application):
         }
 
         # ---------------------------------------------------- 
-        # handlers
+        # route handlers
         # ---------------------------------------------------- 
         search = inspect.getmembers(service.handlers)
         routes = [(h.RoutePath, h) for n, h in search if 'Handler' in n]
@@ -61,15 +62,14 @@ class SpeleoApplication(tornado.web.Application):
         for route in remove: routes.remove(route)
 
         # ---------------------------------------------------- 
-        # shared
+        # shared resources
         # ---------------------------------------------------- 
-        self.assets   = service.environment#PythonLoader('assets').load_environment()
-        self.security = service.get_security(options.security, options)
-        self.database = service.get_database(options.database, options.debug)
-        #self.cache = memcache.Client([options.cache], debug=options.debug)
+        self.assets   = service.get_assets(options)
+        self.security = service.get_security(options)
+        self.database = service.get_database(options)
 
         # ---------------------------------------------------- 
-        # initialize
+        # initialize service
         # ---------------------------------------------------- 
         tornado.web.Application.__init__(self, routes, **settings)
         logging.debug('Installed Routes')
@@ -77,7 +77,7 @@ class SpeleoApplication(tornado.web.Application):
         logging.debug('Service started on port %d' % options.port)
 
 # ------------------------------------------------------------ 
-# service
+# service runner
 # ------------------------------------------------------------ 
 if __name__ == "__main__":
     tornado.options.parse_config_file('settings.py')
