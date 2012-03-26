@@ -77,7 +77,7 @@ var SettingsCollection = Backbone.Collection.extend({
 // ------------------------------------------------------------
 var SettingsView = Backbone.View.extend({
   tagName: 'div',
-  template: _.template($('#settings-template').html()),
+  template: speleo.template['settings.setting'],
   events: {
     'dblclick td span': 'editSetting',
     'keypress td.editing input': 'updateOnEnter',
@@ -138,7 +138,7 @@ var SettingsAppView = Backbone.View.extend({
   settingIdxEl: $('#setting-name'),
   clusterIdxEl: $('#cluster-name'),
   operationIdxEl: $('#operation-name'),
-  template: _.template($('#alert-template').html()),
+  template: speleo.template['settings.alert'],
 
   events: {
     'change #setting-name': 'changeSettings',

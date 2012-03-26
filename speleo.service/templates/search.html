@@ -23,55 +23,6 @@
         </div>
 {% end %}
 
-{% block templates %}
-    <script type="text/template" id="event-template">
-        <a class="close event-close">&times;</a>
-        <div class='event'>
-          <div class='event-time'>
-            <span class='event-title'><%= title %></span>
-            <span class='event-time-date'><%= time %></span>
-            <span class='event-time-time'><%= date %></span>
-          </div>
-          <div class='event-text'><%= text %></div>
-          <div class='event-tags'>
-          <% _.each(tags, function(tag) { %>
-             <span class='label'><%= tag %></span>
-          <% }); %>
-          </div>
-        </div>
-    </script>
-
-    <script type="text/template" id="status-template">
-      <div class="row">
-        <div class="span8">
-          <div id='event-pager' class='pagination'>
-            <ul>
-              <li><a href='#'>Prev</a></li>
-              <% _.each(pages, function(page) { %>
-                <li class=<%= page == 0 ? 'active' : '' %>>
-                  <a href='#'><%= page %></a>
-                </li>
-              <% }); %>
-              <li><a href='#'>Next</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="span2">
-          <div class="pull-right" style="padding-top:5px;">
-            <p><i class='icon-pencil'></i> Best score <%= score %></p>
-            <p><i class='icon-signal'></i> Found <%= count %> events</p>
-          </div>
-        </div>
-        <div class="span2">
-          <div class="pull-right" style="padding-top:5px;">
-            <p><i class='icon-time'></i> Query took <%= time %> ms</p>
-            <p><i class='icon-ok'></i> <%= error ? 'Possible Errors' : 'No Errors' %></p>
-          </div>
-        </div>
-      </div>
-    </script>
-{% end %}
-
 {% block extra-tail %}
     <script src="/static/js/speleo.search.js"></script> 
 {% end %}

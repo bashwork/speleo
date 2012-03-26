@@ -94,7 +94,7 @@ var GenericTableView = Backbone.View.extend({
 
 var HealthNodeView = Backbone.View.extend({
   tagName: 'em',
-  template: _.template($('#health-node-template').html()),
+  template: speleo.template['health.node'],
   initialize: function() {
     this.model.bind('destroy', this.remove, this);
     this.model.bind('change:current', this.update, this);
@@ -309,22 +309,22 @@ var ChartViewCollection = Backbone.View.extend({
 // ------------------------------------------------------------
 var SystemNodeTableView = GenericTableView.extend({
   el: $('#node-system-info'),
-  template: _.template($('#system-info-template').html())
+  template: speleo.template['health.system'],
 });
 
 var JvmNodeTableView = GenericTableView.extend({
   el: $('#node-jvm-info'),
-  template: _.template($('#jvm-info-template').html())
+  template: speleo.template['health.jvm'],
 });
 
 var IndexNodeTableView = GenericTableView.extend({
   el: $('#node-index-info'),
-  template: _.template($('#index-info-template').html())
+  template: speleo.template['health.index'],
 });
 
 var NetworkNodeTableView = GenericTableView.extend({
   el: $('#node-network-info'),
-  template: _.template($('#network-info-template').html())
+  template: speleo.template['health.network'],
 });
 
 var TableViewCollection = Backbone.View.extend({

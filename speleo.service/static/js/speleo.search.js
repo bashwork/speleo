@@ -185,7 +185,7 @@ var FacetCollection = Backbone.Collection.extend({
 // ------------------------------------------------------------
 var EventView = Backbone.View.extend({
   tagName: 'li',
-  template: _.template($('#event-template').html()),
+  template: speleo.template['search.event'],
 
   events: {
     'mouseover .event': 'gainfocus',
@@ -259,7 +259,7 @@ var ChartView = Backbone.View.extend({
 var StatusView = Backbone.View.extend({
 
   el: '#event-status',
-  template: _.template($('#status-template').html()),
+  template: speleo.template['search.status'],
   events: {
     'click #event-pager li': 'changePage'
   },
