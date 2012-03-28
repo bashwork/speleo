@@ -193,3 +193,7 @@ body {
   line-height:20px;
   padding: 10px;
 }
+
+.profile-title {
+  margin-bottom: 1em;
+}

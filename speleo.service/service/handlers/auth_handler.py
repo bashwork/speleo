@@ -3,6 +3,28 @@ import tornado.escape
 import tornado.auth
 import tornado.web
 from service.handlers.common import BaseHandler
+from service.models import User
+
+
+# ------------------------------------------------------------
+# helper methods
+# ------------------------------------------------------------
+def save_user(database, attributes):
+    ''' Given a user, save if the user doesn't exist
+    otherwise update its data.
+
+    :param database: The database to save to
+    :param attributes: The attributes to update with
+    :returns: The user identifier
+    '''
+    user = database.query(User
+        ).filter_by(username=attributes['username']).first()
+    if not user:
+        user = User(**attributes)
+        database.add(user)
+        database.commit()
+        logging.debug('saved new user %s' % user.id)
+    return u"%s" % user.id
 
 
 # ------------------------------------------------------------
@@ -20,7 +42,7 @@ class LoginHandler(BaseHandler):
         password = self.get_argument('password', '')
         session  = self.security.authenticate(username, password)
         if session:
-            self.set_secure_cookie('user', tornado.escape.json_encode(session))
+            self.set_secure_cookie('user', save_user(self.db, session))
             self.redirect(self.get_argument('next', '/'))
         else: self.redirect('/auth/login')
 
@@ -39,7 +61,7 @@ class GoogleAuthHandler(BaseHandler, tornado.auth.GoogleMixin):
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Google authentication failed")
-        self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        self.set_secure_cookie('user', save_user(self.db, session))
         self.redirect(self.get_argument("next", "/"))
 
 
@@ -57,7 +79,7 @@ class TwitterAuthHandler(BaseHandler, tornado.auth.TwitterMixin):
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Twitter authentication failed")
-        self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        self.set_secure_cookie('user', save_user(self.db, session))
         self.redirect(self.get_argument("next", "/"))
 
 
@@ -75,7 +97,7 @@ class FacebookAuthHandler(BaseHandler, tornado.auth.FacebookMixin):
     def _on_auth(self, user):
         if not user:
             raise tornado.web.HTTPError(500, "Facebook authentication failed")
-        self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        self.set_secure_cookie('user', save_user(self.db, session))
         self.redirect(self.get_argument("next", "/"))
 
 

@@ -4,9 +4,9 @@ speleo.frontend
 
 * I18N
 * testing (performance, memory leaks)
-* add one page routing (server/frontend/both?)
-* save page state between switches (service)
 * attach link to hue(configure)
+
+  - pluggable utilities
 
 --------------------------------------------------------
 common ui components
@@ -25,8 +25,16 @@ user profile page
 --------------------------------------------------------
 
 * past dashboards
-* blocks
+* blocks /queries
 * information (readonly)
+* roles
+
+--------------------------------------------------------
+user admin page
+--------------------------------------------------------
+
+* user management
+* roles apply
     
 --------------------------------------------------------
 plugins
@@ -42,7 +50,6 @@ Speleo Settings
 --------------------------------------------------------
 
 * add chicken test to shutdown/delete
-* add roles
 * add all possible settings and bind them
 
 ========================================================
@@ -59,6 +66,8 @@ elastic search proxy
   - index schema
   - analyzers
 
+* analyzer api dsl
+
 --------------------------------------------------------
 service api
 --------------------------------------------------------
@@ -74,7 +83,7 @@ service alerts
 --------------------------------------------------------
 
 * configure via service
-* monitoring service to send
+* speleo.monitor (percolations)
 
   - email
   - sms
@@ -118,7 +127,6 @@ Speleo Dashboard
 Speleo Search
 --------------------------------------------------------
 
-* query builder -> convert query to elastic search
 * click on chart and chart filter
 * sidebar for suggested tag filter
 * speed up slow updates

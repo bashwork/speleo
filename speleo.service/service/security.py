@@ -1,5 +1,5 @@
 import crypt
-import pwd, spwd
+import pwd, spwd, grp
 import logging
 
 try:
@@ -23,8 +23,8 @@ class DisabledSecurity(object):
         '''
         logging.info("user %s logged in" % username)
         return {
-            'name':     username,
-            'username': username,
+            'name':       username,
+            'username':   username,
         }
 
 
@@ -130,9 +130,9 @@ class UnixSecurity(object):
     __fields = {
         'name':     { 'group': False, 'field': 'pw_name',  },
         'username': { 'group': False, 'field': 'pw_name',  },
-        'uid':      { 'group': False, 'field': 'pw_uid',   },
-        'gid':      { 'group': False, 'field': 'pw_gid',   },
-        'comment':  { 'group': False, 'field': 'pw_gecos', },
+        #'id':       { 'group': False, 'field': 'pw_uid',   },
+        'email':    { 'group': False, 'field': 'pw_gecos', },
+        #'gid':      { 'group': False, 'field': 'pw_gid',   },
     }
     __attrs = [m['field'] for m in __fields.values()]
 
@@ -166,7 +166,14 @@ class UnixSecurity(object):
         result = {}
         for key, meta in self.__fields.items():
             result[key] = getattr(attrs, meta['field'])
+        #self._get_group_roles(result)
         return result
+
+    def _get_group_roles(self, user):
+        user['roles'] = []
+        for group in grp.getgrall():
+            if user['username'] in group.gr_mem:
+                user['roles'].append(group.gr_name)
 
 def get_security(options):
     ''' Factory for the security implementations

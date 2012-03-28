@@ -1,5 +1,6 @@
 import tornado.web
 import tornado.escape
+from service.models import User
 
 class BaseHandler(tornado.web.RequestHandler):
 
@@ -20,6 +21,6 @@ class BaseHandler(tornado.web.RequestHandler):
         return self.application.cache
 
     def get_current_user(self):
-        user_json = self.get_secure_cookie("user")
-        if not user_json: return None
-        return tornado.escape.json_decode(user_json)
+        user_id = self.get_secure_cookie("user")
+        if not user_id: return None
+        return self.db.query(User).get(user_id)

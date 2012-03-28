@@ -29,6 +29,7 @@
           <a class="brand" href="#">Speleo</a> 
           <div class="nav-collapse"> 
             <ul class="nav"> 
+              <li><a href="/profile">Profile</a></li> 
               <li><a href="/search">Search</a></li> 
               <li class="dropdown" id="monitoring-menu">
                 <a class='dropdown-toggle' data-toggle='dropdown' href='#monitoring-menu'>Monitoring <b class="caret"></b></a>
@@ -50,7 +51,7 @@
               <li><a href="/contact">Contact</a></li> 
             </ul> 
             {% if current_user %}
-            <p id='nav-login' class="navbar-text pull-right">Logged in as {{ current_user["name"] }} | <a href="/auth/logout">Logout</a></p>
+            <p id='nav-login' class="navbar-text pull-right"><a href="/profile">Logged in as {{ current_user.name }}</a> | <a href="/auth/logout">Logout</a></p>
             {% else %}
             <p id='nav-login' class="navbar-text pull-right"><a href="/auth/login">Login</a></p>
             {% end %}

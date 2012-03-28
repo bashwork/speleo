@@ -41,15 +41,29 @@ class User(Base):
     def __repr__(self):
         return "<User(%s)>" % (self.username)
 
+
+class Role(Base):
+
+    __tablename__ = 'roles'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    description = Column(String(100), nullable=False)
+
+    def __repr__(self):
+        return "<Role(%s)>" % (self.name)
+
+
 class Query(Base):
 
     __tablename__ = 'queries'
 
     id = Column(Integer, primary_key=True)
-    display = Column(String(250), nullable=False)
-    compiled = Column(String(250), nullable=False)
+    title = Column(String(50), nullable=False)
+    display = Column(String(200), nullable=False)
+    compiled = Column(String(200), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", backref=backref('queries', order_by=id))
 
     def __repr__(self):
-        return "<Query(%s, %s)>" % (self.user.username, self.query)
+        return "<Query(%s, %s)>" % (self.user.username, self.title)
