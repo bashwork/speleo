@@ -17,14 +17,16 @@ class ProfileHandler(BaseHandler):
 # ------------------------------------------------------------
 class QueryApiHandler(BaseHandler):
 
-    RoutePath = r'/api/v1/user/query/(.*)'
+    RoutePath = r'/api/v1/user/query/([0-9]*)/?'
 
     @tornado.web.authenticated
-    def get(self, qid):
+    def get(self, qid=None):
         queries = self.get_current_user().queries
-        if query: 
-            queries = [q for q in queries if q.id == qid]
-        self.write({ 'data' : queries })
+        if qid: 
+            qid = int(qid)
+            data = next((q.serialized for q in queries if q.id == qid), None)
+        else: data = [q.serialized for q in queries]
+        self.write({ 'data' : data })
 
     @tornado.web.authenticated
     def post(self, qid):
@@ -45,4 +47,4 @@ class QueryApiHandler(BaseHandler):
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['ProfileHandler']
+__all__ = ['ProfileHandler', 'QueryApiHandler']

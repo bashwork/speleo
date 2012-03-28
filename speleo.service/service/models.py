@@ -41,6 +41,17 @@ class User(Base):
     def __repr__(self):
         return "<User(%s)>" % (self.username)
 
+    @property
+    def serialized(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'username': self.username,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+        }
+
 
 class Role(Base):
 
@@ -67,3 +78,13 @@ class Query(Base):
 
     def __repr__(self):
         return "<Query(%s, %s)>" % (self.user.username, self.title)
+
+    @property
+    def serialized(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'display': self.display,
+            'user': self.user_id,
+        }
+
