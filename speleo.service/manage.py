@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 import os
+import sys
 import tornado.options
 import service
 
@@ -15,6 +17,7 @@ def command_shell(options):
 
     ipshell = IPShellEmbed()
     ipshell()
+    sys.exit(0)
 
 def command_dbshell(options):
     ''' Drops into a database command shell '''
@@ -29,16 +32,18 @@ def command_dbshell(options):
         path[:1] if path[0] == '/' else path
     ]
     os.execvp(command, args)
+    sys.exit(0)
 
 def command_options(options):
     ''' Prints the current system options '''
     print_banner('Current Service Settings')
     for name, option in options.items():
         print "%20s :: %s" % (name, option.value())
+    sys.exit(0)
 
 def command_runserver(options):
     ''' Starts the speleo service '''
-    from main import SpeleoApplication
+    from service.main import SpeleoApplication
     print_banner('Starting Speleo Service')
 
     try:
@@ -46,6 +51,7 @@ def command_runserver(options):
     except Exception, ex:
         print "Experienced error with service, shutting down"
         print ex
+    sys.exit(0)
 
 def command_build_assets(options):
     ''' Compiles and builds the speleo web assets '''
@@ -55,18 +61,40 @@ def command_build_assets(options):
 
     print assets.javascripts
     print assets.stylesheets
+    sys.exit(0)
+
+def command_help(options):
+    ''' Print the management help commands '''
+    print_banner('Available Management Commands')
+    for command in get_manage_cmds():
+        name = command.__name__.replace('command_', '')
+        print "%s\t\t%s" % (name, command.__doc__)
+    print
+    sys.exit(0)
 
 # ------------------------------------------------------------ 
 # utility methods
 # ------------------------------------------------------------ 
-def print_cmd_help():
-    pass
+def get_manage_cmds():
+    '''
+    '''
+    for key, command in globals().items():
+        if 'command_' in key:
+            yield command
 
-def parse_cmd_arguments():
-    pass
+def call_manage_cmd():
+    '''
+    '''
+    root = os.path.dirname(__file__)
+    opts = service.get_options(root)
+    name = sys.argv[1]
+    for key, command in globals().items():
+        if name in key: command(opts)
+    else: print "invalid command requested"
 
 def print_banner(message):
-    # pull docstring and print
+    '''
+    '''
     print "-"*50
     print message
     print "-"*50
@@ -76,10 +104,4 @@ def print_banner(message):
 # main runner
 # ------------------------------------------------------------ 
 if __name__ == '__main__':
-    root_path = os.path.dirname(__file__)
-    options = service.get_options(root_path)
-    #command_shell(options)
-    #command_options(options)
-    #command_runserver(options)
-    #command_build_assets(options)
-    command_dbshell(options)
+    call_manage_cmd()
