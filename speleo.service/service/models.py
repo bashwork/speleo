@@ -1,7 +1,9 @@
 import logging
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy import Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm import relationship, backref
 
@@ -23,68 +25,109 @@ def get_database(options):
     Base.query = session.query_property()
     return session
 
+# ------------------------------------------------------------ 
+# Base Model
+# ------------------------------------------------------------ 
+class BaseMixin(object):
+ 
+    __private__ = []
+
+    # --------------------------------------------------------
+    # default columns
+    # --------------------------------------------------------
+    id      = Column(Integer, primary_key=True)
+    created = Column(DateTime)
+    updated = Column(DateTime)
+
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
+ 
+    #def __init__(self, **kwargs):
+    #    Base.__init__()
+    #    names = set(c.name for c in in self.__table__.columns)
+    #    for key, value in kwargs.items():
+    #        if key in names:
+    #            setattr(self, key, value)
+              
+    @property 
+    def serialized():
+        result = {}
+        columns = [c for c in self.__table__.columns
+            if c.name not in self.__private__]
+
+        for column in columns:
+            value = getattr(self, column.name)
+            if column.type == 'datetime':
+                result[column.name] = value
+            elif column.type == 'group':
+                result[column.name] = [v.serialize for v in value]
+            elif value is None:
+                result = str()
+            else: result[column.name] = value
+        return result
+
+
+# ------------------------------------------------------------ 
+# associative tables
+# ------------------------------------------------------------ 
+user_roles = Table('user_roles', Base.metadata,
+    Column('user_id', Integer, ForeignKey('user.id')),
+    Column('role_id', Integer, ForeignKey('role.id')))
+
 
 # ------------------------------------------------------------ 
 # models
 # ------------------------------------------------------------ 
-class User(Base):
+class User(BaseMixin, Base):
+    '''
+    Represents a single user for the speleo system
+    '''
 
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True)
     name = Column(String(60), nullable=False)
     username = Column(String(30), nullable=False)
-    first_name = Column(String(30), nullable=True)
-    last_name = Column(String(30), nullable=True)
     email = Column(String(75), nullable=True)
+    queries = relationship("Query", backref=backref('user', order_by="User.id"), cascade='all, delete, delete-orphan')
+    roles = relationship("Role", backref='user', secondary=user_roles)
 
     def __repr__(self):
-        return "<User(%s)>" % (self.username)
-
-    @property
-    def serialized(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'username': self.username,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-        }
+        return "<User(%d, %s)>" % (self.id, self.username)
 
 
-class Role(Base):
+class Role(BaseMixin, Base):
+    '''
+    Represents a single role assignable to a user
 
-    __tablename__ = 'roles'
+    :param name: The name of the role
+    :param description: A description of the role's ability
+    '''
 
-    id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
     description = Column(String(100), nullable=False)
 
     def __repr__(self):
-        return "<Role(%s)>" % (self.name)
+        return "<Role(%d, %s)>" % (self.id, self.name)
 
 
-class Query(Base):
+class Query(BaseMixin, Base):
+    '''
+    Represents a single saved query for a given user
 
-    __tablename__ = 'queries'
+    :param title: The title of the query
+    :param display: The lucene style displayable query
+    :param compiled: The json compiled query
+    :param user: The user this query belongs to
+    '''
 
-    id = Column(Integer, primary_key=True)
     title = Column(String(50), nullable=False)
     display = Column(String(200), nullable=False)
     compiled = Column(String(200), nullable=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", backref=backref('queries', order_by=id))
+    user_id = Column(Integer, ForeignKey('user.id'))
 
     def __repr__(self):
-        return "<Query(%s, %s)>" % (self.user.username, self.title)
+        return "<Query(%d, %s, %s)>" % (self.id, self.user.username, self.title)
 
-    @property
-    def serialized(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'display': self.display,
-            'user': self.user_id,
-        }
-
+# ------------------------------------------------------------ 
+# exports
+# ------------------------------------------------------------ 
+__all__ = ['get_database', 'User', 'Query', 'Role']

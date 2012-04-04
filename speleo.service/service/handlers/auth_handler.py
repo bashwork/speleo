@@ -17,8 +17,8 @@ def save_user(database, attributes):
     :param attributes: The attributes to update with
     :returns: The user identifier
     '''
-    user = database.query(User
-        ).filter_by(username=attributes['username']).first()
+    user = User.query.filter_by(
+        username=attributes['username']).first()
     if not user:
         user = User(**attributes)
         database.add(user)

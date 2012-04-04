@@ -39,12 +39,37 @@ class QueryApiHandler(BaseHandler):
         for query in queries:
             if query.id == qid:
                 queries.remove(query)
-        if self.db.is_dirty(): self.db.commit()
-        self.write({ 'data': 'OK' })
+                self.db.commit()
+        self.write(self.serialize({ 'data': 'OK' }))
+
+    put = post
+
+class UserApiHandler(BaseHandler):
+ 
+    RoutePath = r'/api/v1/user/([0-9]*)/?'
+ 
+    @tornado.web.authenticated
+    def get(self, uid=None):
+        if uid:
+            user = User.query.get(int(uid))
+        else: user = self.get_current_user()
+        self.write(self.serialize(user))
+ 
+    @tornado.web.authenticated
+    def post(self, qid):
+        # create or update
+        pass
+ 
+    @tornado.web.authenticated
+    def delete(self, uid=None):
+        if uid:
+            User.query.delete(uid)
+            self.db.commit()
+        self.write(self.serialize({ 'data': 'OK' }))
 
     put = post
 
 # ------------------------------------------------------------
 # exports
 # ------------------------------------------------------------
-__all__ = ['ProfileHandler', 'QueryApiHandler']
+__all__ = ['ProfileHandler', 'UserApiHandler', 'QueryApiHandler']

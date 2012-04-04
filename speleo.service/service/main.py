@@ -16,7 +16,8 @@ class SpeleoApplication(tornado.web.Application):
         # ---------------------------------------------------- 
         # service settings
         # ---------------------------------------------------- 
-        root_path    = os.path.dirname(__file__)
+        curr_path    = os.path.dirname(__file__)
+        root_path    = os.path.abspath(os.path.join(curr_path, os.path.pardir))
         self.options = service.get_options(root_path)
         settings     = {
             'static_path': os.path.join(root_path, 'static'),
@@ -26,6 +27,7 @@ class SpeleoApplication(tornado.web.Application):
             'xsrf_cookies':False,
             'debug': self.options.debug,
         }
+        logging.debug('Serving content from: %s' % root_path)
 
         # ---------------------------------------------------- 
         # route handlers
@@ -57,7 +59,7 @@ class SpeleoApplication(tornado.web.Application):
         tornado.web.Application.__init__(self, routes, **settings)
         logging.debug('Installed Routes')
         for route in sorted(routes): logging.debug(route)
-        logging.debug('Service started on port %d' % self.options.port)
+        logging.info('Service started on port %d' % self.options.port)
 
     def start(self):
         ''' A helper method to start the service

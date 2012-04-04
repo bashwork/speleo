@@ -38,17 +38,17 @@
       <h2 class='profile-title'>Profile Settings</h2>
       <form class="well form-horizontal">
         <div class="control-group">
-          <label class="control-label" for="first-name">First Name</label>
+          <label class="control-label" for="name">Name</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="first-name" name="first-name">
+            <input type="text" class="input-xlarge" id="name" name="name" value="{{ current_user.name }}" />
           </div>
-          <label class="control-label" for="first-name">Last Name</label>
+          <label class="control-label" for="username">User Name</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="first-name" name="first-name">
+            <input type="text" class="input-xlarge" id="username" name="username" value="{{ current_user.username }}" />
           </div>
-          <label class="control-label" for="first-name">Email Address</label>
+          <label class="control-label" for="email">Email Address</label>
           <div class="controls">
-            <input type="text" class="input-xlarge" id="first-name" name="first-name">
+            <input type="text" class="input-xlarge" id="email" name="email" value="{{ current_user.email }}" />
           </div>
         </div>
       </form>

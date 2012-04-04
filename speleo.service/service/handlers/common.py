@@ -1,6 +1,7 @@
 import tornado.web
 import tornado.escape
 from service.models import User
+from service.serializer import serialize
 
 class BaseHandler(tornado.web.RequestHandler):
 
@@ -19,6 +20,9 @@ class BaseHandler(tornado.web.RequestHandler):
     @property
     def cache(self):
         return self.application.cache
+
+    def serialize(self, response):
+        return serialize(self.request, response)
 
     def get_current_user(self):
         user_id = self.get_secure_cookie("user")
